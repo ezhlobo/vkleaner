@@ -5,19 +5,19 @@ var blocks = [
 ];
 
 $(function(){
-	var blocksToUI = [];
-	for (var key in blocks) {
-		blocksToUI.push('#'+blocks[key]);
-	}
-	$(blocksToUI.join(', ')).checkbox();
 	
 	setTimeout(function(){
 		setDefault();
 	}, 100);
 	
 	$('.savebutton').on('click', saveParams);
+	
+	$('.options').load('optionsItems.html', function () {
+		$('.option').checkbox();
+	});
 });
 
+// Functions LocalStorage
 var ls = {};
 var lS = {
 	set: function (name, value) {
@@ -43,12 +43,13 @@ var lS = {
 		}
 	}
 }
+
+// Functions LocalStorage
 lS.get(blocks);
 
 var setDefault = function () {
-	var optionsBlock = $('.options');
 	for (var key in ls) {
-		$('#'+key, optionsBlock).find('input[type=checkbox]')
+		$('#'+key, $('.options')).find('input[type=checkbox]')
 			.removeAttr('checked')
 			.filter('[value='+ls[key]+']').attr('checked', 'checked');
 	}
@@ -56,18 +57,19 @@ var setDefault = function () {
 
 var saveParams = function () {
 	var self = $(this);
-	self.html('Сохранение...');
+		self.html('Сохранение...');
+		
 	$('.option').each(function(){
 		lS.set($(this).attr('id'), $(this).find('input[type=checkbox]:checked').val());
 	});
+	
 	setTimeout(function(){
 		self.html('Сохранить');
-	}, 200);
+	}, 300);
 }
 
 $.fn.checkbox = function () {
 	return this.each(function(){
-		
 		var self = $(this);
 		var inputs = self.find('.params').find('input[type=checkbox]');
 		inputs.on('change', function () {

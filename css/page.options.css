@@ -1,0 +1,8 @@
+body {background:#f4f4f4;}
+
+#wrap {
+	width:620px;
+	margin:100px auto 20px;padding:40px;
+	border:1px solid #ccc;border-radius:3px;box-shadow:0 0 5px #ddd;
+	background:#fff;
+	}

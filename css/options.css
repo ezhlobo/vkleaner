@@ -1,5 +1,4 @@
-/* © 2011 "SunWeb"
- * Author: Evgeny Zhlobo */
+/* Author: Evgeny Zhlobo */
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -23,23 +22,13 @@ time, mark, audio, video {
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {display:block}
 
-body {line-height:1;background:#f4f4f4;font-family:Verdana, Arial;font-size:12px;}
+body {font-family:Verdana, Arial;font-size:12px;line-height:1;}
 
 ol, ul {list-style:none}
 blockquote, q {quotes:none}
 blockquote:before, blockquote:after, q:before, q:after {content:'';content:none}
 table {border-collapse:collapse;border-spacing:0}
 
-/* Styles
- */
-
-#wrap {
-	width:620px;
-	margin:100px auto 20px;padding:40px;
-	border:1px solid #ccc;border-radius:3px;box-shadow:0 0 5px #ddd;
-	background:#fff;
-	}
-	
 	h1 {font-size:20px;margin-bottom:10px;font-family:"Trebuchet MS";}
 	
 	.description {line-height:16px;color:#444;}
