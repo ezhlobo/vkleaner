@@ -1,6 +1,6 @@
 {
 	"name": "Blank VK.News",
-	"version": "0.2.9",
+	"version": "0.2.10",
 	"description": "by Evgeny Zhlobo (losky.net)",
 	
 	"background_page" : "background.html",
