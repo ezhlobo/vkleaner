@@ -1,0 +1,7 @@
+.clearvk-showTop {
+	overflow:hidden;
+	position:relative;
+	height:60px;
+	opacity:.2;
+	}
+.clearvk-hideAll {display:none;}

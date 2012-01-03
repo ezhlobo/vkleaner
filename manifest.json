@@ -1,0 +1,22 @@
+{
+	"name": "Blank VK.News",
+	"version": "0.2.9",
+	"description": "by Evgeny Zhlobo (losky.net)",
+	
+	"background_page" : "background.html",
+	
+	"browser_action": {
+		"default_icon": "popup/icon.png",
+		"default_popup": "popup.html"
+	},
+	
+	"content_scripts": [
+		{
+			"matches": ["http://vk.com/*", "http://vkontakte.ru/*"],
+			"css": ["css/vk.feed.css"],
+			"js": ["js/jquery.js", "js/vk.feed.js"]
+		}
+	],
+	
+	"options_page": "options.html"
+}
