@@ -25,7 +25,6 @@ var lS = {
 // Your LocalStorage
 lS.get(blocks);
 
-var rows = $('#feed_rows');
 var classToRows;
 var fn = {
 	id1: function (self) {
@@ -66,8 +65,7 @@ var fn = {
 
 // Add tags to posts
 var fnAddTags = function () {
-
-	rows.find('.feed_row').each(function(){
+	$('#feed_rows').find('.feed_row').each(function(){
 		var self = $(this);
 		
 		// Add tags to posts from groups
@@ -79,8 +77,16 @@ var fnAddTags = function () {
 };
 
 var checkLocation = function () {
-	if (/(vk|vkontakte)\.(com|ru)\/feed/gi.test(window.location)) fnAddTags();
-}
+	var isFeed = /(vk|vkontakte)\.(com|ru)\/feed/gi.test(window.location);
+	if (isFeed && isCheckLocation) {
+		fnAddTags();
+		isCheckLocation = false;
+	} else if (!isFeed && !isCheckLocation) {
+		isCheckLocation = true;
+	}
+}, isCheckLocation = true;
+
+var rows = $('#feed_rows');
 var checkRowcount = function () {
 	if (currentRowcount != rows.find('.feed_row').length) {
 		currentRowcount = rows.find('.feed_row').length;
@@ -94,5 +100,4 @@ var timerLocation = setInterval(checkLocation, 500);
 // Start!
 setTimeout(function () {
 	classToRows = (ls['clearvk_class'] == 1) ? 'clearvk-showTop' : 'clearvk-hideAll';
-	fnAddTags();
 }, 100);
