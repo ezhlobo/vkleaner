@@ -86,18 +86,18 @@ var checkLocation = function () {
 	}
 }, isCheckLocation = true;
 
-var rows = $('#feed_rows');
 var checkRowcount = function () {
-	if (currentRowcount != rows.find('.feed_row').length) {
-		currentRowcount = rows.find('.feed_row').length;
+	if (currentRowcount != $('#feed_rows').find('.feed_row').length) {
+		currentRowcount = $('#feed_rows').find('.feed_row').length;
 		fnAddTags();
 	}
-}, currentRowcount = rows.find('.feed_row').length;
+}, currentRowcount = $('#feed_rows').find('.feed_row').length;
 
-var timerRowcount = setInterval(checkRowcount, 1000);
-var timerLocation = setInterval(checkLocation, 500);
+setInterval(checkRowcount, 1000);
+setInterval(checkLocation, 500);
 
 // Start!
 setTimeout(function () {
 	classToRows = (ls['clearvk_class'] == 1) ? 'clearvk-showTop' : 'clearvk-hideAll';
+	fnAddTags();
 }, 100);
