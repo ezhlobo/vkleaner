@@ -58,7 +58,14 @@ var fn = {
 			if (tpl.test(href)) {
 				var linkTpl = new RegExp("<a href=\"/away.php\\?to=http:\\/\\/(w{3}\\.)?"+ sites +".[^>]+.[^<]+</a>", "gim");
 				var postWithoutLinks = decodeURIComponent(bLink.parent().html()).replace(linkTpl, '');
-				if (postWithoutLinks.length < 40) fn.addYourClass(self);
+				if (postWithoutLinks.length < 60) fn.addYourClass(self);
+			}
+		} else {
+			var txt = self.find('.wall_post_text').text();
+			var linkInTxt = new RegExp(sites+"\\/\\S", "gim");
+			if (linkInTxt.test(txt)){
+				txt = txt.replace(tpl, '').replace(/\n/gim, '');
+				if (txt.length < 60) fn.addYourClass(self);
 			}
 		}
 	},
