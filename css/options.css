@@ -40,7 +40,12 @@ table {border-collapse:collapse;border-spacing:0}
 		}
 	
 	.options {}
-		.option {padding:10px 12px;margin-bottom:3px;background:rgba(164,198,57,.7);border-radius:3px;text-shadow:1px 1px 1px rgba(255,255,255,.5);}
+		.option {
+			padding:10px 12px;margin-bottom:3px;
+			background:rgba(164,198,57,.7);
+			border-radius:3px;text-shadow:1px 1px 1px rgba(255,255,255,.5);
+			border-bottom:1px solid rgba(164,198,57,1);
+			}
 		.option:after {
 			displaY:block;
 			clear:both;
@@ -48,7 +53,7 @@ table {border-collapse:collapse;border-spacing:0}
 			height:0px;
 			overflow:hidden;
 		}
-		.option.important {background:rgba(255,191,0,.7);}
+		.option.important {background:rgba(255,191,0,.7);border-bottom-color:rgba(255,191,0,1);}
 		.name {width:280px;float:left;line-height:14px;}
 			.name i {display:block;font-size:8px;line-height:10px;margin-top:2px;}
 			#clearvk_linksToAsks .name a {color:#111;text-decoration:none;border-bottom:1px dashed #111;}

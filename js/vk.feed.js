@@ -24,7 +24,7 @@ var lS = {
 
 // Your LocalStorage
 lS.get(blocks);
-lS.fnGET('clearvk.sites');
+lS.get(['clearvk.sites']);
 
 var classToRows;
 var fn = {

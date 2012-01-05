@@ -11,10 +11,6 @@ $(function(){
 	$('.savebutton').on('click', saveParams);
 	
 	$('.options').load('optionsItems.html', function () {
-		$('.option').checkbox();
-		
-		// TODO:
-		// Experimental fn
 		$('#clearvk_linksToAsks a').on('click', function () {
 			lS.get(['clearvk.sites']);
 			setTimeout(function(){
@@ -23,68 +19,6 @@ $(function(){
 			return false;
 		});
 	});
-	var notifier = {
-		show: function (id) {
-			notifier
-				.background.show()
-				.animation('show', '80px', notifier.content(id))
-				.save(true, id);
-		},
-		hide: function () {
-			notifier
-				.background.hide()
-				.animation('hide', '60px', '')
-				.save(false);
-		},
-		save: function (on, id) {
-			var save = function () {
-				var $this = $(this);
-				$this.html('Сохранение...');
-				lS.set('clearvk.sites', notifier.getContent(id));
-				setTimeout(function(){
-					$this.html('Сохранить');
-					notifier.hide();
-				}, 300);
-			}
-			
-			if (on) $('#notifier button').on('click', save);
-				else $('#notifier button').on('click', save);
-		},
-		animation: function (vOpacity, vTop, html) {
-			$('#notifier').animate({opacity: vOpacity, marginTop: vTop}, 100).children('.notifier').html(html);
-			return notifier;
-		},
-		background: {
-			show: function () {
-				$('body').append('<div class="background"></div>');
-				$('.background').width($(document).width()).height($(document).height()).on('click', function(){
-					$(this).off('click');
-					notifier.hide();
-				});
-				return notifier;
-			},
-			hide: function () {
-				$('.background').remove();
-				return notifier;
-			}
-		},
-		content: function (id) {
-			switch (id) {
-				case 'sites':
-					var sites = ls['clearvk.sites'];
-						sites = (sites == 1) ? ['ask.fm', 'sprashivai.ru', 'formspring.me', 'my-truth.ru', 'askbook.me', 'askme.by', 'qroom.ru', 'nekto.me'] : sites.split(',');
-					return '<p class="title">Для восстановления введите 1 и сохраните</p><textarea class="clearvk-id2">'+sites.join('\n')+'</textarea>';
-					break;
-			}
-		},
-		getContent: function (id) {
-			switch (id) {
-				case 'sites':
-					return $('#notifier textarea').val().trim().split('\n');
-					break;
-			}
-		}
-	}
 });
 
 // Functions LocalStorage
@@ -114,14 +48,10 @@ var lS = {
 	}
 }
 
-// Functions LocalStorage
 lS.get(blocks);
-
 var setDefault = function () {
 	for (var key in ls) {
-		$('#'+key, $('.options')).find('input[type=checkbox]')
-			.removeAttr('checked')
-			.filter('[value='+ls[key]+']').attr('checked', 'checked');
+		$('#'+key, $('.options')).find('input').removeAttr('checked').filter('[value='+ls[key]+']').attr('checked', 'checked');
 	}
 }
 
@@ -130,7 +60,7 @@ var saveParams = function () {
 		self.html('Сохранение...');
 		
 	$('.option').each(function(){
-		lS.set($(this).attr('id'), $(this).find('input[type=checkbox]:checked').val());
+		lS.set($(this).attr('id'), $(this).find('input:checked').val());
 	});
 	
 	setTimeout(function(){
@@ -138,18 +68,65 @@ var saveParams = function () {
 	}, 300);
 }
 
-$.fn.checkbox = function () {
-	return this.each(function(){
-		var self = $(this);
-		var inputs = self.find('.params').find('input[type=checkbox]');
-		inputs.on('change', function () {
-			if ($(this).is(':checked')) {
-				inputs.removeAttr('checked').eq($(this).parent().index()).attr('checked', 'checked');
-			} else {
-				inputs.attr('checked', 'checked');
-				$(this).removeAttr('checked');
-			}
-		});
+var notifier = {
+	show: function (id) {
+		notifier
+			.background.show()
+			.animation('show', '80px', notifier.content(id))
+			.save(true, id);
+	},
+	hide: function () {
+		notifier
+			.background.hide()
+			.animation('hide', '60px', '')
+			.save(false);
+	},
+	save: function (on, id) {
+		var save = function () {
+			var $this = $(this);
+			$this.html('Сохранение...');
+			lS.set('clearvk.sites', notifier.getContent(id));
+			setTimeout(function(){
+				$this.html('Сохранить');
+				notifier.hide();
+			}, 300);
+		}
 		
-	});
+		if (on) $('#notifier button').on('click', save);
+			else $('#notifier button').on('click', save);
+	},
+	animation: function (vOpacity, vTop, html) {
+		$('#notifier').animate({opacity: vOpacity, marginTop: vTop}, 100).children('.notifier').html(html);
+		return notifier;
+	},
+	background: {
+		show: function () {
+			$('body').append('<div class="background"></div>');
+			$('.background').width($(document).width()).height($(document).height()).on('click', function(){
+				$(this).off('click');
+				notifier.hide();
+			});
+			return notifier;
+		},
+		hide: function () {
+			$('.background').remove();
+			return notifier;
+		}
+	},
+	content: function (id) {
+		switch (id) {
+			case 'sites':
+				var sites = ls['clearvk.sites'];
+					sites = (sites == 1) ? ['ask.fm', 'sprashivai.ru', 'formspring.me', 'my-truth.ru', 'askbook.me', 'askme.by', 'qroom.ru', 'nekto.me'] : sites.split(',');
+				return '<p class="title">Для восстановления введите 1 и сохраните</p><textarea class="clearvk-id2">'+sites.join('\n')+'</textarea>';
+				break;
+		}
+	},
+	getContent: function (id) {
+		switch (id) {
+			case 'sites':
+				return $('#notifier textarea').val().trim().split('\n');
+				break;
+		}
+	}
 }
