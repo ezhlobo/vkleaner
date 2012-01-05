@@ -22,7 +22,7 @@ time, mark, audio, video {
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {display:block}
 
-body {font-family:Verdana, Arial;font-size:12px;line-height:1;}
+body {position:relative;font-family:Verdana, Arial;font-size:12px;line-height:1;}
 
 ol, ul {list-style:none}
 blockquote, q {quotes:none}
@@ -36,7 +36,7 @@ table {border-collapse:collapse;border-spacing:0}
 	
 	.savebutton {
 		width:100%;padding:10px 0;margin-top:20px;display:block;
-		color:#444;text-shadow:1px 1px 0 #fff;font-size:10px;
+		color:#444;text-shadow:1px 1px 0 #fff;font-size:10px;cursor:pointer;
 		}
 	
 	.options {}
@@ -51,8 +51,33 @@ table {border-collapse:collapse;border-spacing:0}
 		.option.important {background:rgba(255,191,0,.7);}
 		.name {width:280px;float:left;line-height:14px;}
 			.name i {display:block;font-size:8px;line-height:10px;margin-top:2px;}
+			#clearvk_linksToAsks .name a {color:#111;text-decoration:none;border-bottom:1px dashed #111;}
 		.params {
-			margin-left:300px;
+			width:130px;float:left;margin-left:20px;
 			}
 			.params input {margin:0 0 0 3px;padding:0;vertical-align:top;cursor:pointer}
 			.params label {margin-right:25px;cursor:pointer}
+	
+	#notifier {
+		width:370px;height:228px;
+		margin:60px 0 0 -200px;padding:15px;
+		top:0;left:50%;position:absolute;z-index:10000;
+		display:none;
+		background:rgba(0,0,0,.1);border-radius:10px;
+		}
+		.notifier {
+			width:350px;height:168px;padding:10px 10px 50px;overflow:hidden;
+			background:#fff;border-radius:3px;box-shadow:0 0 5px rgba(0,0,0,.1);
+			}
+		#notifier button {
+			height:40px;display:block;
+			position:absolute;bottom:15px;left:15px;right:15px;
+			color:#444;text-shadow:1px 1px 0 #fff;font-size:10px;cursor:pointer;
+			}
+		#notifier p.title {height:18px;line-height:18px;font-size:9px;color:#ccc;}
+	.clearvk-id2 {
+		width:350px;height:150px;padding:5px;resize:none;
+		border:5px solid #f1f1f1;outline:none;
+		font-family:Arial;font-size:11px;line-height:16px;
+		}
+	.background {position:absolute;top:0;left:0;background:rgba(255,255,255,.4)}

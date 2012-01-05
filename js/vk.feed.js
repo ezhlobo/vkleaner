@@ -24,9 +24,11 @@ var lS = {
 
 // Your LocalStorage
 lS.get(blocks);
+lS.fnGET('clearvk.sites');
 
 var classToRows;
 var fn = {
+	// Hide posts from groups
 	id1: function (self) {
 		var link = self.find('.published_by');
 		if (link.length > 0) {
@@ -38,10 +40,12 @@ var fn = {
 			if (symbolSingle == '-' || symbolGroup == '-' || symbolPhotos == '-') fn.addYourClass(self);
 		}
 	},
+	// Hide posts with links to asks
 	id2: function (self) {
-		var sites = "(ask.fm|sprashivai.ru|formspring.me|my-truth.ru|askbook.me|askme.by|qroom.ru|nekto.me)";
-			sites = sites.replace(/\./gi, '\\.');
-		
+		var sites = ls['clearvk.sites'];
+			sites = (sites == 1) ? ['ask.fm', 'sprashivai.ru', 'formspring.me', 'my-truth.ru', 'askbook.me', 'askme.by', 'qroom.ru', 'nekto.me'].join('|') : sites.split(',').join('|');
+			sites = "("+sites.replace(/\./gi, '\\.')+")";
+			
 		var tpl = new RegExp("/away.php\\?to=http:\\/\\/(w{3}\\.)?"+ sites +".+", "gi");
 		var aLink = self.find('.media_desc .lnk');
 		var bLink = self.find('.wall_post_text a');
