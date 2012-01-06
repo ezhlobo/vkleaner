@@ -56,13 +56,13 @@ var notifier = {
 	show: function (id) {
 		notifier
 			.background.show()
-			.animation('show', '80px', notifier.content(id))
+			.animation('show', '+', notifier.content(id))
 			.save(id);
 		},
 	hide: function () {
 		notifier
 			.background.hide()
-			.animation('hide', '60px', '')
+			.animation('hide', '-', '')
 			.save();
 		},
 	save: function (id) {
@@ -79,7 +79,7 @@ var notifier = {
 		if (id) $('#notifier button').on('click', save); else $('#notifier button').off('click');
 	},
 	animation: function (vOpacity, vTop, html) {
-		$('#notifier').animate({opacity: vOpacity, marginTop: vTop}, 100).children('.notifier').html(html);
+		$('#notifier').animate({opacity: vOpacity, marginTop: vTop+'=20px'}, 100).children('.notifier').html(html);
 		return this;
 	},
 	background: {
