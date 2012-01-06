@@ -22,12 +22,12 @@ var fn = {
 	id1: function (self) {
 		var link = self.find('.published_by');
 		if (link.length > 0) {
-			var ourClass = self.children().attr('class');
+			var ourClass = self.parent().attr('class');
 			var symbolSingle = ourClass.substr(11, 1);
 			var symbolGroup = ourClass.substr(17, 1);
 			var symbolPhotos = link.siblings('.published_by_date').children('a').attr('href').substr(6, 1);
 			
-			if (symbolSingle == '-' || symbolGroup == '-' || symbolPhotos == '-') fn.addYourClass(self);
+			if (symbolSingle == '-' || symbolGroup == '-' || symbolPhotos == '-') this.addYourClass(self);
 		}
 	},
 	// Hide posts with links to asks
@@ -42,59 +42,42 @@ var fn = {
 		var href;
 		if (aLink.length > 0) {
 			href = decodeURIComponent(aLink.attr('href'));
-			if (tpl.test(href)) fn.addYourClass(self);
+			if (tpl.test(href)) this.addYourClass(self);
 		} else if (bLink.length > 0) {
 			href = decodeURIComponent(bLink.attr('href'));
 			if (tpl.test(href)) {
 				var linkTpl = new RegExp("<a href=\"/away.php\\?to=http:\\/\\/(w{3}\\.)?"+ sites +".[^>]+.[^<]+</a>", "gim");
 				var postWithoutLinks = decodeURIComponent(bLink.parent().html()).replace(linkTpl, '');
-				if (postWithoutLinks.length < 60) fn.addYourClass(self);
+				if (postWithoutLinks.length < 60) this.addYourClass(self);
 			}
 		} else {
 			var txt = self.find('.wall_post_text').text();
 			var linkInTxt = new RegExp(sites+"\\/\\S", "gim");
 			if (linkInTxt.test(txt)){
 				txt = txt.replace(tpl, '').replace(/\n/gim, '');
-				if (txt.length < 60) fn.addYourClass(self);
+				if (txt.length < 60) this.addYourClass(self);
 			}
 		}
 	},
-	addYourClass: function (elem) {
-		elem.find('.post').addClass(classToRows)
-	}
+	addYourClass: function (elem) { elem.addClass(classToRows) }
 }
 
 // Add tags to posts
 var fnAddTags = function () {
-	$('#feed_rows').find('.feed_row').each(function(){
-		var self = $(this);
+	$('#feed_rows').find('.post:not(.'+classToRows+')').each(function(){
+		var $this = $(this);
 		
 		// Add tags to posts from groups
-		if (ls['clearvk_repostFromGroups'] == 1) fn.id1(self);
+		if (ls['clearvk_repostFromGroups'] == 1) fn.id1($this);
 		
 		// Add tags to posts with links to asks
-		if (ls['clearvk_linksToAsks'] == 1) fn.id2(self);
+		if (ls['clearvk_linksToAsks'] == 1) fn.id2($this);
 	});
 };
 
 var checkLocation = function () {
-	var isFeed = /(vk|vkontakte)\.(com|ru)\/feed/gi.test(window.location);
-	if (isFeed && isCheckLocation) {
-		fnAddTags();
-		isCheckLocation = false;
-	} else if (!isFeed && !isCheckLocation) {
-		isCheckLocation = true;
-	}
-}, isCheckLocation = true;
-
-var checkRowcount = function () {
-	if (currentRowcount != $('#feed_rows').find('.feed_row').length) {
-		currentRowcount = $('#feed_rows').find('.feed_row').length;
-		fnAddTags();
-	}
-}, currentRowcount = $('#feed_rows').find('.feed_row').length;
-
-setInterval(checkRowcount, 1000);
+	if (/(vk|vkontakte)\.(com|ru)\/feed/gi.test(window.location)) fnAddTags();
+}
 setInterval(checkLocation, 500);
 
 // Start!
