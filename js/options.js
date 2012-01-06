@@ -1,4 +1,4 @@
-var blocks = 'clearvk_class, clearvk_repostFromGroups, clearvk_linksToAsks';
+var blocks = 'clearvk_class, clearvk_repostFromGroups, clearvk_linksToAsks, clearvk_video';
 
 $(function(){
 	lS.get(blocks);

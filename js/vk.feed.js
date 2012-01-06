@@ -1,4 +1,4 @@
-var blocks = 'clearvk_class, clearvk_repostFromGroups, clearvk_linksToAsks';
+var blocks = 'clearvk_class, clearvk_repostFromGroups, clearvk_linksToAsks, clearvk_video';
 
 // Functions LocalStorage
 var lS = {
@@ -59,6 +59,11 @@ var fn = {
 			}
 		}
 	},
+	// Hide posts with video
+	id3: function (self) {
+		var video = self.find('.page_media_video');
+		if (video.length > 0) this.addYourClass(self);
+	},
 	addYourClass: function (elem) { elem.addClass(classToRows) }
 }
 
@@ -72,6 +77,9 @@ var fnAddTags = function () {
 		
 		// Add tags to posts with links to asks
 		if (ls['clearvk_linksToAsks'] == 1) fn.id2($this);
+		
+		// Add tags to posts with video
+		if (ls['clearvk_video'] == 1) fn.id3($this);
 	});
 };
 
