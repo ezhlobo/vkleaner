@@ -1,58 +1,42 @@
-var blocks = [
-	'clearvk_class',
-	'clearvk_repostFromGroups',
-	'clearvk_linksToAsks'
-];
+var blocks = 'clearvk_class, clearvk_repostFromGroups, clearvk_linksToAsks';
 
 $(function(){
+	lS.get(blocks);
+	setTimeout(setDefault, 300);
 	
-	setTimeout(setDefault, 100);
+	$('.options').load('optionsItems.html', onLoadOptions);
 	
 	$('.savebutton').on('click', saveParams);
-	
-	$('.options').load('optionsItems.html', function () {
-		$('#clearvk_linksToAsks a').on('click', function () {
-			lS.get(['clearvk.sites']);
-			setTimeout(function(){
-				notifier.show('sites')
-			}, 100);
-			return false;
-		});
-	});
 });
 
-// Functions LocalStorage
-var ls = {};
+// Own LocalStorage
 var lS = {
 	set: function (name, value) {
-		chrome.extension.sendRequest({
-			type: 'set',
-			name: name,
-			value: value
+		chrome.extension.sendRequest({type:'set', name:name, value:value});
+	},
+	fnGET: function (name, defaultValue) {
+		chrome.extension.sendRequest({type:'get', name:name}, function (response) {
+			ls[name] = response || defaultValue;
 		});
 	},
-	fnGET: function (name) {
-		chrome.extension.sendRequest({
-			type: 'get',
-			name: name
-			},
-			function(response) {
-				ls[name] = response || 1;
-			}
-		);
-	},
 	get: function (elems) {
-		for (var key in elems) {
-			lS.fnGET(elems[key]);
-		}
+		elems = elems.split(', ');
+		for (var key in elems) this.fnGET(elems[key], 1);
 	}
+}, ls = {};
+
+var onLoadOptions = function () {
+	$('#clearvk_linksToAsks a').on('click', function () {
+		lS.get('clearvk.sites');
+		setTimeout(function(){
+			notifier.show('sites');
+		}, 10);
+		return false;
+	});
 }
 
-lS.get(blocks);
 var setDefault = function () {
-	for (var key in ls) {
-		$('#'+key, $('.options')).find('input').removeAttr('checked').filter('[value='+ls[key]+']').attr('checked', 'checked');
-	}
+	for (var key in ls) $('#'+key).find('input').removeAttr('checked').filter('[value='+ls[key]+']').attr('checked', 'checked');
 }
 
 var saveParams = function () {
@@ -73,31 +57,30 @@ var notifier = {
 		notifier
 			.background.show()
 			.animation('show', '80px', notifier.content(id))
-			.save(true, id);
-	},
+			.save(id);
+		},
 	hide: function () {
 		notifier
 			.background.hide()
 			.animation('hide', '60px', '')
-			.save(false);
-	},
-	save: function (on, id) {
+			.save();
+		},
+	save: function (id) {
 		var save = function () {
 			var $this = $(this);
-			$this.html('Сохранение...');
-			lS.set('clearvk.sites', notifier.getContent(id));
+				$this.html('Сохранение...');
+			lS.set('clearvk.sites', notifier.content(id, 'save'));
 			setTimeout(function(){
 				$this.html('Сохранить');
 				notifier.hide();
 			}, 300);
 		}
 		
-		if (on) $('#notifier button').on('click', save);
-			else $('#notifier button').on('click', save);
+		if (id) $('#notifier button').on('click', save); else $('#notifier button').off('click');
 	},
 	animation: function (vOpacity, vTop, html) {
 		$('#notifier').animate({opacity: vOpacity, marginTop: vTop}, 100).children('.notifier').html(html);
-		return notifier;
+		return this;
 	},
 	background: {
 		show: function () {
@@ -113,19 +96,16 @@ var notifier = {
 			return notifier;
 		}
 	},
-	content: function (id) {
+	content: function (id, way) {
 		switch (id) {
 			case 'sites':
-				var sites = ls['clearvk.sites'];
-					sites = (sites == 1) ? ['ask.fm', 'sprashivai.ru', 'formspring.me', 'my-truth.ru', 'askbook.me', 'askme.by', 'qroom.ru', 'nekto.me'] : sites.split(',');
-				return '<p class="title">Для восстановления введите 1 и сохраните</p><textarea class="clearvk-id2">'+sites.join('\n')+'</textarea>';
-				break;
-		}
-	},
-	getContent: function (id) {
-		switch (id) {
-			case 'sites':
-				return $('#notifier textarea').val().trim().split('\n');
+				if (way == 'save') {
+					return $('#notifier textarea').val().trim().split('\n');
+				} else {
+					var sites = ls['clearvk.sites'];
+						sites = (sites == 1) ?['ask.fm', 'sprashivai.ru', 'formspring.me', 'my-truth.ru', 'askbook.me', 'askme.by', 'qroom.ru', 'nekto.me'] : sites.split(',');
+					return '<p class="title">Для восстановления введите 1 и сохраните</p><textarea class="clearvk-id2">'+sites.join('\n')+'</textarea>';
+				}
 				break;
 		}
 	}

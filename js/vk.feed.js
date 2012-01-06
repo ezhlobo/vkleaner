@@ -1,30 +1,20 @@
-var blocks = [
-	'clearvk_class',
-	'clearvk_repostFromGroups',
-	'clearvk_linksToAsks'
-];
+var blocks = 'clearvk_class, clearvk_repostFromGroups, clearvk_linksToAsks';
 
 // Functions LocalStorage
-var ls = {};
 var lS = {
 	fnGET: function (name) {
-		chrome.extension.sendRequest({
-			type: 'get',
-			name: name
-			},
-			function(response) {
-				ls[name] = response || 1;
-			}
-		);
+		chrome.extension.sendRequest({type:'get', name:name}, function (response) {
+			ls[name] = response || 1;
+		});
 	},
 	get: function (elems) {
+		elems = elems.split(', ');
 		for (var key in elems) lS.fnGET(elems[key]);
 	}
-}
+}, ls = {};
 
 // Your LocalStorage
-lS.get(blocks);
-lS.get(['clearvk.sites']);
+lS.get(blocks +', '+ 'clearvk.sites');
 
 var classToRows;
 var fn = {
