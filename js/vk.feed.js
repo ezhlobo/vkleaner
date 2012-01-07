@@ -22,7 +22,7 @@ var fn = {
 	id1: function (self) {
 		var link = self.find('.published_by');
 		if (link.length > 0) {
-			var ourClass = self.parent().attr('class');
+			var ourClass = self.closest('.feed_row').children().attr('class');
 			var symbolSingle = ourClass.substr(11, 1);
 			var symbolGroup = ourClass.substr(17, 1);
 			var symbolPhotos = link.siblings('.published_by_date').children('a').attr('href').substr(6, 1);
