@@ -37,17 +37,16 @@ var fn = {
 			sites = "("+sites.replace(/\./gi, '\\.')+")";
 			
 		var tpl = new RegExp("/away.php\\?to=http:\\/\\/(w{3}\\.)?"+ sites +".+", "gi");
-		var aLink = self.find('.media_desc .lnk');
-		var bLink = self.find('.wall_post_text a');
-		var href;
+		var aLink = self.find('.media_desc').find('.lnk');
+		var bLink = self.find('.wall_post_text').find('a');
 		if (aLink.length > 0) {
-			href = decodeURIComponent(aLink.attr('href'));
+			var href = unescape(aLink.attr('href'));
 			if (tpl.test(href)) this.addYourClass(self);
 		} else if (bLink.length > 0) {
-			href = decodeURIComponent(bLink.attr('href'));
+			var href = unescape(bLink.attr('href'));
 			if (tpl.test(href)) {
 				var linkTpl = new RegExp("<a href=\"/away.php\\?to=http:\\/\\/(w{3}\\.)?"+ sites +".[^>]+.[^<]+</a>", "gim");
-				var postWithoutLinks = decodeURIComponent(bLink.parent().html()).replace(linkTpl, '');
+				var postWithoutLinks = unescape(bLink.parent().html()).replace(linkTpl, '');
 				if (postWithoutLinks.length < 60) this.addYourClass(self);
 			}
 		} else {
@@ -92,7 +91,7 @@ var fnAddTags = function () {
 };
 
 var checkLocation = function () {
-	if (/(vk|vkontakte)\.(com|ru)\/feed/gi.test(window.location)) fnAddTags();
+	if (window.location.pathname == '/feed') fnAddTags();
 }
 setInterval(checkLocation, 500);
 
