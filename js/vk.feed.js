@@ -22,12 +22,14 @@ var fn = {
 	id1: function (self) {
 		var link = self.find('.published_by');
 		if (link.length > 0) {
-			var ourClass = self.closest('.feed_row').children().attr('class');
-			var symbolSingle = ourClass.substr(11, 1);
-			var symbolGroup = ourClass.substr(17, 1);
-			var symbolPhotos = link.siblings('.published_by_date').children('a').attr('href').substr(6, 1);
+			var row = self.closest('.feed_row');
+			var ourClass = row.children().attr('class'),
+				repostSingle = ourClass.substr(11, 1) == '-',
+				repostGroup = ourClass.substr(17, 1) == '-',
+				repostPhotos = link.siblings('.published_by_date').children('a').attr('href').substr(6, 1) == '-';
 			
-			if (symbolSingle == '-' || symbolGroup == '-' || symbolPhotos == '-') this.addYourClass(self);
+			if (repostGroup || repostSingle || repostPhotos) this.addYourClass(self);
+			if (repostGroup) row.find('.feed_reposts_more').addClass(classToRows+'-group');
 		}
 	},
 	// Hide posts with links to asks
