@@ -1,85 +1,72 @@
-var blocks = 'clearvk_class, clearvk_repostFromGroups, clearvk_linksToAsks, clearvk_video, clearvk_audio';
-
 $(function(){
-	lS.get(blocks);
-	setTimeout(setDefault, 300);
-	
-	$('.options').load('optionsItems.html', onLoadOptions);
-	
-	$('.savebutton').on('click', saveParams);
+	localStorageManager.get(idsBlocksWithOptions);
+	setTimeout(setDefaultOptions, 300);
+
+	$('#wrap')
+		.load('optionsItems.html')
+		.on('click', '#clearvk_linksToAsks a', function () {
+			localStorageManager.get('clearvk.sites');
+			notification.show('sites');
+			return false;
+		})
+		.on('click', '.savebutton', saveParams);
 });
 
-// Own LocalStorage
-var lS = {
+var idsBlocksWithOptions = 'clearvk_class, clearvk_repostFromGroups, clearvk_linksToAsks, clearvk_video, clearvk_audio';
+var localStorageManager = {
 	set: function (name, value) {
 		chrome.extension.sendRequest({type:'set', name:name, value:value});
 	},
-	fnGET: function (name, defaultValue) {
+	fnGET: function (name) {
 		chrome.extension.sendRequest({type:'get', name:name}, function (response) {
-			ls[name] = response || defaultValue;
+			localStorage[name] = response || 1;
 		});
 	},
-	get: function (elems) {
-		elems = elems.split(', ');
-		for (var key in elems) this.fnGET(elems[key], 1);
+	get: function (ids) {
+		collectionIds = ids.split(', ');
+		for (var k in collectionIds) localStorageManager.fnGET(collectionIds[k]);
 	}
-}, ls = {};
+}, localStorage = {};
 
-var onLoadOptions = function () {
-	$('#clearvk_linksToAsks a').on('click', function () {
-		lS.get('clearvk.sites');
-		setTimeout(function(){
-			notifier.show('sites');
-		}, 10);
-		return false;
-	});
+var setDefaultOptions = function () {
+	for (var id in localStorage) $('#'+id).find('input').removeAttr('checked').filter('[value='+localStorage[id]+']').attr('checked', 'checked');
 }
-
-var setDefault = function () {
-	for (var key in ls) $('#'+key).find('input').removeAttr('checked').filter('[value='+ls[key]+']').attr('checked', 'checked');
-}
-
 var saveParams = function () {
 	var self = $(this);
-		self.html('Сохранение...');
-		
+	self.html('Сохранение...');	
 	$('.option').each(function(){
-		lS.set($(this).attr('id'), $(this).find('input:checked').val());
+		localStorageManager.set($(this).attr('id'), $(this).find('input:checked').val());
 	});
-	
-	setTimeout(function(){
-		self.html('Сохранить');
-	}, 300);
+	setTimeout(function(){ self.html('Сохранить'); }, 300);
 }
 
-var notifier = {
+var notification = {
 	show: function (id) {
-		notifier
+		notification
 			.background.show()
-			.animation('show', '+', notifier.content(id))
-			.save(id);
-		},
+			.animation('show', '+', notification.content(id))
+			.addTriggerSave(id);
+	},
 	hide: function () {
-		notifier
+		notification
 			.background.hide()
 			.animation('hide', '-', '')
-			.save();
-		},
-	save: function (id) {
-		var save = function () {
-			var $this = $(this);
-				$this.html('Сохранение...');
-			lS.set('clearvk.sites', notifier.content(id, 'save'));
-			setTimeout(function(){
-				$this.html('Сохранить');
-				notifier.hide();
-			}, 300);
-		}
-		
-		if (id) $('#notifier button').on('click', save); else $('#notifier button').off('click');
+			.removeTriggerSave();
 	},
-	animation: function (vOpacity, vTop, html) {
-		$('#notifier').animate({opacity: vOpacity, marginTop: vTop+'=20px'}, 100).children('.notifier').html(html);
+	addTriggerSave: function (id) {
+		$('#notifier button').on('click', function () {
+			var buttonSave = $(this);
+			buttonSave.html('Сохранение...');
+			localStorageManager.set('clearvk.sites', notification.content(id, 'save'));
+			setTimeout(function(){
+				buttonSave.html('Сохранить');
+				notification.hide();
+			}, 300);
+		});
+	},
+	removeTriggerSave: function () { $('#notifier button').off('click'); },
+	animation: function (valueOpacity, symbolTop, html) {
+		$('#notifier').animate({opacity: valueOpacity, marginTop: symbolTop+'=20px'}, 100).children('.notifier').html(html);
 		return this;
 	},
 	background: {
@@ -87,13 +74,13 @@ var notifier = {
 			$('body').append('<div class="background"></div>');
 			$('.background').width($(document).width()).height($(document).height()).on('click', function(){
 				$(this).off('click');
-				notifier.hide();
+				notification.hide();
 			});
-			return notifier;
+			return notification;
 		},
 		hide: function () {
 			$('.background').remove();
-			return notifier;
+			return notification;
 		}
 	},
 	content: function (id, way) {
@@ -102,8 +89,8 @@ var notifier = {
 				if (way == 'save') {
 					return $('#notifier textarea').val().trim().split('\n');
 				} else {
-					var sites = ls['clearvk.sites'];
-						sites = (sites == 1) ?['ask.fm', 'sprashivai.ru', 'formspring.me', 'my-truth.ru', 'askbook.me', 'askme.by', 'qroom.ru', 'nekto.me'] : sites.split(',');
+					var sites = localStorage['clearvk.sites'];
+					sites = (sites == 1) ?['ask.fm', 'sprashivai.ru', 'formspring.me', 'my-truth.ru', 'askbook.me', 'askme.by', 'qroom.ru', 'nekto.me'] : sites.split(',');
 					return '<p class="title">Для восстановления введите 1 и сохраните</p><textarea class="clearvk-id2">'+sites.join('\n')+'</textarea>';
 				}
 				break;

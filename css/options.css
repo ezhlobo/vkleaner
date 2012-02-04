@@ -85,4 +85,4 @@ table {border-collapse:collapse;border-spacing:0}
 		border:5px solid #f1f1f1;outline:none;
 		font-family:Arial;font-size:11px;line-height:16px;
 		}
-	.background {position:absolute;top:0;left:0;background:rgba(255,255,255,.4)}
+	.background {position:absolute;top:0;left:0;background:rgba(255,255,255,.4);cursor:pointer}
