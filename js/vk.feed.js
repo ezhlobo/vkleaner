@@ -31,24 +31,19 @@ var hidePosts = {
 		sites = (sites == 1) ? ['ask.fm', 'sprashivai.ru', 'formspring.me', 'my-truth.ru', 'askbook.me', 'askme.by', 'qroom.ru', 'nekto.me'].join('|') : sites.split(',').join('|');
 		sites = "("+sites.replace(/\./gi, '\\.')+")";
 			
-		var templatesUrls = new RegExp("/away.php\\?to=http:\\/\\/(w{3}\\.)?"+ sites +".+", "gi");
-		var mediaLink = post.find('.media_desc').find('.lnk');
-		var linkInText = post.find('.wall_post_text').find('a');
-		if (mediaLink.length > 0) {
-			var href = unescape(mediaLink.attr('href'));
-			if (templatesUrls.test(href)) this.addCssClass(post);
-		} else if (linkInText.length > 0) {
-			var href = unescape(linkInText.attr('href'));
-			if (templatesUrls.test(href)) {
-				var htmlTemplatesUrls = new RegExp("<a href=\"/away.php\\?to=http:\\/\\/(w{3}\\.)?"+ sites +".[^>]+.[^<]+</a>", "gim");
-				var postTextWithoutLinks = unescape(linkInText.parent().html()).replace(htmlTemplatesUrls, '');
-				if (postTextWithoutLinks.length < 60) this.addCssClass(post);
-			}
+		var hrefMediaLink = unescape(post.find('.media_desc').find('.lnk').attr('href'));
+		var hrefLinkInText = unescape(post.find('.wall_post_text').find('a').attr('href'));
+		var templateHref = new RegExp("/away.php\\?to=http:\\/\\/(w{3}\\.)?"+ sites +".+", "gi");
+		if (templateHref.test(hrefMediaLink)) this.addCssClass(post);
+		if (templateHref.test(hrefLinkInText)) {
+			var htmlTemplateLinks = new RegExp("<a href=\"/away.php\\?to=http:\\/\\/(w{3}\\.)?"+ sites +".[^>]+.[^<]+</a>", "gim");
+			var postTextWithoutLinks = unescape(post.find('.wall_post_text').html()).replace(htmlTemplateLinks, '');
+			if (postTextWithoutLinks.length < 60) this.addCssClass(post);
 		} else {
 			var postText = post.find('.wall_post_text').text();
-			var linkInTxt = new RegExp(sites+"\\/\\S", "gim");
-			if (linkInTxt.test(postText)){
-				postText = postText.replace(templatesUrls, '').replace(/\n/gim, '');
+			var templateLinkInTxt = new RegExp(sites, "gim");
+			if (templateLinkInTxt.test(postText)){
+				postText = postText.replace(templateHref, '').replace(/\n/gim, '');
 				if (postText.length < 60) this.addCssClass(post);
 			}
 		}
