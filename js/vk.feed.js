@@ -65,19 +65,8 @@ var hidePosts = {
 }
 var hideSomePosts = function () {
 	$('#feed_rows').find('.post:not(.'+cssClassForHiddenPosts+')').each(function(){
-		var $this = $(this);
-		
-		if (localStorage['clearvk_repostFromGroups'] == 1)
-			hidePosts.fromGroups($this);
-		
-		if (localStorage['clearvk_linksToAsks'] == 1)
-			hidePosts.withLinks($this);
-		
-		if (localStorage['clearvk_video'] == 1)
-			hidePosts.withVideo($this);
-		
-		if (localStorage['clearvk_audio'] == 1)
-			hidePosts.withAudio($this);
+		for (var name in whatNeedHide)
+			hidePosts[ whatNeedHide[name] ] ( $(this) );
 	});
 }
 
@@ -86,6 +75,12 @@ var checkLocation = function () {
 }
 setInterval(checkLocation, 500);
 setTimeout(function () {
+	whatNeedHide = [];
+	if (localStorage['clearvk_repostFromGroups'] == 1) whatNeedHide.push('fromGroups');
+	if (localStorage['clearvk_linksToAsks'] == 1) whatNeedHide.push('withLinks');
+	if (localStorage['clearvk_video'] == 1) whatNeedHide.push('withVideo');
+	if (localStorage['clearvk_audio'] == 1) whatNeedHide.push('withAudio');
+	
 	cssClassForHiddenPosts = (localStorage['clearvk_class'] == 1) ? 'clearvk-showTop' : 'clearvk-hideAll';
 	hideSomePosts();
 }, 100);
