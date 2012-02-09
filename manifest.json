@@ -1,6 +1,6 @@
 {
 	"name": "Clear vk.News",
-	"version": "0.2.15",
+	"version": "0.4.1",
 	"description": "By Evgeny Zhlobo (losky.net)",
 	
 	"background_page" : "background.html",
