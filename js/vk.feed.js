@@ -28,25 +28,16 @@ var hidePosts = {
 	},
 	withLinks: function (post) {
 		var sites = localStorage['clearvk.sites'];
-		sites = (sites == 1) ? ['ask.fm', 'sprashivai.ru', 'formspring.me', 'my-truth.ru', 'askbook.me', 'askme.by', 'qroom.ru', 'nekto.me'].join('|') : sites.split(',').join('|');
+		sites = (sites == 1) ? ['ask.fm', 'sprashivai.ru', 'formspring.me', 'my-truth.ru', 'askbook.me', 'askme.by', 'qroom.ru', 'nekto.me', 'trislovamne.ru'].join('|') : sites.split(',').join('|');
 		sites = "("+sites.replace(/\./gi, '\\.')+")";
 			
 		var hrefMediaLink = unescape(post.find('.media_desc').find('.lnk').attr('href'));
 		var hrefLinkInText = unescape(post.find('.wall_post_text').find('a').attr('href'));
-		var templateHref = new RegExp("/away.php\\?to=http:\\/\\/(w{3}\\.)?"+ sites +".+", "gi");
-		if (templateHref.test(hrefMediaLink)) this.addCssClass(post);
-		if (templateHref.test(hrefLinkInText)) {
-			var htmlTemplateLinks = new RegExp("<a href=\"/away.php\\?to=http:\\/\\/(w{3}\\.)?"+ sites +".[^>]+.[^<]+</a>", "gim");
-			var postTextWithoutLinks = unescape(post.find('.wall_post_text').html()).replace(htmlTemplateLinks, '');
-			if (postTextWithoutLinks.length < 60) this.addCssClass(post);
-		} else {
-			var postText = post.find('.wall_post_text').text();
-			var templateLinkInTxt = new RegExp(sites, "gim");
-			if (templateLinkInTxt.test(postText)){
-				postText = postText.replace(templateHref, '').replace(/\n/gim, '');
-				if (postText.length < 60) this.addCssClass(post);
-			}
-		}
+		var postText = post.find('.wall_post_text').text();
+		
+		var templateHref = new RegExp("(http:\\/\\/|w{3}\\.|\s)"+ sites, "gi");
+		if (templateHref.test(hrefMediaLink) || templateHref.test(hrefLinkInText) || templateHref.test(postText))
+			this.addCssClass(post);
 	},
 	withVideo: function (post) {
 		var video = post.find('.page_media_video');

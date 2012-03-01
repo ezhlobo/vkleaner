@@ -89,7 +89,7 @@ var notification = {
 					return $('#notifier textarea').val().trim().split('\n');
 				} else {
 					var sites = localStorage['clearvk.sites'];
-					sites = (sites == 1) ?['ask.fm', 'sprashivai.ru', 'formspring.me', 'my-truth.ru', 'askbook.me', 'askme.by', 'qroom.ru', 'nekto.me'] : sites.split(',');
+					sites = (sites == 1) ?['ask.fm', 'sprashivai.ru', 'formspring.me', 'my-truth.ru', 'askbook.me', 'askme.by', 'qroom.ru', 'nekto.me', 'trislovamne.ru'] : sites.split(',');
 					return '<p class="title">Для восстановления введите 1 и сохраните</p><textarea class="clearvk-id2">'+sites.join('\n')+'</textarea>';
 				}
 				break;
