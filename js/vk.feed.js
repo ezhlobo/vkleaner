@@ -50,7 +50,8 @@ var hidePosts = {
 	addCssClass: function (post) { post.addClass(cssClassForHiddenPosts) }
 }
 var hideSomePosts = function () {
-	$('#feed_rows').find('.post:not(.'+cssClassForHiddenPosts+')').each(function(){
+	$('#feed_rows').find('.post').each(function(){
+		$(this).removeClass(cssClassForHiddenPosts)
 		for (var name in whatNeedHide)
 			hidePosts[ whatNeedHide[name] ] ( $(this) );
 	});
