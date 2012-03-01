@@ -1,22 +1,18 @@
 {
 	"name": "VKleaner",
-	"version": "0.4.1",
-	"description": "By Evgeny Zhlobo (losky.net)",
+	"version": "0.5.3",
+	"description": "Chrome extension for vk.com that hides unwanted posts. You can define types of posts that will be hided.",
 	
 	"background_page" : "background.html",
-	
+	"options_page": "options.html",
 	"browser_action": {
 		"default_icon": "popup/icon.png",
 		"default_popup": "popup.html"
 	},
 	
-	"content_scripts": [
-		{
-			"matches": ["http://vk.com/*", "http://vkontakte.ru/*"],
-			"css": ["css/vk.feed.css"],
-			"js": ["js/jquery.js", "js/vk.feed.js"]
-		}
-	],
-	
-	"options_page": "options.html"
+	"content_scripts": [{
+		"matches": ["http://vk.com/*", "http://vkontakte.ru/*"],
+		"css": ["css/vk.feed.css"],
+		"js": ["js/jquery.js", "js/vk.feed.js"]
+	}]
 }
