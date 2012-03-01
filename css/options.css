@@ -85,4 +85,14 @@ table {border-collapse:collapse;border-spacing:0}
 		border:5px solid #f1f1f1;outline:none;
 		font-family:Arial;font-size:11px;line-height:16px;
 		}
-	.background {position:absolute;top:0;left:0;background:rgba(255,255,255,.4);cursor:pointer}
+	.background {position:absolute;top:0;left:0;background:rgba(255,255,255,.5);cursor:pointer}
+	
+	#status {
+		width:100px;padding:10px 0;margin-left:-51px;
+		display:none;
+		position:absolute;top:21px;left:50%;z-index:10001;
+		border:1px solid #8DB600;border-top-color:#c6db85;border-radius:3px;
+		background:#A4C639;
+		background:-webkit-gradient(linear, left bottom, left top, from(#A4C639), to(#b6d161));
+		text-align:center;color:#333;text-shadow:1px 1px 1px rgba(255,255,255,.5);font-size:10px;
+		}

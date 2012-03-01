@@ -33,13 +33,17 @@ var setDefaultOptions = function () {
 }
 var saveParams = function () {
 	var self = $(this);
-	self.html('Сохранение...');	
 	$('.option').each(function(){
 		localStorageManager.set($(this).attr('id'), $(this).find('input:checked').val());
 	});
-	setTimeout(function(){ self.html('Сохранить'); }, 300);
+	showStatusMessage();
 }
 
+var showStatusMessage = function () {
+	notification.hide();
+	$('#status').show();
+	setTimeout(function(){ $('#status').hide(); }, 600);
+}
 var notification = {
 	show: function (id) {
 		notification
@@ -55,13 +59,8 @@ var notification = {
 	},
 	addTriggerSave: function (id) {
 		$('#notifier button').on('click', function () {
-			var buttonSave = $(this);
-			buttonSave.html('Сохранение...');
 			localStorageManager.set('clearvk.sites', notification.content(id, 'save'));
-			setTimeout(function(){
-				buttonSave.html('Сохранить');
-				notification.hide();
-			}, 300);
+			setTimeout(showStatusMessage, 300);
 		});
 	},
 	removeTriggerSave: function () { $('#notifier button').off('click'); },
@@ -79,7 +78,7 @@ var notification = {
 			return notification;
 		},
 		hide: function () {
-			$('.background').remove();
+			$('.background').off('click').remove();
 			return notification;
 		}
 	},
