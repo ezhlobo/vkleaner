@@ -1,11 +1,10 @@
 $(function(){
-	localStorageManager.get(idsBlocksWithOptions);
+	localStorageManager.get(idsBlocksWithOptions + ", clearvk.sites");
 	setTimeout(setDefaultOptions, 300);
 
 	$("#wrap")
 		.load("optionsItems.html")
 		.on("click", "#clearvk_linksToAsks a", function () {
-			localStorageManager.get("clearvk.sites");
 			notification.show("sites");
 			return false;
 		})
@@ -20,22 +19,22 @@ var localStorageManager = {
 	},
 	fnGET: function (name) {
 		chrome.extension.sendRequest({type:"get", name:name}, function (response) {
-			localStorage[name] = response || 1;
+			ownLocalStorage[name] = response || 1;
 		});
 	},
 	get: function (ids) {
 		collectionIds = ids.split(", ");
 		for (var k in collectionIds) localStorageManager.fnGET(collectionIds[k]);
 	}
-}, localStorage = {};
+}, ownLocalStorage = {};
 
 var getBadUrls = function () {
-	var urls = localStorage["clearvk.sites"];
+	var urls = ownLocalStorage["clearvk.sites"];
 	return (urls == 1) ? defaultSites : urls.split(",");
 }
 
 var setDefaultOptions = function () {
-	for (var id in localStorage) $("#"+id).find("input").removeAttr("checked").filter("[value="+localStorage[id]+"]").attr("checked", "checked");
+	for (var id in ownLocalStorage) $("#"+id).find("input").removeAttr("checked").filter("[value="+ownLocalStorage[id]+"]").attr("checked", "checked");
 }
 var saveParams = function () {
 	var self = $(this);

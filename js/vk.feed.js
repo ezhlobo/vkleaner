@@ -3,18 +3,18 @@ var idsBlocksWithOptions = "clearvk_class, clearvk_repostFromGroups, clearvk_lin
 var localStorageManager = {
 	fnGET: function (name) {
 		chrome.extension.sendRequest({type:"get", name:name}, function (response) {
-			localStorage[name] = response || 1;
+			ownLocalStorage[name] = response || 1;
 		});
 	},
 	get: function (ids) {
 		collectionIds = ids.split(", ");
 		for (var k in collectionIds) localStorageManager.fnGET(collectionIds[k]);
 	}
-}, localStorage = {};
+}, ownLocalStorage = {};
 localStorageManager.get(idsBlocksWithOptions + ", clearvk.sites");
 
 var getBadUrls = function () {
-	var urls = localStorage["clearvk.sites"];
+	var urls = ownLocalStorage["clearvk.sites"];
 	return (urls == 1) ? defaultSites : urls.split(",");
 }
 
@@ -71,15 +71,15 @@ var checkLocation = function () {
 setInterval(checkLocation, 500);
 setTimeout(function () {
 	whatNeedHide = [];
-	if (localStorage["clearvk_repostFromGroups"] == 1)
+	if (ownLocalStorage["clearvk_repostFromGroups"] == 1)
 		whatNeedHide.push("fromGroups");
-	if (localStorage["clearvk_linksToAsks"] == 1)
+	if (ownLocalStorage["clearvk_linksToAsks"] == 1)
 		whatNeedHide.push("withLinks");
-	if (localStorage["clearvk_video"] == 1)
+	if (ownLocalStorage["clearvk_video"] == 1)
 		whatNeedHide.push("withVideo");
-	if (localStorage["clearvk_audio"] == 1)
+	if (ownLocalStorage["clearvk_audio"] == 1)
 		whatNeedHide.push("withAudio");
 	
-	cssClassForHiddenPosts = (localStorage["clearvk_class"] == 1) ? "clearvk-showTop" : "clearvk-hideAll";
+	cssClassForHiddenPosts = (ownLocalStorage["clearvk_class"] == 1) ? "clearvk-showTop" : "clearvk-hideAll";
 	hideSomePosts();
 }, 100);
