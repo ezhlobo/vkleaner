@@ -11,11 +11,11 @@ article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup, 
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
-	margin:0;
-	padding:0;
-	border:0;
-	font-size:100%;
-	vertical-align:baseline;
+  margin:0;
+  padding:0;
+  border:0;
+  font-size:100%;
+  vertical-align:baseline;
 }
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {display:block}
@@ -27,70 +27,70 @@ blockquote, q {quotes:none}
 blockquote:before, blockquote:after, q:before, q:after {content:'';content:none}
 table {border-collapse:collapse;border-spacing:0}
 
-	h1 {font-size:20px;margin-bottom:10px;font-family:"Trebuchet MS";}
-	
-	.description {line-height:16px;color:#444;}
-		.description p {margin-bottom:10px;}
-	
-	.savebutton {
-		width:100%;padding:10px 0;margin-top:20px;display:block;
-		color:#444;text-shadow:1px 1px 0 #fff;font-size:10px;cursor:pointer;
-		}
-	
-	.options {}
-		.option {
-			padding:10px 12px;margin-bottom:3px;
-			background:rgba(164,198,57,.7);
-			border-radius:3px;text-shadow:1px 1px 1px rgba(255,255,255,.5);
-			border-bottom:1px solid rgba(164,198,57,1);
-			}
-		.option:after {
-			displaY:block;
-			clear:both;
-			content:'.';
-			height:0px;
-			overflow:hidden;
-		}
-		.option.important {background:rgba(255,191,0,.7);border-bottom-color:rgba(255,191,0,1);}
-		.name {width:420px;float:left;line-height:14px;}
-			.name i {display:block;font-size:8px;line-height:10px;margin-top:2px;}
-			#clearvk_linksToAsks .name a {color:#111;text-decoration:none;border-bottom:1px dashed #111;}
-		.params {
-			width:130px;float:left;margin-left:20px;
-			}
-			.params input {margin:0 0 0 3px;padding:0;vertical-align:top;cursor:pointer}
-			.params label {margin-right:25px;cursor:pointer;font-size:10px}
-	
-	#notifier {
-		width:370px;height:228px;
-		margin:20px 0 0 -200px;padding:15px;
-		top:0;left:50%;position:absolute;z-index:10000;
-		display:none;
-		background:rgba(0,0,0,.1);border-radius:10px;
-		}
-		.notifier {
-			width:350px;height:168px;padding:10px 10px 50px;overflow:hidden;
-			background:#fff;border-radius:3px;box-shadow:0 0 5px rgba(0,0,0,.1);
-			}
-		#notifier button {
-			height:40px;display:block;
-			position:absolute;bottom:15px;left:15px;right:15px;
-			color:#444;text-shadow:1px 1px 0 #fff;font-size:10px;cursor:pointer;
-			}
-		#notifier p.title {height:18px;line-height:18px;font-size:9px;color:#ccc;}
-	.clearvk-id2 {
-		width:350px;height:150px;padding:5px;resize:none;
-		border:5px solid #f1f1f1;outline:none;
-		font-family:Arial;font-size:11px;line-height:16px;
-		}
-	.background {position:absolute;top:0;left:0;background:rgba(255,255,255,.5);cursor:pointer}
-	
-	#status {
-		width:100px;padding:10px 0;margin-left:-51px;
-		display:none;
-		position:absolute;top:21px;left:50%;z-index:10001;
-		border:1px solid #8DB600;border-top-color:#c6db85;border-radius:3px;
-		background:#A4C639;
-		background:-webkit-gradient(linear, left bottom, left top, from(#A4C639), to(#b6d161));
-		text-align:center;color:#333;text-shadow:1px 1px 1px rgba(255,255,255,.5);font-size:10px;
-		}
+  h1 {font-size:20px;margin-bottom:10px;font-family:"Trebuchet MS";}
+
+  .description {line-height:16px;color:#444;}
+    .description p {margin-bottom:10px;}
+
+  .savebutton {
+    width:100%;padding:10px 0;margin-top:20px;display:block;
+    color:#444;text-shadow:1px 1px 0 #fff;font-size:10px;cursor:pointer;
+    }
+
+  .options {}
+    .option {
+      padding:10px 12px;margin-bottom:3px;
+      background:rgba(164,198,57,.7);
+      border-radius:3px;text-shadow:1px 1px 1px rgba(255,255,255,.5);
+      border-bottom:1px solid rgba(164,198,57,1);
+      }
+    .option:after {
+      displaY:block;
+      clear:both;
+      content:'.';
+      height:0px;
+      overflow:hidden;
+    }
+    .option.important {background:rgba(255,191,0,.7);border-bottom-color:rgba(255,191,0,1);}
+    .name {width:420px;float:left;line-height:14px;}
+      .name i {display:block;font-size:8px;line-height:10px;margin-top:2px;}
+      #clearvk_linksToAsks .name a {color:#111;text-decoration:none;border-bottom:1px dashed #111;}
+    .params {
+      width:130px;float:left;margin-left:20px;
+      }
+      .params input {margin:0 0 0 3px;padding:0;vertical-align:top;cursor:pointer}
+      .params label {margin-right:25px;cursor:pointer;font-size:10px}
+
+  #notifier {
+    width:370px;height:228px;
+    margin:20px 0 0 -200px;padding:15px;
+    top:0;left:50%;position:absolute;z-index:10000;
+    display:none;
+    background:rgba(0,0,0,.1);border-radius:10px;
+    }
+    .notifier {
+      width:350px;height:168px;padding:10px 10px 50px;overflow:hidden;
+      background:#fff;border-radius:3px;box-shadow:0 0 5px rgba(0,0,0,.1);
+      }
+    #notifier button {
+      height:40px;display:block;
+      position:absolute;bottom:15px;left:15px;right:15px;
+      color:#444;text-shadow:1px 1px 0 #fff;font-size:10px;cursor:pointer;
+      }
+    #notifier p.title {height:18px;line-height:18px;font-size:9px;color:#ccc;}
+  .clearvk-id2 {
+    width:350px;height:150px;padding:5px;resize:none;
+    border:5px solid #f1f1f1;outline:none;
+    font-family:Arial;font-size:11px;line-height:16px;
+    }
+  .background {position:absolute;top:0;left:0;background:rgba(255,255,255,.5);cursor:pointer}
+
+  #status {
+    width:100px;padding:10px 0;margin-left:-51px;
+    display:none;
+    position:absolute;top:21px;left:50%;z-index:10001;
+    border:1px solid #8DB600;border-top-color:#c6db85;border-radius:3px;
+    background:#A4C639;
+    background:-webkit-gradient(linear, left bottom, left top, from(#A4C639), to(#b6d161));
+    text-align:center;color:#333;text-shadow:1px 1px 1px rgba(255,255,255,.5);font-size:10px;
+    }
