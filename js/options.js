@@ -1,9 +1,31 @@
+// Localize
+$("title").html($("title").html()+ getMessage("options"));
+var localize = function () {
+  $("#wrap")
+    .find("h1").html($("h1").html()+" "+ getMessage("options")).end()
+    .find(".description p").html(getMessage("options_description")).end()
+    .find(".option").each(function () {
+      $(this).find("label").each(function (n) {
+        var yesno = (n == 0)? getMessage("options_yes") : getMessage("options_no");
+        $(this).html(yesno + $(this).html());
+      });
+    }).end()
+    .find("#clearvk_repostFromGroups .name").html(getMessage("options_repostFromGroups")).end()
+    .find("#clearvk_linksToAsks .name").html(getMessage("options_withLinks")).end()
+    .find("#clearvk_video .name").html(getMessage("options_video")).end()
+    .find("#clearvk_audio .name").html(getMessage("options_audio")).end()
+    .find("#clearvk_class .name").html(getMessage("options_class")).end()
+    .find(".savebutton").html(getMessage("options_save")).end()
+    .find("#notifier").html("<div class=\"notifier\">"+ getMessage("options_saving") +"...</div><button>"+ getMessage("options_save") +"</button>").end()
+    .find("#status").html(getMessage("options_saved"));
+};
+
 $(function(){
   localStorageManager.get(idsBlocksWithOptions + ", clearvk.sites");
   setTimeout(setDefaultOptions, 300);
 
   $("#wrap")
-    .load("optionsItems.html")
+    .load("optionsItems.html", localize)
     .on("click", "#clearvk_linksToAsks a", function () {
       notification.show("sites");
       return false;
@@ -93,9 +115,12 @@ var notification = {
         if (way == "save") {
           return $("#notifier textarea").val().trim().split("\n");
         } else {
-          return "<p class=\"title\">Для восстановления введите 1 и сохраните</p><textarea class=\"clearvk-id2\">"+getBadUrls().join("\n")+"</textarea>";
+          return "<p class=\"title\">"+ getMessage("options_toRestore") +"</p><textarea class=\"clearvk-id2\">"+getBadUrls().join("\n")+"</textarea>";
         }
         break;
     }
   }
+}
+function getMessage (query) {
+  return chrome.i18n.getMessage(query);
 }

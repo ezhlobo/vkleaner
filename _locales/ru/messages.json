@@ -1,0 +1,45 @@
+{
+  "description": {
+    "message": "Chrome расширение для vk.com, которое скрывает нежелательные сообщения. Вы можете определить, какие сообщения скрывать.",
+    "description": "Описание приложения"
+  },
+  "options": {
+    "message": "Настройки",
+    "description": "Заголовок на странице настроек"
+  },
+  "options_description": {
+    "message": "Приложение очищает новости ВКонтакте от перепостов из групп.",
+    "description": "Описание приложения на странице настроек"
+  },
+  "options_repostFromGroups": {
+    "message": "Скрывать перепосты из групп и публичных страниц?",
+    "description": "Имя опции"
+  },
+  "options_withLinks": {
+    "message": "Скрывать сообщения со ссылками?<i><a href=''>Черный список ссылок</a></i>",
+    "description": "Имя опции"
+  },
+  "options_video": {
+    "message": "Скрывать видео?",
+    "description": "Имя опции"
+  },
+  "options_audio": {
+    "message": "Скрывать музыку?",
+    "description": "Имя опции"
+  },
+  "options_class": {
+    "message": "Показывать заголовок скрытого поста?",
+    "description": "Имя опции"
+  },
+  "options_toRestore": {
+    "message": "Для восстановления введите 1 и сохраните",
+    "description": "В notifier"
+  },
+
+  "options_save": { "message": "Сохранить" },
+  "options_saving": { "message": "Сохранение" },
+  "options_saved": { "message": "Сохранено" },
+
+  "options_yes": { "message": "Да" },
+  "options_no": { "message": "Нет" }
+}

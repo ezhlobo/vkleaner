@@ -1,0 +1,45 @@
+{
+  "description": {
+    "message": "Chrome extension for vk.com that hides unwanted posts. You can define types of posts that will be hided.",
+    "description": "Description of app"
+  },
+  "options": {
+    "message": "Options",
+    "description": "Title on options page"
+  },
+  "options_description": {
+    "message": "The application cleans vkontakte news from reposts of the groups.",
+    "description": "Description of app on options page"
+  },
+  "options_repostFromGroups": {
+    "message": "Hide repost of the groups and the public pages?",
+    "description": "Option name"
+  },
+  "options_withLinks": {
+    "message": "Hide posts with links?<i><a href=''>Black list of links</a></i>",
+    "description": "Option name"
+  },
+  "options_video": {
+    "message": "Hide video?",
+    "description": "Option name"
+  },
+  "options_audio": {
+    "message": "Hide audio?",
+    "description": "Option name"
+  },
+  "options_class": {
+    "message": "Show the title of the hidden post?",
+    "description": "Option name"
+  },
+  "options_toRestore": {
+    "message": "To restore, type 1 and save",
+    "description": "In notifier"
+  },
+
+  "options_save": { "message": "Save" },
+  "options_saving": { "message": "Saving" },
+  "options_saved": { "message": "Saved" },
+
+  "options_yes": { "message": "Yes" },
+  "options_no": { "message": "No" }
+}

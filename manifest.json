@@ -1,7 +1,8 @@
 {
   "name": "VKleaner",
   "version": "0.5.4",
-  "description": "Chrome extension for vk.com that hides unwanted posts. You can define types of posts that will be hided.",
+  "description": "__MSG_description__",
+  "default_locale": "en",
 
   "icons": {
     "16": "img/icon-16.png",
