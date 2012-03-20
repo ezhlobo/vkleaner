@@ -18,7 +18,7 @@ var getBadUrls = function () {
   return (urls == 1) ? defaultSites : urls.split(",");
 }
 
-var cssClassForHiddenPosts;
+var cssClassForHiddenPosts, whatNeedHide;
 var hidePosts = {
   fromGroups: function (post) {
     var repost = post.find(".published_by");
@@ -68,8 +68,14 @@ var checkLocation = function () {
   if (window.location.pathname == "/feed")
     hideSomePosts();
 }
-setInterval(checkLocation, 500);
-setTimeout(function () {
+
+var running;
+var runExtension = function () {
+  clearInterval(running);
+  setInterval(checkLocation, 500);
+  hideSomePosts();
+};
+var initExtension = function () {
   whatNeedHide = [];
   if (ownLocalStorage["clearvk_repostFromGroups"] == 1)
     whatNeedHide.push("fromGroups");
@@ -81,5 +87,9 @@ setTimeout(function () {
     whatNeedHide.push("withAudio");
 
   cssClassForHiddenPosts = (ownLocalStorage["clearvk_class"] == 1) ? "clearvk-showTop" : "clearvk-hideAll";
-  hideSomePosts();
-}, 100);
+  
+  if (whatNeedHide.length != 0)
+    runExtension();
+};
+
+running = setInterval(initExtension, 10);
