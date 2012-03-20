@@ -32,34 +32,40 @@ table {border-collapse:collapse;border-spacing:0}
   .description {line-height:16px;color:#444;}
     .description p {margin-bottom:10px;}
 
-  .savebutton {
-    width:100%;padding:10px 0;margin-top:20px;display:block;
-    color:#444;text-shadow:1px 1px 0 #fff;font-size:10px;cursor:pointer;
-    }
-
   .options {}
     .option {
       padding:10px 12px;margin-bottom:3px;
-      background:rgba(164,198,57,.7);
+      background:rgba(230,230,230,.7);
       border-radius:3px;text-shadow:1px 1px 1px rgba(255,255,255,.5);
+      border-bottom:1px solid rgba(255,255,255,1);
+      color:#444;
+      opacity:.7;
+      }
+    .option.yes, .option.important {
+      background:rgba(164,198,57,.7);
       border-bottom:1px solid rgba(164,198,57,1);
+      color:#000;
+      opacity:1;
       }
     .option:after {
-      displaY:block;
+      display:block;
       clear:both;
       content:'.';
       height:0px;
       overflow:hidden;
     }
-    .option.important {background:rgba(255,191,0,.7);border-bottom-color:rgba(255,191,0,1);}
+    .option.important {background:rgba(255,191,0,.7);border-bottom-color:rgba(255,191,0,1);opacity:.5;}
+    .option.important.yes {opacity:1;}
     .name {width:420px;float:left;line-height:14px;}
       .name i {display:block;font-size:8px;line-height:10px;margin-top:2px;}
-      #clearvk_linksToAsks .name a {color:#111;text-decoration:none;border-bottom:1px dashed #111;}
+      #clearvk_linksToAsks .name a {color:#afafaf;text-decoration:none;border-bottom:1px dashed #afafaf;}
+      #clearvk_linksToAsks.yes .name a {color:#111;border-bottom-color:#111;}
     .params {
-      width:130px;float:left;margin-left:20px;
+      float:right;margin-left:20px;
+      line-height:14px;
       }
       .params input {margin:0 0 0 3px;padding:0;vertical-align:top;cursor:pointer}
-      .params label {margin-right:25px;cursor:pointer;font-size:10px}
+      .params label {margin-left:25px;cursor:pointer;}
 
   #notifier {
     width:370px;height:228px;
@@ -84,13 +90,3 @@ table {border-collapse:collapse;border-spacing:0}
     font-family:Arial;font-size:11px;line-height:16px;
     }
   .background {position:absolute;top:0;left:0;background:rgba(255,255,255,.5);cursor:pointer}
-
-  #status {
-    width:100px;padding:10px 0;margin-left:-51px;
-    display:none;
-    position:absolute;top:21px;left:50%;z-index:10001;
-    border:1px solid #8DB600;border-top-color:#c6db85;border-radius:3px;
-    background:#A4C639;
-    background:-webkit-gradient(linear, left bottom, left top, from(#A4C639), to(#b6d161));
-    text-align:center;color:#333;text-shadow:1px 1px 1px rgba(255,255,255,.5);font-size:10px;
-    }

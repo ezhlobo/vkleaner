@@ -6,8 +6,7 @@ var localize = function () {
     .find(".description p").html(getMessage("options_description")).end()
     .find(".option").each(function () {
       $(this).find("label").each(function (n) {
-        var yesno = (n == 0)? getMessage("options_yes") : getMessage("options_no");
-        $(this).html(yesno + $(this).html());
+        $(this).html(getMessage("options_yes") + $(this).html());
       });
     }).end()
     .find("#clearvk_repostFromGroups .name").html(getMessage("options_repostFromGroups")).end()
@@ -15,9 +14,7 @@ var localize = function () {
     .find("#clearvk_video .name").html(getMessage("options_video")).end()
     .find("#clearvk_audio .name").html(getMessage("options_audio")).end()
     .find("#clearvk_class .name").html(getMessage("options_class")).end()
-    .find(".savebutton").html(getMessage("options_save")).end()
-    .find("#notifier").html("<div class=\"notifier\">"+ getMessage("options_saving") +"...</div><button>"+ getMessage("options_save") +"</button>").end()
-    .find("#status").html(getMessage("options_saved"));
+    .find("#notifier").html("<div class=\"notifier\"></div><button>"+ getMessage("options_save") +"</button>").end();
 };
 
 $(function(){
@@ -30,7 +27,7 @@ $(function(){
       notification.show("sites");
       return false;
     })
-    .on("click", ".savebutton", saveParams);
+    .on("change", ".option input", saveParam);
 });
 
 var defaultSites = ["ask.fm", "sprashivai.ru", "formspring.me", "my-truth.ru", "askbook.me", "askme.by", "qroom.ru", "nekto.me"]
@@ -38,6 +35,7 @@ var idsBlocksWithOptions = "clearvk_class, clearvk_repostFromGroups, clearvk_lin
 var localStorageManager = {
   set: function (name, value) {
     chrome.extension.sendRequest({type:"set", name:name, value:value});
+    return this;
   },
   fnGET: function (name) {
     chrome.extension.sendRequest({type:"get", name:name}, function (response) {
@@ -46,7 +44,7 @@ var localStorageManager = {
   },
   get: function (ids) {
     collectionIds = ids.split(", ");
-    for (var k in collectionIds) localStorageManager.fnGET(collectionIds[k]);
+    for (var k in collectionIds) this.fnGET(collectionIds[k]);
   }
 }, ownLocalStorage = {};
 
@@ -56,21 +54,26 @@ var getBadUrls = function () {
 }
 
 var setDefaultOptions = function () {
-  for (var id in ownLocalStorage) $("#"+id).find("input").removeAttr("checked").filter("[value="+ownLocalStorage[id]+"]").attr("checked", "checked");
-}
-var saveParams = function () {
-  var self = $(this);
-  $(".option").each(function(){
-    localStorageManager.set($(this).attr("id"), $(this).find("input:checked").val());
-  });
-  showStatusMessage();
+  var option = $(".options").find(".option").removeClass("yes").find("input").removeAttr("checked").end();
+  for (var id in ownLocalStorage) {
+    if (ownLocalStorage[id] == 1)
+      option.filter("#"+id).addClass("yes").find("input").attr("checked", "checked");
+  }
 }
 
-var showStatusMessage = function () {
-  notification.hide();
-  $("#status").show();
-  setTimeout(function(){ $("#status").hide(); }, 600);
+var saveParam = function () {
+  var self = $(this);
+  var thisRowBlock = self.closest(".option");
+  var value = 0;
+  if (self.is(":checked")) {
+    value = 1;
+    thisRowBlock.addClass("yes");
+  } else {
+    thisRowBlock.removeClass("yes");
+  }
+  localStorageManager.set(self.attr("name"), value);
 }
+
 var notification = {
   show: function (id) {
     notification
@@ -86,8 +89,10 @@ var notification = {
   },
   addTriggerSave: function (id) {
     $("#notifier button").on("click", function () {
-      localStorageManager.set("clearvk.sites", notification.content(id, "save"));
-      setTimeout(showStatusMessage, 300);
+      localStorageManager
+        .set("clearvk.sites", notification.content(id, "save"))
+        .get("clearvk.sites");
+      notification.hide();
     });
   },
   removeTriggerSave: function () { $("#notifier button").off("click"); },

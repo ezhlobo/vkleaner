@@ -1,6 +1,6 @@
 {
   "description": {
-    "message": "Chrome extension for vk.com that hides unwanted posts. You can define types of posts that will be hided.",
+    "message": "Tool for vk.com than hides unwanted post from news feed.",
     "description": "Description of app"
   },
   "options": {
@@ -37,9 +37,6 @@
   },
 
   "options_save": { "message": "Save" },
-  "options_saving": { "message": "Saving" },
-  "options_saved": { "message": "Saved" },
 
-  "options_yes": { "message": "Yes" },
-  "options_no": { "message": "No" }
+  "options_yes": { "message": "Yes" }
 }

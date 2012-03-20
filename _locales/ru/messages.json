@@ -1,6 +1,6 @@
 {
   "description": {
-    "message": "Chrome расширение для vk.com, которое скрывает нежелательные сообщения. Вы можете определить, какие сообщения скрывать.",
+    "message": "Приложение для vk.com, скрывающее нежелательные новости из ленты.",
     "description": "Описание приложения"
   },
   "options": {
@@ -37,9 +37,6 @@
   },
 
   "options_save": { "message": "Сохранить" },
-  "options_saving": { "message": "Сохранение" },
-  "options_saved": { "message": "Сохранено" },
 
-  "options_yes": { "message": "Да" },
-  "options_no": { "message": "Нет" }
+  "options_yes": { "message": "Да" }
 }
