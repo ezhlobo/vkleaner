@@ -19,7 +19,7 @@ var localize = function () {
 
 $(function(){
   localStorageManager.get(idsBlocksWithOptions + ", clearvk.sites");
-  setTimeout(setDefaultOptions, 300);
+  setDefaultOptions();
 
   $("#wrap")
     .load("optionsItems.html", localize)
@@ -54,11 +54,19 @@ var getBadUrls = function () {
 }
 
 var setDefaultOptions = function () {
-  var option = $(".options").find(".option").removeClass("yes").find("input").removeAttr("checked").end();
-  for (var id in ownLocalStorage) {
-    if (ownLocalStorage[id] == 1)
-      option.filter("#"+id).addClass("yes").find("input").attr("checked", "checked");
-  }
+  var loadedDefaultParams = function () {
+    clearInterval(timer);
+    var option = $(".options").find(".option").removeClass("yes").find("input").removeAttr("checked").end();
+    for (var id in ownLocalStorage) {
+      if (ownLocalStorage[id] == 1)
+        option.filter("#"+id).addClass("yes").find("input").attr("checked", "checked");
+    }
+  };
+  var gettingDefaultParams = function () {
+    if(ownLocalStorage["clearvk.sites"])
+      loadedDefaultParams();
+  };
+  var timer = setInterval(gettingDefaultParams, 0);
 }
 
 var saveParam = function () {
