@@ -63,10 +63,10 @@ var setDefaultOptions = function () {
     }
   };
   var gettingDefaultParams = function () {
-    if(ownLocalStorage["clearvk.sites"])
+    if(ownLocalStorage["clearvk.sites"] != void 0)
       loadedDefaultParams();
   };
-  var timer = setInterval(gettingDefaultParams, 0);
+  var timer = setInterval(gettingDefaultParams, 10);
 }
 
 var saveParam = function () {
