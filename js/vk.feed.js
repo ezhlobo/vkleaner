@@ -57,8 +57,16 @@ var hidePosts = {
   addCssClass: function (post) { post.addClass(cssClassForHiddenPosts) }
 }
 var hideSomePosts = function () {
+  // Get new values of settings
+  localStorageManager.get(idsBlocksWithOptions + ", clearvk.sites");
+
+  // Get new params for unwanted posts
+  newParams();
+
   $("#feed_rows").find(".post").each(function(){
-    $(this).removeClass(cssClassForHiddenPosts);
+    // Remove all hidden class
+    $(this).removeClass("clearvk-showTop clearvk-hideAll");
+
     for (var name in whatNeedHide)
       hidePosts[ whatNeedHide[name] ] ( $(this) );
   });
@@ -75,7 +83,8 @@ var runExtension = function () {
   setInterval(checkLocation, 500);
   hideSomePosts();
 };
-var initExtension = function () {
+var newParams = function () {
+  // New array
   whatNeedHide = [];
   if (ownLocalStorage["clearvk_repostFromGroups"] == 1)
     whatNeedHide.push("fromGroups");
@@ -86,8 +95,12 @@ var initExtension = function () {
   if (ownLocalStorage["clearvk_audio"] == 1)
     whatNeedHide.push("withAudio");
 
+  // New class for all posts
   cssClassForHiddenPosts = (ownLocalStorage["clearvk_class"] == 1) ? "clearvk-showTop" : "clearvk-hideAll";
-  
+}
+var initExtension = function () {
+  newParams();
+
   if (whatNeedHide.length != 0)
     runExtension();
 };
