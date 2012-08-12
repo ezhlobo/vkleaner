@@ -32,7 +32,7 @@
     "description": "Option name"
   },
   "options_toRestore": {
-    "message": "To restore, type 1 and save",
+    "message": "To restore delete all and save",
     "description": "In notifier"
   },
 

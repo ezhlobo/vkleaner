@@ -1,139 +1,112 @@
-// Localize
-$("title").html($("title").html()+ getMessage("options"));
-var localize = function () {
-  $("#wrap")
-    .find("h1").html($("h1").html()+" "+ getMessage("options")).end()
-    .find(".description p").html(getMessage("options_description")).end()
-    .find(".option").each(function () {
-      $(this).find("label").each(function (n) {
-        $(this).html(getMessage("options_yes") + $(this).html());
-      });
-    }).end()
-    .find("#clearvk_repostFromGroups .name").html(getMessage("options_repostFromGroups")).end()
-    .find("#clearvk_linksToAsks .name").html(getMessage("options_withLinks")).end()
-    .find("#clearvk_video .name").html(getMessage("options_video")).end()
-    .find("#clearvk_audio .name").html(getMessage("options_audio")).end()
-    .find("#clearvk_class .name").html(getMessage("options_class")).end()
-    .find("#notifier").html("<div class=\"notifier\"></div><button>"+ getMessage("options_save") +"</button>").end();
-};
+$(function() {
+  $('#wrap')
+    .load('optionsItems.html', localization)
+    .on('change', '.option input', changeOptionStatus);
 
-$(function(){
-  localStorageManager.get(idsBlocksWithOptions + ", clearvk.sites");
-  setDefaultOptions();
+  modal('#clearvk_withLinks a');
 
-  $("#wrap")
-    .load("optionsItems.html", localize)
-    .on("click", "#clearvk_linksToAsks a", function () {
-      notification.show("sites");
-      return false;
-    })
-    .on("change", ".option input", saveParam);
+  setDefaultSettings();
 });
 
-var defaultSites = ["ask.fm", "sprashivai.ru", "formspring.me", "my-truth.ru", "askbook.me", "askme.by", "qroom.ru", "nekto.me"]
-var idsBlocksWithOptions = "clearvk_class, clearvk_repostFromGroups, clearvk_linksToAsks, clearvk_video, clearvk_audio";
-var localStorageManager = {
-  set: function (name, value) {
-    chrome.extension.sendRequest({type:"set", name:name, value:value});
-    return this;
-  },
-  fnGET: function (name) {
-    chrome.extension.sendRequest({type:"get", name:name}, function (response) {
-      ownLocalStorage[name] = response || 1;
+// Make ownLocalStorage object
+localStorageManager.getAllSettings();
+
+var modal = function(element) {
+  var animateDuration = 200;
+
+  var background = $('body').append('<div class=\'background\'></div>').find('.background');
+  background.display = function(value) {
+    this.animate({opacity: value}, animateDuration);
+  };
+
+  localStorageManager.get('clearvk_withLinks_content');
+
+  var open = function() {
+    background.css({ width: $(document).width(), height: $(document).height() }).display('show');
+    $('#notifier')
+      .animate({opacity: 'show', top: '20px'}, animateDuration)
+      .find('.notifier').html('<p class=\'title\'>' + getLocalizedText('options_toRestore') + '</p><textarea>' + links().join('\n') + '</textarea>');
+    return false;
+  };
+  var hide = function() {
+    background.display('hide');
+    $('#notifier').animate({opacity: 'hide', top: '0'}, animateDuration);
+    return false;
+  };
+
+  var saveContent = function() {
+    var value = $('#notifier textarea').val().trim().replace(/\n/, linksSeparator);
+    localStorageManager.set('clearvk_withLinks_content', value);
+    localStorageManager.get('clearvk_withLinks_content');
+    hide();
+  };
+
+  $('#wrap').on('click', element, open).on('click', '#notifier button', saveContent);
+  background.hide().on('click', hide);
+};
+
+var setDefaultSettings = function() {
+  // Run, when the default settings are loaded
+  var loadedDefaultSettings = function() {
+    $.each(ownLocalStorage, function(id) {
+      // If the option must be enabled
+      if (ownLocalStorage[id] == 1) enableOption(id);
     });
-  },
-  get: function (ids) {
-    collectionIds = ids.split(", ");
-    for (var k in collectionIds) this.fnGET(collectionIds[k]);
-  }
-}, ownLocalStorage = {};
+  };
 
-var getBadUrls = function () {
-  var urls = ownLocalStorage["clearvk.sites"];
-  return (urls == 1) ? defaultSites : urls.split(",");
-}
+  var enableOption = function(optionId) {
+    $('#' + optionId, $('.options')).addClass('yes').find('input').attr('checked', 'checked');
+  };
 
-var setDefaultOptions = function () {
-  var loadedDefaultParams = function () {
-    clearInterval(timer);
-    var option = $(".options").find(".option").removeClass("yes").find("input").removeAttr("checked").end();
-    for (var id in ownLocalStorage) {
-      if (ownLocalStorage[id] == 1)
-        option.filter("#"+id).addClass("yes").find("input").attr("checked", "checked");
+  // Checking: are the default settings loaded?
+  var checkingDefaultSettings = function() {
+    if (ownLocalStorage['clearvk_audio'] != void 0) {
+      clearInterval(timer);
+      loadedDefaultSettings();
     }
   };
-  var gettingDefaultParams = function () {
-    if(ownLocalStorage["clearvk.sites"] != void 0)
-      loadedDefaultParams();
-  };
-  var timer = setInterval(gettingDefaultParams, 10);
-}
+  var timer = setInterval(checkingDefaultSettings, 10);
+};
 
-var saveParam = function () {
-  var self = $(this);
-  var thisRowBlock = self.closest(".option");
+// Change option (yes or now)
+var changeOptionStatus = function() {
+  var input = $(this);
+  var option = input.closest('.option');
+
+  // Change status of option
   var value = 0;
-  if (self.is(":checked")) {
+  if (input.is(':checked')) {
     value = 1;
-    thisRowBlock.addClass("yes");
-  } else {
-    thisRowBlock.removeClass("yes");
-  }
-  localStorageManager.set(self.attr("name"), value);
-}
+    option.addClass('yes');
+  } else { option.removeClass('yes'); }
 
-var notification = {
-  show: function (id) {
-    notification
-      .background.show()
-      .animation("show", "+", notification.content(id))
-      .addTriggerSave(id);
-  },
-  hide: function () {
-    notification
-      .background.hide()
-      .animation("hide", "-", "")
-      .removeTriggerSave();
-  },
-  addTriggerSave: function (id) {
-    $("#notifier button").on("click", function () {
-      localStorageManager
-        .set("clearvk.sites", notification.content(id, "save"))
-        .get("clearvk.sites");
-      notification.hide();
-    });
-  },
-  removeTriggerSave: function () { $("#notifier button").off("click"); },
-  animation: function (valueOpacity, symbolTop, html) {
-    $("#notifier").animate({opacity: valueOpacity, marginTop: symbolTop+"=20px"}, 100).children(".notifier").html(html);
-    return this;
-  },
-  background: {
-    show: function () {
-      $("body").append("<div class=\"background\"></div>");
-      $(".background").width($(document).width()).height($(document).height()).on("click", function(){
-        $(this).off("click");
-        notification.hide();
-      });
-      return notification;
-    },
-    hide: function () {
-      $(".background").off("click").remove();
-      return notification;
-    }
-  },
-  content: function (id, way) {
-    switch (id) {
-      case "sites":
-        if (way == "save") {
-          return $("#notifier textarea").val().trim().split("\n");
-        } else {
-          return "<p class=\"title\">"+ getMessage("options_toRestore") +"</p><textarea class=\"clearvk-id2\">"+getBadUrls().join("\n")+"</textarea>";
-        }
-        break;
-    }
-  }
-}
-function getMessage (query) {
-  return chrome.i18n.getMessage(query);
-}
+  // Save settings
+  localStorageManager.set(input.attr('name'), value);
+};
+
+// Localize title of page
+$('title').html($('title').html() + getLocalizedText('options'));
+
+var localization = function() {
+  $('#wrap')
+    // Localize header
+    .find('h1').html($('h1').html() + getLocalizedText('options')).end()
+
+    // Localize description
+    .find('.description p').html(getLocalizedText('options_description')).end()
+      
+    // Localize checkbox of option
+    .find('.option label').each(function() {
+      $(this).html(getLocalizedText('options_yes') + $(this).html());
+    }).end()
+
+    // Localize content of option
+    .find('.option').each(function() {
+      var option = $(this);
+      var nameOfOption = option.attr('id').replace('clearvk', '');
+      $('.name', option).html(getLocalizedText('options' + nameOfOption));
+    }).end()
+
+    // Localize content of notification
+    .find('#notifier').html('<div class=\'notifier\'></div><button>' + getLocalizedText('options_save') + '</button>');
+};

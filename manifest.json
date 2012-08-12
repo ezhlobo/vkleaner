@@ -1,6 +1,6 @@
 {
   "name": "VKleaner",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "__MSG_description__",
   "default_locale": "en",
 
@@ -19,6 +19,6 @@
   "content_scripts": [{
     "matches": ["http://vk.com/*"],
     "css": ["css/vk.feed.css"],
-    "js": ["js/jquery.js", "js/vk.feed.js"]
+    "js": ["js/jquery.js", "js/main.js", "js/feed.js"]
   }]
 }

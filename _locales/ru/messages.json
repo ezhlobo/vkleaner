@@ -32,7 +32,7 @@
     "description": "Имя опции"
   },
   "options_toRestore": {
-    "message": "Для восстановления введите 1 и сохраните",
+    "message": "Для восстановления удалите все и сохраните",
     "description": "В notifier"
   },
 
