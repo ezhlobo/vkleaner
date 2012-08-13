@@ -94,7 +94,7 @@ var localization = function() {
 
     // Localize description
     .find('.description p').html(getLocalizedText('options_description')).end()
-      
+
     // Localize checkbox of option
     .find('.option label').each(function() {
       $(this).html(getLocalizedText('options_yes') + $(this).html());

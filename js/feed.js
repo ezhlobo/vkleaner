@@ -39,12 +39,12 @@ var hiding = {
 
 var hidePosts = function() {
   if (window.location.pathname != '/feed') return false;
-  
+
   localStorageManager.getAllSettings('clearvk_withLinks_content');
 
   // Get new params for unwanted posts
   getParams();
-  
+
   $('#feed_rows').find('.feed_row').removeClass('clearvk-showTop clearvk-hideAll').each(function(){
     for (var name in whatNeedHide)
       hiding[whatNeedHide[name]]($(this));
