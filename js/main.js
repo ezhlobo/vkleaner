@@ -1,10 +1,10 @@
 // Return localized text
-var getLocalizedText = function(query) {
+var localize = function(query) {
   return chrome.i18n.getMessage(query);
 };
 
 // Black list of links by default
-var defaultLinks = [
+var defaultBlacklist = [
   'ask.fm',
   'sprashivai.ru',
   'formspring.me',
@@ -15,10 +15,10 @@ var defaultLinks = [
   'nekto.me'
 ];
 
-var linksSeparator = '%VKleaneR#@Z';
+var linksSeparator = ';';
 var links = function() {
   var links = ownLocalStorage['clearvk_withLinks_content'].toString();
-  return links ? links.split(linksSeparator) : defaultLinks;
+  return links ? links.split(linksSeparator) : defaultBlacklist;
 };
 
 // Ids of options and their default values

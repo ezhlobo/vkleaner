@@ -1,6 +1,6 @@
 localStorageManager.getAllSettings('clearvk_withLinks_content');
 
-var addCssClass = function(post) {
+var hide = function(post) {
   post.addClass(cssClassForHiddenPosts);
 };
 
@@ -10,12 +10,12 @@ var hiding = {
     if (innerWrapClass.substr(0, 11) == 'feed_repost') {
       // Group reposts from VKGroup
       if (innerWrapClass.substr(17, 1) == '-') {
-        addCssClass(post);
+        hide(post);
         post.find('.feed_reposts_more').addClass(cssClassForHiddenPosts + '-group');
       }
       // Repost from VKGroup or Photo-repost from VKGroup
       else if (innerWrapClass.substr(0, 11) == 'feed_repost' || post.find('a.published_by_date').attr('href').substr(6, 1) == '-') {
-        addCssClass(post);
+        hide(post);
       }
     }
   },
@@ -25,15 +25,15 @@ var hiding = {
 
     var urlTpl = new RegExp('(\s|^)(https?:\/\/)?(w{3}\.)?([^\s]+)?(' + links().join('|') + ')(\/[^\s]*)?', 'i');
     if (urlTpl.test(mediaLink) || urlTpl.test(linkInText))
-      addCssClass(post);
+      hide(post);
   },
   withVideo: function(post) {
     if (post.find('.page_media_video').length > 0)
-      addCssClass(post);
+      hide(post);
   },
   withAudio: function(post) {
     if (post.find('.audio').length > 0)
-      addCssClass(post);
+      hide(post);
   }
 };
 
@@ -46,21 +46,21 @@ var hidePosts = function() {
   getParams();
 
   $('#feed_rows').find('.feed_row').removeClass('clearvk-showTop clearvk-hideAll').each(function(){
-    for (var name in whatNeedHide)
-      hiding[whatNeedHide[name]]($(this));
+    for (var name in needHide)
+      hiding[needHide[name]]($(this));
   });
 };
 
-var whatNeedHide, getParams = function () {
-  whatNeedHide = [];
+var needHide, getParams = function () {
+  needHide = [];
   if (ownLocalStorage['clearvk_repostFromGroups'] == 1)
-    whatNeedHide.push('repostFromGroups');
+    needHide.push('repostFromGroups');
   if (ownLocalStorage['clearvk_withLinks'] == 1)
-    whatNeedHide.push('withLinks');
+    needHide.push('withLinks');
   if (ownLocalStorage['clearvk_video'] == 1)
-    whatNeedHide.push('withVideo');
+    needHide.push('withVideo');
   if (ownLocalStorage['clearvk_audio'] == 1)
-    whatNeedHide.push('withAudio');
+    needHide.push('withAudio');
 
   cssClassForHiddenPosts = (ownLocalStorage['clearvk_class'] == 1) ? 'clearvk-showTop' : 'clearvk-hideAll';
 }, cssClassForHiddenPosts;

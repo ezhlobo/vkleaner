@@ -3,7 +3,7 @@ $(function() {
     .load('optionsItems.html', localization)
     .on('change', '.option input', changeOptionStatus);
 
-  modal('#clearvk_withLinks a');
+  modalBlacklist('#clearvk_withLinks a');
 
   setDefaultSettings();
 });
@@ -11,7 +11,7 @@ $(function() {
 // Make ownLocalStorage object
 localStorageManager.getAllSettings();
 
-var modal = function(element) {
+var modalBlacklist = function(element) {
   var animateDuration = 200;
 
   var background = $('body').append('<div class=\'background\'></div>').find('.background');
@@ -25,7 +25,7 @@ var modal = function(element) {
     background.css({ width: $(document).width(), height: $(document).height() }).display('show');
     $('#notifier')
       .animate({opacity: 'show', top: '20px'}, animateDuration)
-      .find('.notifier').html('<p class=\'title\'>' + getLocalizedText('options_toRestore') + '</p><textarea>' + links().join('\n') + '</textarea>');
+      .find('.notifier').html('<p class=\'title\'>' + localize('options_toRestore') + '</p><textarea>' + links().join('\n') + '</textarea>');
     return false;
   };
   var hide = function() {
@@ -85,28 +85,28 @@ var changeOptionStatus = function() {
 };
 
 // Localize title of page
-$('title').html($('title').html() + getLocalizedText('options'));
+$('title').html($('title').html() + localize('options'));
 
 var localization = function() {
   $('#wrap')
     // Localize header
-    .find('h1').html($('h1').html() + getLocalizedText('options')).end()
+    .find('h1').html($('h1').html() + localize('options')).end()
 
     // Localize description
-    .find('.description p').html(getLocalizedText('options_description')).end()
+    .find('.description p').html(localize('options_description')).end()
 
     // Localize checkbox of option
     .find('.option label').each(function() {
-      $(this).html(getLocalizedText('options_yes') + $(this).html());
+      $(this).html(localize('options_yes') + $(this).html());
     }).end()
 
     // Localize content of option
     .find('.option').each(function() {
       var option = $(this);
       var nameOfOption = option.attr('id').replace('clearvk', '');
-      $('.name', option).html(getLocalizedText('options' + nameOfOption));
+      $('.name', option).html(localize('options' + nameOfOption));
     }).end()
 
     // Localize content of notification
-    .find('#notifier').html('<div class=\'notifier\'></div><button>' + getLocalizedText('options_save') + '</button>');
+    .find('#notifier').html('<div class=\'notifier\'></div><button>' + localize('options_save') + '</button>');
 };
