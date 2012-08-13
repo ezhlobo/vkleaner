@@ -5,28 +5,28 @@ var getLocalizedText = function(query) {
 
 // Black list of links by default
 var defaultLinks = [
-  'ask.fm', 
-  'sprashivai.ru', 
-  'formspring.me', 
-  'my-truth.ru', 
-  'askbook.me', 
-  'askme.by', 
-  'qroom.ru', 
+  'ask.fm',
+  'sprashivai.ru',
+  'formspring.me',
+  'my-truth.ru',
+  'askbook.me',
+  'askme.by',
+  'qroom.ru',
   'nekto.me'
 ];
 
 var linksSeparator = '%VKleaneR#@Z';
 var links = function() {
-  var links = ownLocalStorage['clearvk_withLinks_content'];
+  var links = ownLocalStorage['clearvk_withLinks_content'].toString();
   return links ? links.split(linksSeparator) : defaultLinks;
 };
 
 // Ids of options and their default values
 var idsOfOptions = {
-  'clearvk_class': 1, 
-  'clearvk_repostFromGroups': 1, 
-  'clearvk_withLinks': 1, 
-  'clearvk_video': 0, 
+  'clearvk_class': 1,
+  'clearvk_repostFromGroups': 1,
+  'clearvk_withLinks': 1,
+  'clearvk_video': 0,
   'clearvk_audio': 0
 };
 
