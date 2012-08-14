@@ -35,7 +35,7 @@ var modalBlacklist = function(element) {
   };
 
   var saveContent = function() {
-    var value = $('#notifier textarea').val().trim().replace(/\n/, linksSeparator);
+    var value = cleanArray($('#notifier textarea').val().trim().split('\n')).join(linksSeparator);
     localStorageManager.set('clearvk_withLinks_content', value);
     localStorageManager.get('clearvk_withLinks_content');
     hide();

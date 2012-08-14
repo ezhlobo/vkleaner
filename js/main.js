@@ -15,10 +15,17 @@ var defaultBlacklist = [
   'nekto.me'
 ];
 
+var cleanArray = function(array) {
+  var newArray = new Array();
+  for(var i = 0; i < array.length; i++)
+    if (array[i]) newArray.push(array[i]);
+  return newArray;
+}
+
 var linksSeparator = ';';
 var links = function() {
   var links = ownLocalStorage['clearvk_withLinks_content'];
-  return links ? links.toString().split(linksSeparator) : defaultBlacklist;
+  return links == 'clearvk_withLinks_content' ? defaultBlacklist : cleanArray(links.split(linksSeparator));
 };
 
 // Ids of options and their default values
@@ -35,28 +42,20 @@ var ownLocalStorage = {}, localStorageManager = {
   set: function(name, value) {
     chrome.extension.sendRequest({type: 'set', name: name, value: value});
   },
-  getOptions: function(name) {
-    chrome.extension.sendRequest({type: 'get', name: name}, function(response) {
-      var value = response === null ? idsOfOptions[name] : response;
-      ownLocalStorage[name] = parseInt(value);
-    });
-  },
-  getStatus: function() {
-    chrome.extension.sendRequest({type: 'get', name: 'clearvk_status'}, function(response) {
-      var value = response === null ? 1 : response;
-      ownLocalStorage['clearvk_status'] = value;
-    });
-  },
   get: function(name) {
     chrome.extension.sendRequest({type: 'get', name: name}, function(response) {
-      var value = response === null ? links().join('\n') : response;
+      var value;
+      if (response === null || response == '')
+        value = (idsOfOptions[name] === void 0) ? name : idsOfOptions[name];
+      else
+        value = response;
       ownLocalStorage[name] = value;
     });
   },
   getAllSettings: function(anotherId) {
     for (var id in idsOfOptions)
-      this.getOptions(id);
+      this.get(id);
     if (anotherId)
-      this.get(anotherId);
-  },
+      this.get(anotherId)
+  }
 };

@@ -14,7 +14,7 @@ var hiding = {
         post.find('.feed_reposts_more').addClass(cssClassForHiddenPosts + '-group');
       }
       // Repost from VKGroup or Photo-repost from VKGroup
-      else if (innerWrapClass.substr(11, 1) == '-' || post.find('a.published_by_date').attr('href').substr(6, 1) == '-') {
+      else if (innerWrapClass.substr(11, 1) == '-') {
         hide(post);
       }
     }
@@ -71,7 +71,7 @@ var initExtension = function() {
   // If extension was running
   if (ownLocalStorage['clearvk_repostFromGroups'] !== void 0) {
     clearInterval(running);
-    setInterval(hidePosts, 100);
+    setInterval(hidePosts, 300);
     hidePosts();
   }
 };
