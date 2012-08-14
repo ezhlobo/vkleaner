@@ -14,7 +14,7 @@ var hiding = {
         post.find('.feed_reposts_more').addClass(cssClassForHiddenPosts + '-group');
       }
       // Repost from VKGroup or Photo-repost from VKGroup
-      else if (innerWrapClass.substr(0, 11) == 'feed_repost' || post.find('a.published_by_date').attr('href').substr(6, 1) == '-') {
+      else if (innerWrapClass.substr(11, 1) == '-' || post.find('a.published_by_date').attr('href').substr(6, 1) == '-') {
         hide(post);
       }
     }
