@@ -69,12 +69,11 @@ var initExtension = function() {
   getParams();
 
   // If extension was running
-  if (ownLocalStorage['clearvk_status'] == 1) {
+  if (ownLocalStorage['clearvk_repostFromGroups'] !== void 0) {
     clearInterval(running);
     setInterval(hidePosts, 100);
     hidePosts();
   }
 };
 
-localStorageManager.get('clearvk_status');
 var running = setInterval(initExtension, 10);
