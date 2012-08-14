@@ -17,8 +17,8 @@ var defaultBlacklist = [
 
 var linksSeparator = ';';
 var links = function() {
-  var links = ownLocalStorage['clearvk_withLinks_content'].toString();
-  return links ? links.split(linksSeparator) : defaultBlacklist;
+  var links = ownLocalStorage['clearvk_withLinks_content'];
+  return links ? links.toString().split(linksSeparator) : defaultBlacklist;
 };
 
 // Ids of options and their default values
@@ -35,16 +35,28 @@ var ownLocalStorage = {}, localStorageManager = {
   set: function(name, value) {
     chrome.extension.sendRequest({type: 'set', name: name, value: value});
   },
+  getOptions: function(name) {
+    chrome.extension.sendRequest({type: 'get', name: name}, function(response) {
+      var value = response === null ? idsOfOptions[name] : response;
+      ownLocalStorage[name] = parseInt(value);
+    });
+  },
+  getStatus: function() {
+    chrome.extension.sendRequest({type: 'get', name: 'clearvk_status'}, function(response) {
+      var value = response === null ? 1 : response;
+      ownLocalStorage['clearvk_status'] = value;
+    });
+  },
   get: function(name) {
     chrome.extension.sendRequest({type: 'get', name: name}, function(response) {
-      var value = (response == void 0) ? (idsOfOptions[name] || 1) : response;
+      var value = response === null ? links().join('\n') : response;
       ownLocalStorage[name] = value;
     });
   },
   getAllSettings: function(anotherId) {
     for (var id in idsOfOptions)
-      this.get(id);
+      this.getOptions(id);
     if (anotherId)
       this.get(anotherId);
-  }
+  },
 };
