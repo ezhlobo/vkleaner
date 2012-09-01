@@ -1,7 +1,8 @@
 $(function() {
   $('#wrap')
-    .load('optionsItems.html', localization)
     .on('change', '.option input', changeOptionStatus);
+
+  localization();
 
   modalBlacklist('#clearvk_withLinks a');
 
