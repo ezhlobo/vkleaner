@@ -1,21 +1,17 @@
 localStorageManager.getAllSettings('clearvk_withLinks_content');
 
-var hide = function(post) {
-  post.addClass(cssClassForHiddenPosts);
-};
-
 var hiding = {
   repostFromGroups: function(post) {
     var innerWrapClass = post.children().attr('class');
     if (innerWrapClass.substr(0, 11) == 'feed_repost') {
       // Group reposts from VKGroup
       if (innerWrapClass.substr(17, 1) == '-') {
-        hide(post);
+        return true;
         post.find('.feed_reposts_more').addClass(cssClassForHiddenPosts + '-group');
       }
       // Repost from VKGroup or Photo-repost from VKGroup
       else if (innerWrapClass.substr(11, 1) == '-') {
-        hide(post);
+        return true;
       }
     }
   },
@@ -25,18 +21,19 @@ var hiding = {
 
     var urlTpl = new RegExp('(\s|^)(https?:\/\/)?(w{3}\.)?([^\s]+)?(' + links().join('|') + ')(\/[^\s]*)?', 'i');
     if (urlTpl.test(mediaLink) || urlTpl.test(linkInText))
-      hide(post);
+      return true;
   },
   withVideo: function(post) {
     if (post.find('.page_media_video').length > 0)
-      hide(post);
+      return true;
   },
   withAudio: function(post) {
     if (post.find('.audio').length > 0)
-      hide(post);
+      return true;
   }
 };
 
+var contentBlock = $('#wrap3');
 var hidePosts = function() {
   if (window.location.pathname != '/feed') return false;
 
@@ -45,13 +42,22 @@ var hidePosts = function() {
   // Get new params for unwanted posts
   getParams();
 
-  $('#feed_rows').find('.feed_row').removeClass('clearvk-showTop clearvk-hideAll').each(function(){
-    for (var name in needHide)
-      hiding[needHide[name]]($(this));
+  $('#feed_rows', contentBlock).find('.feed_row').each(function() {
+    var post = $(this);
+    var isUnwanted = false;
+
+    // set isUnwanted = true if post is unwanted
+    for (var name in needHide) if (isUnwanted = hiding[needHide[name]](post)) break;
+
+    if (isUnwanted) {
+      if (cssClassForHiddenPosts == 'clearvk-showTop') post.removeClass('clearvk-hideAll');
+      post.addClass(cssClassForHiddenPosts);
+    } else
+      post.removeClass('clearvk-showTop clearvk-hideAll');
   });
 };
 
-var needHide, getParams = function () {
+var needHide, cssClassForHiddenPosts, getParams = function () {
   needHide = [];
   if (ownLocalStorage['clearvk_repostFromGroups'] == 1)
     needHide.push('repostFromGroups');
@@ -63,7 +69,7 @@ var needHide, getParams = function () {
     needHide.push('withAudio');
 
   cssClassForHiddenPosts = (ownLocalStorage['clearvk_class'] == 1) ? 'clearvk-showTop' : 'clearvk-hideAll';
-}, cssClassForHiddenPosts;
+};
 
 var initExtension = function() {
   getParams();
@@ -71,7 +77,7 @@ var initExtension = function() {
   // If extension was running
   if (ownLocalStorage['clearvk_repostFromGroups'] !== void 0) {
     clearInterval(running);
-    setInterval(hidePosts, 300);
+    setInterval(hidePosts, 100);
     hidePosts();
   }
 };
