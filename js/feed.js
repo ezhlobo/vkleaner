@@ -38,7 +38,8 @@ var addCssClass = function(post) {
 
 var contentBlock = $('#wrap3');
 var hidePosts = function() {
-  if (window.location.pathname != '/feed') return false;
+  var location = window.location;
+  if (!/^\/feed(\?section=source&source=\d+)?$/.test(location.pathname + location.search)) return false;
 
   localStorageManager.getAllSettings('clearvk_withLinks_content');
 
