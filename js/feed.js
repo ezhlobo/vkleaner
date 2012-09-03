@@ -3,17 +3,9 @@ localStorageManager.getAllSettings('clearvk_withLinks_content');
 var hiding = {
   repostFromGroups: function(post) {
     var innerWrapClass = post.children().attr('class');
-    if (innerWrapClass.substr(0, 11) == 'feed_repost') {
-      // Group reposts from VKGroup
-      if (innerWrapClass.substr(17, 1) == '-') {
-        return true;
-        post.find('.feed_reposts_more').addClass(cssClassForHiddenPosts + '-group');
-      }
-      // Repost from VKGroup or Photo-repost from VKGroup
-      else if (innerWrapClass.substr(11, 1) == '-') {
-        return true;
-      }
-    }
+    // Reposts && (Group reposts from VKGroup || Reposts from VKGroup or Photo-reposts from VKGroup)
+    if (innerWrapClass.substr(0, 11) == 'feed_repost' && (innerWrapClass.substr(17, 1) == '-' || innerWrapClass.substr(11, 1) == '-'))
+      return true;
   },
   withLinks: function(post) {
     var mediaLink = post.find('.lnk .a').text();
@@ -33,6 +25,17 @@ var hiding = {
   }
 };
 
+var removeCssClass = function(post) {
+  post
+    .removeClass('clearvk-showTop clearvk-hideAll')
+    .find('.feed_reposts_more').removeClass('clearvk-showTop-group clearvk-hideAll-group');
+};
+var addCssClass = function(post) {
+  post
+    .addClass(cssClassForHiddenPosts)
+    .find('.feed_reposts_more').addClass(cssClassForHiddenPosts + '-group');
+};
+
 var contentBlock = $('#wrap3');
 var hidePosts = function() {
   if (window.location.pathname != '/feed') return false;
@@ -50,10 +53,10 @@ var hidePosts = function() {
     for (var name in needHide) if (isUnwanted = hiding[needHide[name]](post)) break;
 
     if (isUnwanted) {
-      if (cssClassForHiddenPosts == 'clearvk-showTop') post.removeClass('clearvk-hideAll');
-      post.addClass(cssClassForHiddenPosts);
+      if (cssClassForHiddenPosts == 'clearvk-showTop') removeCssClass(post);
+      addCssClass(post);
     } else
-      post.removeClass('clearvk-showTop clearvk-hideAll');
+      removeCssClass(post);
   });
 };
 
