@@ -36,7 +36,7 @@ var addCssClass = function(post) {
     .find('.feed_reposts_more').addClass(cssClassForHiddenPosts + '-group');
 };
 
-var contentBlock = $('#wrap3');
+var contentBlock = $('#page_body');
 var hidePosts = function() {
   var location = window.location;
   if (!/^\/feed(\?section=source&source=\d+)?$/.test(location.pathname + location.search)) return false;
