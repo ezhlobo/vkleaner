@@ -27,6 +27,10 @@
     "message": "Hide audio?",
     "description": "Option name"
   },
+  "options_groupShare": {
+    "message": "Hide sharing of groups?",
+    "description": "Option name"
+  },
   "options_class": {
     "message": "Show the title of the hidden post?",
     "description": "Option name"

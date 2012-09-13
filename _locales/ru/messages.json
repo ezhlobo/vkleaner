@@ -27,6 +27,10 @@
     "message": "Скрывать музыку?",
     "description": "Имя опции"
   },
+  "options_groupShare": {
+    "message": "Скрывать рассказы о группах?",
+    "description": "Имя опции"
+  },
   "options_class": {
     "message": "Показывать заголовок скрытого поста?",
     "description": "Имя опции"

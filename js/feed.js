@@ -22,6 +22,10 @@ var hiding = {
   withAudio: function(post) {
     if (post.find('.audio').length > 0)
       return true;
+  },
+  groupShare: function(post) {
+    if (post.find('.group_share').length > 0)
+      return true;
   }
 };
 
@@ -71,6 +75,8 @@ var needHide, cssClassForHiddenPosts, getParams = function () {
     needHide.push('withVideo');
   if (ownLocalStorage['clearvk_audio'] == 1)
     needHide.push('withAudio');
+  if (ownLocalStorage['clearvk_groupShare'] == 1)
+    needHide.push('groupShare');
 
   cssClassForHiddenPosts = (ownLocalStorage['clearvk_class'] == 1) ? 'clearvk-showTop' : 'clearvk-hideAll';
 };

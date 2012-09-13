@@ -34,7 +34,8 @@ var idsOfOptions = {
   'clearvk_repostFromGroups': 1,
   'clearvk_withLinks': 1,
   'clearvk_video': 0,
-  'clearvk_audio': 0
+  'clearvk_audio': 0,
+  'clearvk_groupShare': 0
 };
 
 // Own local storage
