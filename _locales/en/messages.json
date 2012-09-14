@@ -19,11 +19,11 @@
     "message": "Hide posts with links?<i><a href=''>Black list of links</a></i>",
     "description": "Option name"
   },
-  "options_video": {
+  "options_withVideo": {
     "message": "Hide video?",
     "description": "Option name"
   },
-  "options_audio": {
+  "options_withAudio": {
     "message": "Hide audio?",
     "description": "Option name"
   },

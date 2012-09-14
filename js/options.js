@@ -1,6 +1,5 @@
 $(function() {
-  $('#wrap')
-    .on('change', '.option input', changeOptionStatus);
+  $('#wrap').on('change', '.option input', changeOptionStatus);
 
   localization();
 
@@ -61,7 +60,7 @@ var setDefaultSettings = function() {
 
   // Checking: are the default settings loaded?
   var checkingDefaultSettings = function() {
-    if (ownLocalStorage['clearvk_audio'] != void 0) {
+    if (ownLocalStorage['clearvk_withAudio'] != void 0) {
       clearInterval(timer);
       loadedDefaultSettings();
     }

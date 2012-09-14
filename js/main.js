@@ -33,8 +33,8 @@ var idsOfOptions = {
   'clearvk_class': 1,
   'clearvk_repostFromGroups': 1,
   'clearvk_withLinks': 1,
-  'clearvk_video': 0,
-  'clearvk_audio': 0,
+  'clearvk_withVideo': 0,
+  'clearvk_withAudio': 0,
   'clearvk_groupShare': 0
 };
 

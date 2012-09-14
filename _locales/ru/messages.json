@@ -19,11 +19,11 @@
     "message": "Скрывать сообщения со ссылками?<i><a href=''>Черный список ссылок</a></i>",
     "description": "Имя опции"
   },
-  "options_video": {
+  "options_withVideo": {
     "message": "Скрывать видео?",
     "description": "Имя опции"
   },
-  "options_audio": {
+  "options_withAudio": {
     "message": "Скрывать музыку?",
     "description": "Имя опции"
   },
