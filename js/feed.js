@@ -3,9 +3,10 @@ localStorageManager.getAllSettings('clearvk_withLinks_content');
 var hiding = {
   repostFromGroups: function(post) {
     var innerWrapClass = post.children().attr('class');
-    // Reposts && (Group reposts from VKGroup || Reposts from VKGroup or Photo-reposts from VKGroup)
-    if (innerWrapClass.substr(0, 11) == 'feed_repost' && (innerWrapClass.substr(17, 1) == '-' || innerWrapClass.substr(11, 1) == '-'))
-      return true;
+    if (innerWrapClass.substr(0, 11) == 'feed_repost') {
+      if (/^\/photo-[\d_]+$/.test($('a.published_by_date', post).attr('href')) || innerWrapClass.substr(17, 1) == '-' || innerWrapClass.substr(11, 1) == '-')
+        return true;
+    }
   },
   withLinks: function(post) {
     var mediaLink = post.find('.lnk .a').text();
