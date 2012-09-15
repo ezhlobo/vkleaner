@@ -8,6 +8,7 @@ Do you have problem with reading your personal news feed on vk.com like me? I do
 - hide reposts by frends from group you're not subsribed.
 - hide posts with links on different sites.
 - hide posts containig videos and musics.
+- hide sharing of groups.
 
 
 If you're afraid to miss very important content you can blur messages rather than deleting it from feed.
