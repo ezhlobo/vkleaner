@@ -55,7 +55,29 @@ var checkEachPost = function() {
   } else { removeCssClass(post) }
 };
 
-var hidePosts = function() {
+var hidePosts = function(rows) {
+  rows.each(checkEachPost);
+};
+
+var ifRowsWereChanged = function(rows) {
+  var is = false;
+  if (rows.length != oldCount || rows.first().find('.post').attr('id') != oldFirstPostId || rows.last().find('.post').attr('id') != oldLastPostId)
+    is = true;
+  return is;
+};
+
+var ifOptionsWereChanged = function() {
+  var is = false;
+  if (oldOptions !== void 0 && needHide.length == oldOptions.length) {
+    is = true;
+    $.each(needHide, function(index, value) {
+      if (value !== oldOptions[index]) return is = false;
+    });
+  };
+  return !is;
+};
+
+var checkParams = function() {
   // Stop hiding if url is "/feed" or "/feed?section=source&source=userid"
   if (!/^\/feed(\?section=source&source=\d+)?$/.test(window.location.pathname + window.location.search)) return false;
 
@@ -64,10 +86,20 @@ var hidePosts = function() {
   // Get new params for unwanted posts
   getParams();
 
-  $('#feed_rows', contentBlock).find('.feed_row').each(checkEachPost);
+  var rows = $('#feed_rows', contentBlock).find('.feed_row');
+
+  if (ifRowsWereChanged(rows) || ifOptionsWereChanged() || oldCssClass != cssClassForHiddenPosts) {
+    hidePosts(rows);
+
+    oldCount = rows.length;
+    oldFirstPostId = rows.first().find('.post').attr('id');
+    oldLastPostId = rows.last().find('.post').attr('id');
+    oldOptions = needHide;
+    oldCssClass = cssClassForHiddenPosts;
+  }
 };
 
-var needHide, cssClassForHiddenPosts, getParams = function () {
+var getParams = function () {
   needHide = $.map(ownLocalStorage, function(value, key) {
     if (value == 1 && key != 'clearvk_class') return key.replace(/clearvk_/, '');
   });
@@ -80,10 +112,14 @@ var initExtension = function() {
   // If extension was initialized
   if (ownLocalStorage['clearvk_repostFromGroups'] !== void 0) {
     clearInterval(initializing);
-    setInterval(hidePosts, 300);
-    hidePosts();
+
+    setInterval(checkParams, 100);
+    checkParams();
   }
 };
+
+var oldOptions, oldCssClass, oldCount, oldFirstPostId, oldLastPostId;
+var needHide, cssClassForHiddenPosts
 
 var contentBlock = $('#page_body');
 var initializing = setInterval(initExtension, 10);
