@@ -68,12 +68,17 @@ var ifRowsWereChanged = function(rows) {
 
 var ifOptionsWereChanged = function() {
   var is = false;
-  if (oldOptions !== void 0 && needHide.length == oldOptions.length) {
+  if ((oldOptions !== void 0 && needHide.length == oldOptions.length) || (oldLinks !== void 0 && links().length == oldLinks.length)) {
     is = true;
+    // If options are not changed
     $.each(needHide, function(index, value) {
-      if (value !== oldOptions[index]) return is = false;
+      if (!$.inArray(value, oldOptions)) return is = false;
     });
-  };
+    // If links are not changed
+    $.each(links(), function(index, value) {
+      if (!$.inArray(value, oldLinks)) return is = false;
+    });
+  }
   return !is;
 };
 
@@ -91,11 +96,12 @@ var checkParams = function() {
   if (ifRowsWereChanged(rows) || ifOptionsWereChanged() || oldCssClass != cssClassForHiddenPosts) {
     hidePosts(rows);
 
+    oldOptions = needHide;
+    oldLinks = links();
+    oldCssClass = cssClassForHiddenPosts;
     oldCount = rows.length;
     oldFirstPostId = rows.first().find('.post').attr('id');
     oldLastPostId = rows.last().find('.post').attr('id');
-    oldOptions = needHide;
-    oldCssClass = cssClassForHiddenPosts;
   }
 };
 
@@ -118,7 +124,7 @@ var initExtension = function() {
   }
 };
 
-var oldOptions, oldCssClass, oldCount, oldFirstPostId, oldLastPostId;
+var oldOptions, oldLinks, oldCssClass, oldCount, oldFirstPostId, oldLastPostId;
 var needHide, cssClassForHiddenPosts
 
 var contentBlock = $('#page_body');
