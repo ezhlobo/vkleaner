@@ -60,25 +60,21 @@ var hidePosts = function(rows) {
 };
 
 var ifRowsWereChanged = function(rows) {
-  var is = false;
-  if (rows.length != oldCount || rows.first().find('.post').attr('id') != oldFirstPostId || rows.last().find('.post').attr('id') != oldLastPostId)
-    is = true;
-  return is;
+  return (rows.length != oldCount || rows.first().find('.post').attr('id') != oldFirstPostId || rows.last().find('.post').attr('id') != oldLastPostId) || false;
 };
 
 var ifOptionsWereChanged = function() {
-  var is = false;
-  if ((oldOptions !== void 0 && needHide.length == oldOptions.length) || (oldLinks !== void 0 && links().length == oldLinks.length)) {
-    is = true;
-    // If options are not changed
-    $.each(needHide, function(index, value) {
-      if (!$.inArray(value, oldOptions)) return is = false;
-    });
-    // If links are not changed
-    $.each(links(), function(index, value) {
-      if (!$.inArray(value, oldLinks)) return is = false;
+  // If options items are not changed
+  var is = (oldOptions !== void 0 && needHide.length == oldOptions.length);
+
+  // If links are not changed
+  var newLinks = links();
+  if (is && oldLinks !== void 0 && newLinks.length == oldLinks.length) {
+    $.each(newLinks, function(index, value) {
+      if ($.inArray(value, oldLinks) == -1 ? true : false) return is = false;
     });
   }
+
   return !is;
 };
 
@@ -120,7 +116,6 @@ var initExtension = function() {
     clearInterval(initializing);
 
     setInterval(checkParams, 100);
-    checkParams();
   }
 };
 
