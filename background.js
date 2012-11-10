@@ -1,4 +1,3 @@
-<script>
 chrome.extension.onRequest.addListener(
   function(request, sender, sendResponse) {
     switch (request.type) {
@@ -14,4 +13,3 @@ chrome.extension.onRequest.addListener(
     }
   }
 );
-</script>
