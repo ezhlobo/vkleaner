@@ -18,7 +18,7 @@ var hiding = {
   },
   withVideo: function(post) {
     var walltext = post.find('.wall_text');
-    if (post.find('.wall_text a[href^="/video"]').length > 0)
+    if (post.find('.wall_text a[href^="/video"], a.page_post_thumb_video').length > 0)
       return true;
   },
   withAudio: function(post) {
