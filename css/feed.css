@@ -1,0 +1,21 @@
+#feed_rows[vkleaner-showheader="1"] .feed_row[vkleaner-status="1"] > div,
+#feed_rows[vkleaner-showheader="0"] .feed_row[vkleaner-status="1"],
+#feed_rows[vkleaner-showheader="0"] .feed_row[vkleaner-status="2"] {
+  display: none;
+  }
+#feed_rows[vkleaner-showheader="1"] .feed_row[vkleaner-status="1"] .vkleaner-open,
+#feed_rows[vkleaner-showheader="1"] .feed_row[vkleaner-status="2"] .vkleaner-open {
+  display: block;
+  }
+
+  .vkleaner-open {
+  	padding: 5px;
+    margin-top: 1px;
+  	display: none;
+  	border-bottom: 1px solid #DAE1E8;
+    color: #778A96;
+    }
+  .feed_row:hover .vkleaner-open {
+  	background: rgba(245,245,245,.8);
+    text-decoration: none;
+    }

@@ -1,127 +1,206 @@
 localStorageManager.getAllSettings('clearvk_withLinks_content');
 
-var hiding = {
-  repostFromGroups: function(post) {
-    var innerWrapClass = post.children().attr('class');
-    if (innerWrapClass.substr(0, 11) == 'feed_repost') {
-      if (/^\/photo-[\d_]+$/.test($('a.published_by_date', post).attr('href')) || innerWrapClass.substr(17, 1) == '-' || innerWrapClass.substr(11, 1) == '-')
-        return true;
-    }
-  },
-  withLinks: function(post) {
-    var mediaLink = post.find('.lnk .a').text();
-    var linkInText = unescape(post.find('.wall_post_text').text());
+/**
+ * Init vkleaner to row or delete vkleaner of row
+ * @param  {jQuery Object} row jQuery object of .feed_row
+ * @return {refreshPostStatus} Refresh status after rows refreshing
+ */
+var refreshPost = function(row) {
+  var types = [];
 
-    var urlTpl = new RegExp('(\s|^)(https?:\/\/)?(w{3}\.)?([^\s]+)?(' + links().join('|') + ')(\/[^\s]*)?', 'i');
-    if (urlTpl.test(mediaLink) || urlTpl.test(linkInText))
-      return true;
-  },
-  withVideo: function(post) {
-    var walltext = post.find('.wall_text');
-    if (post.find('.wall_text a[href^="/video"], a.page_post_thumb_video').length > 0)
-      return true;
-  },
-  withAudio: function(post) {
-    if (post.find('.audio').length > 0)
-      return true;
-  },
-  groupShare: function(post) {
-    if (post.find('.group_share').length > 0)
-      return true;
+  for (var name in hiding) {
+    if (hiding[name](row)) {
+      types.push(name);
+    }
+  }
+
+  if (types.length > 0) {
+    row.attr('vkleaner-types', types.join(' '));
+    if (row.find('.vkleaner-open').length == 0) {
+      var openLinkText = localize('feed_openlink') + ' <b>' + row.find('.author:first').text() + '</b>';
+      row.prepend('<a class="vkleaner-open" href="">' + openLinkText + '</a>');
+    }
+  } else {
+    row.removeAttr('vkleaner-types').find('.vkleaner-open').remove();
+  }
+
+  return refreshPostStatus(row, types);
+};
+
+/**
+ * Refresh vkleaner-status value
+ * @param  {jQuery Object} row jQuery object of .feed_row
+ * @param  {Array} [types] Array of vkleaner-types
+ */
+var refreshPostStatus = function(row, types) {
+  if (!types) {
+    types = $.trim(row.attr('vkleaner-types')).split(' ');
+  }
+
+  var length = types.length;
+  if (length > 0) {
+    var status = 0;
+
+    for (var i = 0; i < length; i++) {
+      if ($.inArray(types[i], unwantedTypes) !== -1) {
+        status = 1;
+        break;
+      }
+    }
+
+    row.attr('vkleaner-status', status);
+  } else {
+    row.removeAttr('vkleaner-status');
   }
 };
 
-var removeCssClass = function(post) {
-  post
-    .removeClass('clearvk-showTop clearvk-hideAll')
-    .find('.feed_reposts_more').removeClass('clearvk-showTop-group clearvk-hideAll-group');
+/**
+ * Which option has been changed
+ * @param  {Array} what  Value of this types would be checked
+ * @param  {Array} where
+ * @return {String} Name of changed option
+ */
+var whatOptionWasChanged = function(what, where) {
+  for (var i = 0, l = what.length; i < l; i++) {
+    if ($.inArray(what[i], where) === -1) {
+      return what[i];
+      break;
+    }
+  }
 };
 
-var addCssClass = function(post) {
-  post
-    .addClass(cssClassForHiddenPosts)
-    .find('.feed_reposts_more').addClass(cssClassForHiddenPosts + '-group');
+/**
+ * Refresh posts
+ * @return {refreshPost} Refresh not vkleaner posts
+ */
+var refreshEveryPost = function() {
+  rowsBlock.find('.feed_row:not([vkleaner-types])').each(function() {
+    refreshPost($(this));
+  });
 };
 
-var checkEachPost = function() {
-  // .feed_row
-  var post = $(this);
+/**
+ * Refresh post status which vkleaner-types include changed option
+ * @return {refreshPostStatus} Refresh post status of posts with changed option
+ *   in vkleaner-types attr
+ */
+var optionsChanged = function() {
+  if (oldOptions !== undefined) {
+    var type = '';
+    if (oldOptions.length > unwantedTypes.length) {
+    // option has been removed
+      type = whatOptionWasChanged(oldOptions, unwantedTypes);
+    } else {
+    // option has been added
+      type = whatOptionWasChanged(unwantedTypes, oldOptions);
+    }
 
-  // Set isUnwanted = true if post is unwanted
-  for (var name in needHide) if (isUnwanted = hiding[needHide[name]](post)) break;
-
-  if (isUnwanted) {
-    if (cssClassForHiddenPosts == 'clearvk-showTop') removeCssClass(post);
-    addCssClass(post);
-  } else { removeCssClass(post) }
-};
-
-var hidePosts = function(rows) {
-  rows.each(checkEachPost);
-};
-
-var ifRowsWereChanged = function(rows) {
-  return (rows.length != oldCount || rows.first().find('.post').attr('id') != oldFirstPostId || rows.last().find('.post').attr('id') != oldLastPostId) || false;
-};
-
-var ifOptionsWereChanged = function() {
-  // If options items are not changed
-  var is = (oldOptions !== void 0 && needHide.length == oldOptions.length);
-
-  // If links are not changed
-  var newLinks = links();
-  if (is && oldLinks !== void 0 && newLinks.length == oldLinks.length) {
-    $.each(newLinks, function(index, value) {
-      if ($.inArray(value, oldLinks) == -1 ? true : false) return is = false;
+    rowsBlock.find('.feed_row[vkleaner-types*=' + type + ']').each(function() {
+      refreshPostStatus($(this));
     });
   }
-
-  return !is;
 };
 
-var checkParams = function() {
-  // Stop hiding if url is "/feed" or "/feed?section=source&source=userid"
-  if (!/^\/feed(\?section=source&source=\d+)?$/.test(window.location.pathname + window.location.search)) return false;
+/**
+ * Refresh posts after blacklist changing
+ * @return {refreshPost} Refresh not vkleaner and "withLinks" posts
+ */
+var blacklistChanged = function() {
+  var rows = rowsBlock.find('.feed_row:not([vkleaner-types]), .feed_row[vkleaner-types*=withLinks]');
+  rows.each(function() {
+    refreshPost($(this));
+  });
+};
 
-  localStorageManager.getAllSettings('clearvk_withLinks_content');
+/**
+ * Refresh vkleaner-showheader
+ * @return {Function}
+ */
+var refreshStyle = function() {
+  rowsBlock.attr('vkleaner-showheader', ownLocalStorage['clearvk_class']);
+};
 
-  // Get new params for unwanted posts
-  getParams();
-
-  var rows = $('#feed_rows', contentBlock).find('.feed_row');
-
-  if (ifRowsWereChanged(rows) || ifOptionsWereChanged() || oldCssClass != cssClassForHiddenPosts) {
-    hidePosts(rows);
-
-    oldOptions = needHide;
-    oldLinks = links();
-    oldCssClass = cssClassForHiddenPosts;
-    oldCount = rows.length;
-    oldFirstPostId = rows.first().find('.post').attr('id');
-    oldLastPostId = rows.last().find('.post').attr('id');
+/**
+ * Start or stop vkleaner after location changing
+ * @return {Function}
+ */
+var checkLocation = function() {
+  if (isNewsPage()) {
+    refresh();
+    bind.start();
+  } else {
+    bind.stop();
   }
 };
 
-var getParams = function () {
-  needHide = $.map(ownLocalStorage, function(value, key) {
-    if (value == 1 && key != 'clearvk_class') return key.replace(/clearvk_/, '');
-  });
-  cssClassForHiddenPosts = (ownLocalStorage['clearvk_class'] == 1) ? 'clearvk-showTop' : 'clearvk-hideAll';
+/**
+ * Show or hide a row after clicking the post
+ * @return {Boolean} FALSE
+ */
+var openRow = function() {
+  var row = $(this).closest('.feed_row');
+  var status = 0;
+  if (/display:\s?none/.test(row.find('> div').attr('style'))) {
+    status = 2;
+    row.find('.vkleaner-open').html(localize('post_was_deleted'));
+  } else {
+    status = (parseInt(row.attr('vkleaner-status')) === 2) ? 1 : 2;
+  }
+  row.attr('vkleaner-status', status);
+  return false;
 };
 
-var initExtension = function() {
-  getParams();
+/**
+ * Refresh the VKleaner
+ *
+ * <p>Set rowsBlock</p>
+ * <p>Add DOM handlers</p>
+ */
+var refresh = function() {
+  rowsBlock = $('#feed_rows');
+  rowsBlock
+    .off('.vkleaner')
+    .on('click.vkleaner', '.vkleaner-open', openRow)
+    .on('DOMNodeInserted.vkleaner', function(event) {
+      if (isNewsPage()) {
+        var row = $(event.target).closest('.feed_row');
+        if (!row.attr('vkleaner-types')) {
+          refreshPost(row);
+        }
+      }
+    });
 
-  // If extension was initialized
-  if (ownLocalStorage['clearvk_repostFromGroups'] !== void 0) {
+  refreshEveryPost();
+  refreshStyle();
+  oldOptions = unwantedTypes;
+  oldLinks = links();
+  oldCssClass = ownLocalStorage['clearvk_class'];
+  oldLocation = window.location.pathname + window.location.search;
+};
+
+bind.setChecks({
+  options: optionsChanged,
+  blacklist: blacklistChanged,
+  style: refreshStyle,
+  location: checkLocation
+});
+
+/**
+ * Initializing extension when the own local storage will be ready
+ *
+ * <p>Select unwanted types to unwantedTypes</p>
+ * <p>Refresh if user at news page</p>
+ * <p>Add bind to chech location</p>
+ */
+var firstInitialize = function() {
+  if (isLocalStorageReady()) {
     clearInterval(initializing);
 
-    setInterval(checkParams, 100);
+    selectUnwantedTypes();
+
+    checkLocation();
+    bind.checkLocation();
   }
 };
 
-var oldOptions, oldLinks, oldCssClass, oldCount, oldFirstPostId, oldLastPostId;
-var needHide, cssClassForHiddenPosts
-
-var contentBlock = $('#page_body');
-var initializing = setInterval(initExtension, 10);
+var initializing = setInterval(firstInitialize, 10);

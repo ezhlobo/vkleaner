@@ -35,7 +35,7 @@ var modalBlacklist = function(element) {
   };
 
   var saveContent = function() {
-    var value = cleanArray($('#notifier textarea').val().trim().split('\n')).join(linksSeparator);
+    var value = cleanArray($('#notifier textarea').val().trim().split('\n')).join(';');
     localStorageManager.set('clearvk_withLinks_content', value);
     localStorageManager.get('clearvk_withLinks_content');
     hide();
@@ -60,7 +60,7 @@ var setDefaultSettings = function() {
 
   // Checking: are the default settings loaded?
   var checkingDefaultSettings = function() {
-    if (ownLocalStorage['clearvk_withAudio'] != void 0) {
+    if (ownLocalStorage['clearvk_withAudio'] !== undefined) {
       clearInterval(timer);
       loadedDefaultSettings();
     }

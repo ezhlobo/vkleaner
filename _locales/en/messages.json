@@ -42,5 +42,9 @@
 
   "options_save": { "message": "Save" },
 
-  "options_yes": { "message": "Yes" }
+  "options_yes": { "message": "Yes" },
+
+  "feed_openlink": { "message": "Post by" },
+
+  "post_was_deleted": { "message": "Post was deleted" }
 }
