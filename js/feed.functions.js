@@ -115,8 +115,9 @@ var isLocationChanged = function() {
  * @return {Boolean}
  */
 var isNewsPage = function() {
-  return /^\/feed(\?section=source&source=\d+)?$/.test(window.location.pathname + window.location.search);
+  return newsUrlTemplate.test(window.location.pathname + window.location.search);
 };
+var newsUrlTemplate = /^(\/feed|\/al_feed.php)(\?section=source&source=\d+|\?section=news)?$/;
 
 /**
  * Is own local storage ready
