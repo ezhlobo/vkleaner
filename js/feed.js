@@ -140,7 +140,7 @@ var checkLocation = function() {
 var openRow = function() {
   var row = $(this).closest('.feed_row');
   var status = 0;
-  if (/display:\s?none/.test(row.find('> div').attr('style'))) {
+  if (/display:\s?none/.test(row.find('.post').attr('style'))) {
     status = 2;
     row.find('.vkleaner-open').html(localize('post_was_deleted'));
   } else {
