@@ -31,6 +31,10 @@
     "message": "Скрывать рассказы о группах?",
     "description": "Имя опции"
   },
+  "options_fromApps": {
+    "message": "Скрывать сообщения от приложений?",
+    "description": "Имя опции"
+  },
   "options_class": {
     "message": "Показывать заголовок скрытого поста?",
     "description": "Имя опции"

@@ -63,6 +63,15 @@ var hiding = {
   groupShare: function(post) {
     if (post.find('.group_share').length > 0)
       return true;
+  },
+  /**
+   * Is post by app
+   * @param  {jQuery Object} post jQuery object of .feed_row
+   * @return {Boolean} TRUE if post by app
+   */
+  fromApps: function(post) {
+    if (post.find('.wall_post_source_default').length > 0)
+      return true;
   }
 };
 

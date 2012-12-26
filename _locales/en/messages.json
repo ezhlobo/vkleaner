@@ -31,6 +31,10 @@
     "message": "Hide sharing of groups?",
     "description": "Option name"
   },
+  "options_fromApps": {
+    "message": "Hide posts by apps?",
+    "description": "Option name"
+  },
   "options_class": {
     "message": "Show the title of the hidden post?",
     "description": "Option name"

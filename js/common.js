@@ -52,7 +52,8 @@ var idsOfOptions = {
   'clearvk_withLinks': 1,
   'clearvk_withVideo': 0,
   'clearvk_withAudio': 0,
-  'clearvk_groupShare': 0
+  'clearvk_groupShare': 0,
+  'clearvk_fromApps': 0
 };
 
 /**
