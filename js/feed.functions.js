@@ -119,7 +119,7 @@ var isBlacklistChanged = function() {
  * @return {Boolean}
  */
 var isStyleChanged = function() {
-  return (ownLocalStorage['clearvk_class'] !== oldCssClass);
+  return (ownLocalStorage.items['clearvk_class'] !== oldCssClass);
 };
 
 /**
@@ -144,7 +144,7 @@ var newsUrlTemplate = /^(\/feed|\/al_feed.php)(\?section=source&source=\d+|\?sec
  * @return {Boolean}
  */
 var isLocalStorageReady = function() {
-  return ownLocalStorage['clearvk_withLinks_content'] !== undefined;
+  return ownLocalStorage.items['clearvk_withLinks_content'] !== undefined;
 };
 
 /**
@@ -152,7 +152,7 @@ var isLocalStorageReady = function() {
  * @return {Array} unwantedTypes
  */
 var selectUnwantedTypes = function() {
-  return unwantedTypes = $.map(ownLocalStorage, function(value, key) {
+  return unwantedTypes = $.map(ownLocalStorage.items, function(value, key) {
     if (parseInt(value) === 1 && key !== 'clearvk_class') return key.replace(/clearvk_/, '');
   });
 };
@@ -197,7 +197,7 @@ var bind = function() {
   bind._checking = function() {
     var rows = rowsBlock.find('.feed_row');
 
-    localStorageManager.getAllSettings('clearvk_withLinks_content');
+    ownLocalStorage.selectAll();
     selectUnwantedTypes();
 
     if (isOptionsChanged()) {
@@ -215,7 +215,7 @@ var bind = function() {
     if (isStyleChanged()) {
       bind._checks.style();
 
-      oldCssClass = ownLocalStorage['clearvk_class'];
+      oldCssClass = ownLocalStorage.items['clearvk_class'];
     }
   };
 

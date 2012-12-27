@@ -1,4 +1,4 @@
-localStorageManager.getAllSettings('clearvk_withLinks_content');
+ownLocalStorage.selectAll();
 
 /**
  * Init vkleaner to row or delete vkleaner of row
@@ -117,7 +117,7 @@ var blacklistChanged = function() {
  * @return {Function}
  */
 var refreshStyle = function() {
-  rowsBlock.attr('vkleaner-showheader', ownLocalStorage['clearvk_class']);
+  rowsBlock.attr('vkleaner-showheader', ownLocalStorage.items['clearvk_class']);
 };
 
 /**
@@ -174,7 +174,7 @@ var refresh = function() {
   refreshStyle();
   oldOptions = unwantedTypes;
   oldLinks = links();
-  oldCssClass = ownLocalStorage['clearvk_class'];
+  oldCssClass = ownLocalStorage.items['clearvk_class'];
   oldLocation = window.location.pathname + window.location.search;
 };
 

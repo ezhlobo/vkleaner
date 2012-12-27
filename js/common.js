@@ -39,7 +39,7 @@ var cleanArray = function(array) {
  * @return {Array}
  */
 var links = function() {
-  var links = ownLocalStorage['clearvk_withLinks_content'];
+  var links = ownLocalStorage.items['clearvk_withLinks_content'];
   return (links === undefined) ? [] : (links === 'clearvk_withLinks_content') ? defaultBlacklist : cleanArray(links.split(';'));
 };
 
@@ -55,50 +55,4 @@ var idsOfOptions = {
   'clearvk_withAudio': 0,
   'clearvk_groupShare': 0,
   'clearvk_fromApps': 0
-};
-
-/**
- * Vkleaner localStorage emulator
- */
-var ownLocalStorage = {};
-
-/**
- * Vkleaner localStorage manager
- * @class
- *
- * @see ownLocalStorage
- */
-var localStorageManager = {
-  /**
-   * Set value by name
-   * @param {String} name
-   * @param {String} value
-   */
-  set: function(name, value) {
-    chrome.extension.sendRequest({type: 'set', name: name, value: value});
-  },
-  /**
-   * Get value by name
-   * @param  {String} name
-   */
-  get: function(name) {
-    chrome.extension.sendRequest({type: 'get', name: name}, function(response) {
-      var value;
-      if (response === null || response == '')
-        value = (idsOfOptions[name] === undefined) ? name : idsOfOptions[name];
-      else
-        value = response;
-      ownLocalStorage[name] = value;
-    });
-  },
-  /**
-   * Select all values of local storage to ownLocalStorage
-   * @param  {String} [anotherId]
-   */
-  getAllSettings: function(anotherId) {
-    for (var id in idsOfOptions)
-      this.get(id);
-    if (anotherId)
-      this.get(anotherId)
-  }
 };

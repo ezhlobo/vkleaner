@@ -8,9 +8,6 @@ $(function() {
   setDefaultSettings();
 });
 
-// Make ownLocalStorage object
-localStorageManager.getAllSettings();
-
 var modalBlacklist = function(element) {
   var animateDuration = 200;
 
@@ -19,7 +16,7 @@ var modalBlacklist = function(element) {
     this.animate({opacity: value}, animateDuration);
   };
 
-  localStorageManager.get('clearvk_withLinks_content');
+  localStorage.getItem('clearvk_withLinks_content');
 
   var open = function() {
     background.css({ width: $(document).width(), height: $(document).height() }).display('show');
@@ -36,8 +33,8 @@ var modalBlacklist = function(element) {
 
   var saveContent = function() {
     var value = cleanArray($('#notifier textarea').val().trim().split('\n')).join(';');
-    localStorageManager.set('clearvk_withLinks_content', value);
-    localStorageManager.get('clearvk_withLinks_content');
+    localStorage.setItem('clearvk_withLinks_content', value);
+    localStorage.getItem('clearvk_withLinks_content');
     hide();
   };
 
@@ -48,10 +45,10 @@ var modalBlacklist = function(element) {
 var setDefaultSettings = function() {
   // Run, when the default settings are loaded
   var loadedDefaultSettings = function() {
-    $.each(ownLocalStorage, function(id) {
+    for (var id in localStorage) {
       // If the option must be enabled
-      if (ownLocalStorage[id] == 1) enableOption(id);
-    });
+      if (localStorage[id] == 1) enableOption(id);
+    }
   };
 
   var enableOption = function(optionId) {
@@ -60,7 +57,7 @@ var setDefaultSettings = function() {
 
   // Checking: are the default settings loaded?
   var checkingDefaultSettings = function() {
-    if (ownLocalStorage['clearvk_withAudio'] !== undefined) {
+    if (localStorage['clearvk_withAudio'] !== undefined) {
       clearInterval(timer);
       loadedDefaultSettings();
     }
@@ -81,7 +78,7 @@ var changeOptionStatus = function() {
   } else { option.removeClass('yes'); }
 
   // Save settings
-  localStorageManager.set(input.attr('name'), value);
+  localStorage.setItem(input.attr('name'), value);
 };
 
 // Localize title of page

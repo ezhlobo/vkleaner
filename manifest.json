@@ -25,7 +25,7 @@
   "content_scripts": [{
     "matches": ["http://vk.com/*"],
     "css": ["css/feed.css"],
-    "js": ["js/jquery.js", "js/common.js", "js/feed.functions.js", "js/feed.js"]
+    "js": ["js/jquery.js", "js/common.js", "js/localstorage.js", "js/feed.functions.js", "js/feed.js"]
   }],
 
   "manifest_version": 2
