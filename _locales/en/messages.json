@@ -15,6 +15,10 @@
     "message": "Hide repost of the groups and the public pages?",
     "description": "Option name"
   },
+  "options_repostFromUsers": {
+    "message": "Hide repost from users?",
+    "description": "Option name"
+  },
   "options_withLinks": {
     "message": "Hide posts with links?<i><a href=''>Black list of links</a></i>",
     "description": "Option name"

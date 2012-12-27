@@ -15,6 +15,10 @@
     "message": "Скрывать перепосты из групп и публичных страниц?",
     "description": "Имя опции"
   },
+  "options_repostFromUsers": {
+    "message": "Скрывать перепосты от пользователей?",
+    "description": "Имя опции"
+  },
   "options_withLinks": {
     "message": "Скрывать сообщения со ссылками?<i><a href=''>Черный список ссылок</a></i>",
     "description": "Имя опции"

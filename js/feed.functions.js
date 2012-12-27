@@ -24,6 +24,17 @@ var hiding = {
     }
   },
   /**
+   * Is repost from user
+   * @param  {jQuery Object} post jQuery object of .feed_row
+   * @return {Boolean} TRUE if post is repost from user
+   */
+  repostFromUsers: function(post) {
+    var innerWrapClass = post.find('> div').attr('class');
+    if (innerWrapClass && /^feed_repost\d+_\d+$/.test(innerWrapClass)) {
+      return true;
+    }
+  },
+  /**
    * Is post include links of blacklist
    * @param  {jQuery Object} post jQuery object of .feed_row
    * @return {Boolean} TRUE if post include links of blacklist
