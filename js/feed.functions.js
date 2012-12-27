@@ -43,7 +43,7 @@ var hiding = {
     var mediaLink = post.find('.lnk .a').text();
     var linkInText = unescape(post.find('.wall_post_text').text());
 
-    var urlTpl = new RegExp('(\s|^)(https?:\/\/)?(w{3}\.)?([^\s]+)?(' + links().join('|') + ')(\/[^\s]*)?', 'i');
+    var urlTpl = new RegExp('(\s|^)(https?:\/\/)?(w{3}\.)?([^\s]+\.)?(' + links().join('|') + ')(\/[^\s]*)?(\s|$)', 'i');
     if (urlTpl.test(mediaLink) || urlTpl.test(linkInText))
       return true;
   },
