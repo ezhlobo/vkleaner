@@ -38,8 +38,8 @@ var cleanArray = function(array) {
  * Get current blacklist content
  * @return {Array}
  */
-var links = function() {
-  var links = ownLocalStorage.items['clearvk_withLinks_content'];
+var links = function(content) {
+  var links = content ? content : ownLocalStorage.items['clearvk_withLinks_content'];
   return (links === undefined) ? [] : (links === 'clearvk_withLinks_content') ? defaultBlacklist : cleanArray(links.split(';'));
 };
 
