@@ -17,7 +17,7 @@ var refreshPost = function(row) {
   if (types.length > 0) {
     row.attr('vkleaner-types', types.join(' '));
     if (row.find('.vkleaner-open').length == 0) {
-      var openLinkText = localize('feed_openlink') + ' <b>' + row.find('.author:first').text() + '</b>';
+      var openLinkText = localize_feed_openlink + ' <b>' + row.find('.author:first').text() + '</b>';
       row.prepend('<a class="vkleaner-open" href="">' + openLinkText + '</a>');
     }
   } else {
@@ -142,7 +142,7 @@ var openRow = function() {
   var status = 0;
   if (/display:\s?none/.test(row.find('.post').attr('style'))) {
     status = 2;
-    row.find('.vkleaner-open').html(localize('post_was_deleted'));
+    row.find('.vkleaner-open').html(localize_post_was_deleted);
   } else {
     status = (parseInt(row.attr('vkleaner-status')) === 2) ? 1 : 2;
   }

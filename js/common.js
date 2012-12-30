@@ -7,6 +7,11 @@ var localize = function(query) {
   return chrome.i18n.getMessage(query);
 };
 
+var localize_options = localize('options');
+var localize_yes = localize('options_yes');
+var localize_feed_openlink = localize('feed_openlink');
+var localize_post_was_deleted = localize('post_was_deleted');
+
 /**
  * Default content of blacklist
  * @type {Array}

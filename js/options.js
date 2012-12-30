@@ -84,8 +84,6 @@ var changeOptionStatus = function() {
 };
 
 var localization = function() {
-  var localize_options = localize('options');
-  var localize_yes = localize('options_yes');
   var notifierContent = '<div class="notifier"><p class="title">' + localize('options_toRestore') + '</p><textarea></textarea></div><button>' + localize('options_save') + '</button>';
 
   // Localize title of page
