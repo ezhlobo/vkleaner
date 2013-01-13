@@ -1,126 +1,10 @@
-var oldOptions, oldLinks, oldCssClass, oldLocation;
+var oldLocation;
 
 /** Array of unwanted types */
 var unwantedTypes;
 
 /** Jquery object of #feed_row */
 var rowsBlock;
-
-/**
- * Detectors of unwanted posts
- * @class
- */
-var hiding = {
-  /**
-   * Is repost from group
-   * @param  {jQuery Object} post jQuery object of .feed_row
-   * @return {Boolean} TRUE if post is repost from group
-   */
-  repostFromGroups: function(post) {
-    var innerWrapClass = post.children().attr('class');
-    if (innerWrapClass && innerWrapClass.substr(0, 11) === 'feed_repost') {
-      if (/^\/photo-[\d_]+$/.test($('a.published_by_date', post).attr('href')) || innerWrapClass.substr(17, 1) == '-' || innerWrapClass.substr(11, 1) == '-')
-        return true;
-    }
-  },
-  /**
-   * Is repost from user
-   * @param  {jQuery Object} post jQuery object of .feed_row
-   * @return {Boolean} TRUE if post is repost from user
-   */
-  repostFromUsers: function(post) {
-    var innerWrapClass = post.find('> div').attr('class');
-    if (innerWrapClass && /^feed_repost\d+_\d+$/.test(innerWrapClass)) {
-      return true;
-    }
-  },
-  /**
-   * Is post include links of blacklist
-   * @param  {jQuery Object} post jQuery object of .feed_row
-   * @return {Boolean} TRUE if post include links of blacklist
-   */
-  withLinks: function(post) {
-    var mediaLink = post.find('.lnk .a').text();
-    var linkInText = unescape(post.find('.wall_post_text').text());
-
-    var urlTpl = new RegExp('(\s|^)(https?:\/\/)?(w{3}\.)?([^\s]+\.)?(' + links().join('|') + ')(\/[^\s]*)?(\s|$)', 'i');
-    if (urlTpl.test(mediaLink) || urlTpl.test(linkInText))
-      return true;
-  },
-  /**
-   * Is post include video
-   * @param  {jQuery Object} post jQuery object of .feed_row
-   * @return {Boolean} TRUE if post include video
-   */
-  withVideo: function(post) {
-    var walltext = post.find('.wall_text');
-    if (post.find('.wall_text a[href^="/video"], a.page_post_thumb_video').length > 0)
-      return true;
-  },
-  /**
-   * Is post include audio
-   * @param  {jQuery Object} post jQuery object of .feed_row
-   * @return {Boolean} TRUE if post include audio
-   */
-  withAudio: function(post) {
-    if (post.find('.audio').length > 0)
-      return true;
-  },
-  /**
-   * Is post about group
-   * @param  {jQuery Object} post jQuery object of .feed_row
-   * @return {Boolean} TRUE if post about group
-   */
-  groupShare: function(post) {
-    if (post.find('.group_share').length > 0)
-      return true;
-  },
-  /**
-   * Is post by app
-   * @param  {jQuery Object} post jQuery object of .feed_row
-   * @return {Boolean} TRUE if post by app
-   */
-  fromApps: function(post) {
-    if (post.find('.wall_post_source_default').length > 0)
-      return true;
-  }
-};
-
-/**
- * Is options (connected with posts and not content of blacklist) changed
- * @return {Boolean}
- */
-var isOptionsChanged = function() {
-  return !(oldOptions !== undefined && unwantedTypes.length === oldOptions.length);
-};
-
-/**
- * Is blacklist value changed
- * @return {Boolean}
- */
-var isBlacklistChanged = function() {
-  var is = false;
-  var newLinks = links();
-  if (oldLinks !== undefined && newLinks.length === oldLinks.length) {
-    for (var i = 0, l = newLinks.length; i < l; i++) {
-      if ($.inArray(newLinks[i], oldLinks) === -1) {
-        is = true;
-        break;
-      }
-    }
-  } else {
-    is = true;
-  }
-  return is;
-};
-
-/**
- * Is style changed
- * @return {Boolean}
- */
-var isStyleChanged = function() {
-  return (ownLocalStorage.items['clearvk_class'] !== oldCssClass);
-};
 
 /**
  * Is location changed
@@ -130,6 +14,8 @@ var isLocationChanged = function() {
   return (oldLocation !== window.location.pathname + window.location.search);
 };
 
+var newsUrlTemplate = /^(\/feed|\/al_feed.php)(\?section=source&source=\d+|\?section=news)?$/;
+
 /**
  * Is user at news page
  * @return {Boolean}
@@ -137,87 +23,79 @@ var isLocationChanged = function() {
 var isNewsPage = function() {
   return newsUrlTemplate.test(window.location.pathname + window.location.search);
 };
-var newsUrlTemplate = /^(\/feed|\/al_feed.php)(\?section=source&source=\d+|\?section=news)?$/;
-
-/**
- * Is own local storage ready
- * @return {Boolean}
- */
-var isLocalStorageReady = function() {
-  return ownLocalStorage.items['clearvk_withLinks_content'] !== undefined;
-};
 
 /**
  * Selecting unwanted types
  * @return {Array} unwantedTypes
  */
 var selectUnwantedTypes = function() {
-  return unwantedTypes = $.map(ownLocalStorage.items, function(value, key) {
-    if (parseInt(value) === 1 && key !== 'clearvk_class') return key.replace(/clearvk_/, '');
+  return unwantedTypes = $.map(Storage.items, function(value, key) {
+    if (parseInt(value) === 1 && key !== 'clearvk_class') {
+      return key.replace(/clearvk_/, '');
+    }
   });
 };
 
 /**
- * Create own bind function
- * @class
+ * Init vkleaner to row or delete vkleaner of row
+ * @param  {jQuery Object} row jQuery object of .feed_row
+ * @return {refreshPostStatus} Refresh status after rows refreshing
  */
-var bind = function() {
-  var bind = {}, timer, timerLocation, interval = 350;
+var refreshPost = function(row) {
+  var types = [];
 
-  /** @param {Object} checks Object of callbacks */
-  bind.setChecks = function(checks) {
-    bind._checks = checks;
-  };
-
-  /** @public */
-  bind.start = function() {
-    timer = setInterval(bind._checking, interval);
-  };
-
-  /** @public */
-  bind.checkLocation = function() {
-    timerLocation = setInterval(bind._checkLocation, interval);
-  };
-
-  /** @public */
-  bind.stop = function() {
-    clearInterval(timer);
-  };
-
-  /** @public */
-  bind._checkLocation = function() {
-    if (isLocationChanged()) {
-      bind._checks.location();
-
-      oldLocation = window.location.pathname + window.location.search;
+  for (var name in hiding) {
+    if (hiding[name](row)) {
+      types[types.length] = name;
     }
-  };
+  }
 
-  /** @public */
-  bind._checking = function() {
-    var rows = rowsBlock.find('.feed_row');
+  if (types.length > 0) {
+    row.attr('vkleaner-types', types.join(' '));
+    if (row.find('.vkleaner-open').length == 0) {
+      var openLinkText = localize_feed_openlink + ' <b>' + row.find('.author:first').text() + '</b>';
+      row.prepend('<a class="vkleaner-open" href="">' + openLinkText + '</a>');
+    }
+  } else {
+    row.removeAttr('vkleaner-types').find('.vkleaner-open').remove();
+  }
 
-    ownLocalStorage.selectAll();
-    selectUnwantedTypes();
+  return refreshPostStatus(row, types);
+};
 
-    if (isOptionsChanged()) {
-      bind._checks.options();
+/**
+ * Refresh vkleaner-status value
+ * @param  {jQuery Object} row  jQuery object of .feed_row
+ * @param  {Array} types        Array of vkleaner-types
+ */
+var refreshPostStatus = function(row, types) {
+  if (!types) {
+    types = $.trim(row.attr('vkleaner-types')).split(' ');
+  }
 
-      oldOptions = unwantedTypes;
+  var length = types.length;
+  if (length > 0) {
+    var status = 0;
+
+    for (var i = 0; i < length; i++) {
+      if ($.inArray(types[i], unwantedTypes) !== -1) {
+        status = 1;
+        break;
+      }
     }
 
-    if (isBlacklistChanged()) {
-      bind._checks.blacklist();
+    return row.attr('vkleaner-status', status);
+  } else {
+    return row.removeAttr('vkleaner-status');
+  }
+};
 
-      oldLinks = links();
-    }
-
-    if (isStyleChanged()) {
-      bind._checks.style();
-
-      oldCssClass = ownLocalStorage.items['clearvk_class'];
-    }
-  };
-
-  return bind;
-}();
+/**
+ * Refresh posts
+ * @return {refreshPost} Refresh not vkleaner posts
+ */
+var refreshEveryPost = function() {
+  return rowsBlock.find('.feed_row:not([vkleaner-types])').each(function() {
+    return refreshPost( $(this) );
+  });
+};

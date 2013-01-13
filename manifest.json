@@ -10,10 +10,9 @@
     "128": "img/icon-128.png"
   },
 
-  "background" : {
-    "scripts": ["background.js"],
-    "persistent": false
-  },
+  "permissions": [
+    "storage"
+  ],
 
   "options_page": "options.html",
 
@@ -24,8 +23,20 @@
 
   "content_scripts": [{
     "matches": ["http://vk.com/*"],
-    "css": ["css/feed.css"],
-    "js": ["js/jquery.js", "js/common.js", "js/localstorage.js", "js/feed.functions.js", "js/feed.js"]
+
+    "css": [
+      "css/feed.css"
+    ],
+
+    "js": [
+      "js/jquery.js",
+      "js/storage.js",
+      "js/common.js",
+      "js/feed.functions.js",
+      "js/feed.detectors.js",
+      "js/feed.js"
+    ]
+
   }],
 
   "manifest_version": 2

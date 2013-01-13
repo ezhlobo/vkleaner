@@ -10,12 +10,13 @@ $(function() {
 
   modalBlacklist('#clearvk_withLinks a');
 
-  setDefaultSettings();
+  Storage.selectAll(setDefaultSettings);
 });
 
 var modalBlacklist = function(element) {
   var animateDuration = 200;
 
+  var notifier = $('#notifier');
   var background = $('body').append('<div class="background"></div>').find('> .background');
 
   background.display = function(value) {
@@ -24,50 +25,71 @@ var modalBlacklist = function(element) {
 
   var open = function(e) {
     e.preventDefault();
-    background.display('show').css({ width: $(document).width(), height: $(document).height() });
-    $('#notifier')
-      .animate({opacity: 'show', top: 20}, animateDuration)
-      .find('.notifier textarea')
-        .val(links(localStorage.getItem('clearvk_withLinks_content')).join('\n'));
+
+    background
+      .display('show')
+      .css({ width: $(document).width(), height: $(document).height() });
+
+    notifier
+      .animate({opacity: 'show', top: 20}, animateDuration);
+
+    Storage.select('clearvk_withLinks_content', function() {
+      notifier.find('.notifier textarea').val(links().join('\n'));
+    });
   };
 
   var hide = function() {
-    background.display('hide');
-    $('#notifier')
+    background
+      .display('hide');
+
+    notifier
       .animate({opacity: 'hide', top: 0}, animateDuration);
   };
 
   var saveContent = function() {
-    var arrayOfContent = $('#notifier textarea').val().trim().split('\n');
-    var value = cleanArray(arrayOfContent).length > 0 ? cleanArray(arrayOfContent).join(';') : 'clearvk_withLinks_content';
-    localStorage.setItem('clearvk_withLinks_content', value);
+    var arrayOfContent = notifier.find('textarea').val().trim().split('\n');
+
+    var value = cleanArray(arrayOfContent).length > 0
+      ? cleanArray(arrayOfContent).join(';')
+      : 'clearvk_withLinks_content';
+
+    Storage.set('clearvk_withLinks_content', value);
+
     hide();
   };
 
   wrapBlock
     .on('click', element, open)
     .on('click', '#notifier button', saveContent);
-  background.hide().on('click', hide);
+
+  background
+    .hide()
+    .on('click', hide);
 };
 
 var enableOption = function(optionId, firstInit) {
-  var option = $('#' + optionId, optionsBlock);
+  var option = optionsBlock.find('#' + optionId);
+
   option.addClass('yes');
+
   if (firstInit) {
     option.find('input').prop('checked', 'checked');
+  } else {
+    Storage.set(optionId, 1);
   }
-  localStorage.setItem(optionId, 1);
 };
 
 var disableOption = function(optionId) {
-  $('#' + optionId, optionsBlock).removeClass('yes');
-  localStorage.setItem(optionId, 0);
+  optionsBlock.find('#' + optionId).removeClass('yes');
+
+  Storage.set(optionId, 0);
 };
 
 var setDefaultSettings = function() {
-  for (var optionId in localStorage) {
-    if (parseInt(localStorage[optionId]) === 1)
+  for (var optionId in Storage.items) {
+    if (parseInt(Storage.items[optionId]) === 1) {
       enableOption(optionId, true);
+    }
   }
 };
 
@@ -105,9 +127,9 @@ var localization = function() {
     .find('.option').each(function() {
       var option = $(this);
       var nameOfOption = option.attr('id').replace('clearvk', '');
-      $('.name', option).html(localize('options' + nameOfOption));
+      option.find('.name').html(localize('options' + nameOfOption));
     }).end()
 
     // Localize content of notification
-    .find('#notifier').html(notifierContent);
+    .find(notifier).html(notifierContent);
 };

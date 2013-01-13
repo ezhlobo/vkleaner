@@ -34,8 +34,13 @@ var defaultBlacklist = [
  */
 var cleanArray = function(array) {
   var newArray = new Array();
-  for(var i = 0; i < array.length; i++)
-    if (array[i]) newArray.push(array[i]);
+
+  for(var i = 0; i < array.length; i++) {
+    if (array[i]) {
+      newArray[newArray.length] = array[i];
+    }
+  }
+
   return newArray;
 };
 
@@ -43,9 +48,11 @@ var cleanArray = function(array) {
  * Get current blacklist content
  * @return {Array}
  */
-var links = function(content) {
-  var links = content ? content : ownLocalStorage.items['clearvk_withLinks_content'];
-  return (links === undefined) ? [] : (links === 'clearvk_withLinks_content') ? defaultBlacklist : cleanArray(links.split(';'));
+var links = function() {
+  var links = Storage.items['clearvk_withLinks_content'];
+  return (links === undefined)
+    ? []
+    : (links === 'clearvk_withLinks_content') ? defaultBlacklist : cleanArray(links.split(';'));
 };
 
 /**
@@ -61,3 +68,11 @@ var idsOfOptions = {
   'clearvk_groupShare': 0,
   'clearvk_fromApps': 0
 };
+
+var idsOfOptionsKeys = ['clearvk_withLinks_content'];
+
+$.each(idsOfOptions, function(name) {
+  if (name !== 'clearvk_class') {
+    return idsOfOptionsKeys[idsOfOptionsKeys.length] = name;
+  }
+});
