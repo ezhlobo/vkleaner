@@ -62,7 +62,7 @@ var idsOfOptions = {
   'clearvk_class': 1,
   'clearvk_repostFromGroups': 1,
   'clearvk_repostFromUsers': 0,
-  'clearvk_withLinks': 1,
+  'clearvk_withLinks': 0,
   'clearvk_withVideo': 0,
   'clearvk_withAudio': 0,
   'clearvk_groupShare': 0,

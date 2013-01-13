@@ -36,7 +36,7 @@ var StorageManager = new (function() {
     var _this = this;
 
     return chrome.storage.sync.get(names, function(object) {
-      _this.items = $.extend({}, idsOfOptions, _this.items, object);
+      _this.items = $.extend({}, idsOfOptions, fixedFirstLoadObject, _this.items, object);
       if (fnAfterSelect) fnAfterSelect.call(this);
     });
   };
@@ -59,5 +59,8 @@ var StorageManager = new (function() {
 
   return StorageManager;
 })();
+
+// Default value for items[clearvk_withLinks_content]
+var fixedFirstLoadObject = {'clearvk_withLinks_content': 'clearvk_withLinks_content'};
 
 var Storage = new StorageManager();
