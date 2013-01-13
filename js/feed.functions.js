@@ -44,8 +44,8 @@ var selectUnwantedTypes = function() {
 var refreshPost = function(row) {
   var types = [];
 
-  for (var name in hiding) {
-    if (hiding[name](row)) {
+  for (var name in detect) {
+    if (detect[name](row)) {
       types[types.length] = name;
     }
   }
