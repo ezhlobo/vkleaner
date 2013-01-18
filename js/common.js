@@ -72,7 +72,5 @@ var idsOfOptions = {
 var idsOfOptionsKeys = ['clearvk_withLinks_content'];
 
 $.each(idsOfOptions, function(name) {
-  if (name !== 'clearvk_class') {
-    return idsOfOptionsKeys[idsOfOptionsKeys.length] = name;
-  }
+  return idsOfOptionsKeys[idsOfOptionsKeys.length] = name;
 });
