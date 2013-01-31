@@ -10,9 +10,11 @@ var detect = {
    * @return {Boolean}            TRUE if post is repost from group
    */
   repostFromGroups: function(post) {
-    var repostLink = post.find('a.published_by_date');
-    if (repostLink && /^\/(wall-|photo-)\d+/.test(repostLink.attr('href'))) {
-      return true;
+    var repostLink = post.find('.published_by_date');
+    if (repostLink.length) {
+      return false
+        || /^\/(wall|photo)-\d+/.test(repostLink.filter('a').attr('href'))
+        || /^(feed_reposts?)-\d+/.test(repostLink.closest('.post').parent().attr('class'));
     }
   },
 
@@ -22,9 +24,11 @@ var detect = {
    * @return {Boolean}            TRUE if post is repost from user
    */
   repostFromUsers: function(post) {
-    var repostLink = post.find('a.published_by_date');
-    if (repostLink && /^\/(wall|photo)\d+/.test(repostLink.attr('href'))) {
-      return true;
+    var repostLink = post.find('.published_by_date');
+    if (repostLink.length) {
+      return false
+        || /^\/(wall|photo)\d+/.test(repostLink.attr('href'))
+        || /^(feed_reposts?)\d+/.test(repostLink.closest('.post').parent().attr('class'));
     }
   },
 
