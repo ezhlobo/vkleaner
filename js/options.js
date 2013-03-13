@@ -1,135 +1,162 @@
 var optionsBlock, wrapBlock;
 
-$(function() {
-  wrapBlock = $('#wrap');
-  optionsBlock = $('.options');
-
-  wrapBlock.on('change', '.option input', changeOptionStatus);
+hata.ready(function() {
+  wrapBlock = hata("#wrap");
+  optionsBlock = hata(".options");
 
   localization();
+  Storage.selectAll( setDefaultSettings );
 
-  modalBlacklist('#clearvk_withLinks a');
+  wrapBlock.find(".option input").bind("change", changeOptionStatus );
 
-  Storage.selectAll(setDefaultSettings);
+  modalBlacklist("#clearvk_withLinks a");
 });
 
-var modalBlacklist = function(element) {
-  var animateDuration = 200;
+var modalBlacklist = function( element ) {
+  var notifier = hata("#notifier");
+  var background = hata("body").append("<div class=\"background\"></div>").find(".background");
 
-  var notifier = $('#notifier');
-  var background = $('body').append('<div class="background"></div>').find('> .background');
-
-  background.display = function(value) {
-    return this.animate({opacity: value}, animateDuration);
-  };
-
-  var open = function(e) {
+  var open = function( e ) {
     e.preventDefault();
 
-    background
-      .display('show')
-      .css({ width: $(document).width(), height: $(document).height() });
+    var cssObj = {
+      display: "block",
+      opacity: 0
+    };
 
-    notifier
-      .animate({opacity: 'show', top: 20}, animateDuration);
+    background.css( hata.extend({}, cssObj, {
+      width: document.width,
+      height: document.height
+    }));
 
-    Storage.select('clearvk_withLinks_content', function() {
-      notifier.find('.notifier textarea').val(links().join('\n'));
+    notifier.css( cssObj );
+
+    hata.animate({
+      step: function( x ) {
+        x = Math.pow( x, 1/2);
+        var y = 20 * x;
+
+        var cssObj = {
+          opacity: x
+        };
+
+        background.css( cssObj );
+        notifier.css( hata.extend( cssObj, {
+          top: y
+        }));
+      }
+    });
+
+    Storage.select("clearvk_withLinks_content", function() {
+      notifier.find(".notifier textarea").val(links().join("\n"));
     });
   };
 
   var hide = function() {
-    background
-      .display('hide');
+    hata.animate({
+      step: function( x ) {
+        x = Math.pow( x, 1/2);
+        var y = 20 - 20 * x;
 
-    notifier
-      .animate({opacity: 'hide', top: 0}, animateDuration);
+        var cssObj = {
+          opacity: 1 - x
+        };
+
+        background.css( cssObj );
+        notifier.css( hata.extend( cssObj, {
+          top: y
+        }));
+      },
+      done: function() {
+        var cssObj = {
+          display: "none"
+        };
+
+        background.css( cssObj );
+        notifier.css( cssObj );
+      }
+    });
   };
 
-  var saveContent = function() {
-    var arrayOfContent = notifier.find('textarea').val().trim().split('\n');
+  var saveContentAndHide = function() {
+    var arrayOfContent = notifier.find("textarea").val().trim().split("\n");
 
-    var value = cleanArray(arrayOfContent).length > 0
-      ? cleanArray(arrayOfContent).join(';')
-      : 'clearvk_withLinks_content';
+    var value = cleanArray( arrayOfContent ).length > 0
+      ? cleanArray( arrayOfContent ).join(";")
+      : "clearvk_withLinks_content";
 
-    Storage.set('clearvk_withLinks_content', value);
+    Storage.set("clearvk_withLinks_content", value );
 
     hide();
   };
 
-  wrapBlock
-    .on('click', element, open)
-    .on('click', '#notifier button', saveContent);
+  wrapBlock.find(element).bind("click", open );
+  wrapBlock.find("#notifier button").bind("click", saveContentAndHide );
 
-  background
-    .hide()
-    .on('click', hide);
+  background.bind("click", hide );
 };
 
-var enableOption = function(optionId, firstInit) {
-  var option = optionsBlock.find('#' + optionId);
+var enableOption = function( optionId, firstInit ) {
+  var option = optionsBlock.find("#" + optionId );
 
-  option.addClass('yes');
+  option.addClass("yes");
 
-  if (firstInit) {
-    option.find('input').prop('checked', 'checked');
+  if ( firstInit ) {
+    option.find("input").attr("checked", "checked");
   } else {
-    Storage.set(optionId, 1);
+    Storage.set( optionId, 1);
   }
 };
 
-var disableOption = function(optionId) {
-  optionsBlock.find('#' + optionId).removeClass('yes');
+var disableOption = function( optionId ) {
+  optionsBlock.find("#" + optionId).removeClass("yes");
 
-  Storage.set(optionId, 0);
+  Storage.set( optionId, 0);
+};
+
+var changeOptionStatus = function() {
+  var input = hata(this);
+  var optionId = input.attr("name");
+
+  if ( input.is(":checked") ) {
+    enableOption( optionId );
+  } else {
+    disableOption( optionId );
+  }
 };
 
 var setDefaultSettings = function() {
-  for (var optionId in Storage.items) {
-    if (parseInt(Storage.items[optionId]) === 1) {
-      enableOption(optionId, true);
+  hata.each( Storage.items, function( value, optionId ) {
+    if ( parseInt(value) === 1 ) {
+      enableOption( optionId, true);
     }
-  }
-};
-
-// Change option (yes or now)
-var changeOptionStatus = function() {
-  var input = $(this);
-  var optionId = input.attr('name');
-
-  if (input.is(':checked')) {
-    enableOption(optionId);
-  } else {
-    disableOption(optionId);
-  }
+  });
 };
 
 var localization = function() {
-  var notifierContent = '<div class="notifier"><p class="title">' + localize('options_toRestore') + '</p><textarea></textarea></div><button>' + localize('options_save') + '</button>';
+  var notifierContent = "<div class=\"notifier\"><p class=\"title\">" + localize("options_toRestore") + "</p><textarea></textarea></div><button>" + localize("options_save") + "</button>";
 
   // Localize title of page
-  $('title').html($('title').html() + localize_options);
+  hata("title").html(hata("title").html() + localize_options);
 
-  wrapBlock
-    // Localize header
-    .find('h1').html($('h1').html() + localize_options).end()
+  // Localize header
+  wrapBlock.find("h1").html(hata("h1").html() + localize_options);
 
-    // Localize description
-    .find('.description p').html(localize('options_description')).end()
+  // Localize description
+  wrapBlock.find(".description p").html(localize("options_description"));
 
-    // Localize checkbox of option
-    .find('.option label').each(function() {
-      $(this).html(localize_yes + $(this).html());
-    }).end()
+  // Localize checkbox of option
+  wrapBlock.find(".option label").each(function() {
+    this.innerHTML = localize_yes + this.innerHTML;
+  });
 
-    // Localize content of option
-    .find('.option').each(function() {
-      var option = $(this);
-      var nameOfOption = option.attr('id').replace('clearvk', '');
-      option.find('.name').html(localize('options' + nameOfOption));
-    }).end()
+  // Localize content of option
+  wrapBlock.find(".option").each(function() {
+    var option = hata(this);
+    var nameOfOption = option.attr("id").replace("clearvk", "");
+    option.find(".name").html(localize("options" + nameOfOption));
+  });
 
-    // Localize content of notification
-    .find(notifier).html(notifierContent);
+  // Localize content of notification
+  wrapBlock.find(notifier).html(notifierContent);
 };

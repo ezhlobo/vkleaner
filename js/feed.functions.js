@@ -1,101 +1,135 @@
-var oldLocation;
+var
 
-/** Array of unwanted types */
-var unwantedTypes;
+  oldLocation,
 
-/** Jquery object of #feed_row */
-var rowsBlock;
+  /** Array of unwanted types */
+  unwantedTypes,
 
-/**
- * Is location changed
- * @return {Boolean}
- */
-var isLocationChanged = function() {
-  return (oldLocation !== window.location.pathname + window.location.search);
-};
+  /** Hata object of #feed_row */
+  rowsBlock,
 
-var newsUrlTemplate = /^(\/feed|\/al_feed.php)(\?section=source&source=\d+|\?section=news)?$/;
+  /**
+   * @return {Array} unwantedTypes
+   */
+  selectUnwantedTypes = function() {
+    unwantedTypes = [];
 
-/**
- * Is user at news page
- * @return {Boolean}
- */
-var isNewsPage = function() {
-  return newsUrlTemplate.test(window.location.pathname + window.location.search);
-};
+    hata.each( Storage.items, function( value, key ) {
+      if ( parseInt( value ) === 1 && key !== "clearvk_class" ) {
+        unwantedTypes[ unwantedTypes.length ] = key.replace(/clearvk_/, "");
+      }
+    });
 
-/**
- * Selecting unwanted types
- * @return {Array} unwantedTypes
- */
-var selectUnwantedTypes = function() {
-  return unwantedTypes = $.map(Storage.items, function(value, key) {
-    if (parseInt(value) === 1 && key !== 'clearvk_class') {
-      return key.replace(/clearvk_/, '');
-    }
-  });
-};
+    return unwantedTypes;
+  },
 
-/**
- * Init vkleaner to row or delete vkleaner of row
- * @param  {jQuery Object} row jQuery object of .feed_row
- * @return {refreshPostStatus} Refresh status after rows refreshing
- */
-var refreshPost = function(row) {
-  var types = [];
+  /**
+   * @return {Boolean}
+   */
+  isLocationChanged = function() {
+    return ( oldLocation !== window.location.pathname + window.location.search );
+  },
 
-  for (var name in detect) {
-    if (detect[name](row)) {
-      types[types.length] = name;
-    }
-  }
+  newsUrlTemplate = /^(\/feed|\/al_feed.php)(\?section=source&source=\d+|\?section=news)?$/,
 
-  if (types.length > 0) {
-    row.attr('vkleaner-types', types.join(' '));
-    if (row.find('.vkleaner-open').length == 0) {
-      var openLinkText = localize_feed_openlink + ' <b>' + row.find('.author:first').text() + '</b>';
-      row.prepend('<a class="vkleaner-open" href="">' + openLinkText + '</a>');
-    }
-  } else {
-    row.removeAttr('vkleaner-types').find('.vkleaner-open').remove();
-  }
+  /**
+   * @return {Boolean}
+   */
+  isNewsPage = function() {
+    return newsUrlTemplate.test( window.location.pathname + window.location.search );
+  },
 
-  return refreshPostStatus(row, types);
-};
+  /**
+   * Refresh vkleaner-showheader
+   * @return {Object} rowsBlock
+   */
+  refreshShowHeaderType = function() {
+    return rowsBlock.attr("vkleaner-showheader", Storage.items["clearvk_class"]);
+  },
 
-/**
- * Refresh vkleaner-status value
- * @param  {jQuery Object} row  jQuery object of .feed_row
- * @param  {Array} types        Array of vkleaner-types
- */
-var refreshPostStatus = function(row, types) {
-  if (!types) {
-    types = $.trim(row.attr('vkleaner-types')).split(' ');
-  }
+  /**
+   * Refresh post status which vkleaner-types include changed option
+   * @return {Object} rowsBlock
+   */
+  optionsChanged = function(type) {
+    return rowsBlock.find(".feed_row[vkleaner-types*=" + type + "]").each(function() {
+      refreshPostStatus( hata(this) );
+    });
+  },
 
-  var length = types.length;
-  if (length > 0) {
-    var status = 0;
+  /**
+   * Refresh posts after blacklist changing
+   * @return {Object} rows Not vkleaner and "withLinks" posts
+   */
+  blacklistChanged = function() {
+    var rows = rowsBlock.find(".feed_row:not([vkleaner-types]), .feed_row[vkleaner-types*=withLinks]");
+    return rows.each(function() {
+      refreshPost( hata(this) );
+    });
+  },
 
-    for (var i = 0; i < length; i++) {
-      if ($.inArray(types[i], unwantedTypes) !== -1) {
-        status = 1;
-        break;
+  /**
+   * Init vkleaner to row or delete vkleaner of row
+   * @param  {Object}   row
+   * @return {Function} refreshPostStatus
+   */
+  refreshPost = function( row ) {
+    var types = [];
+
+    for ( var name in detect ) {
+      if ( detect[ name ]( row ) ) {
+        types[ types.length ] = name;
       }
     }
 
-    return row.attr('vkleaner-status', status);
-  } else {
-    return row.removeAttr('vkleaner-status');
-  }
-};
+    if ( types.length > 0 ) {
+      row.attr("vkleaner-types", types.join(" ") );
+      if ( row.find(".vkleaner-open").size() == 0 ) {
+        var openLinkText = localize_feed_openlink + " <b>" + row.find(".author").text() + "</b>";
+        row.prepend("<a class=\"vkleaner-open\" href=\"\">" + openLinkText + "</a>");
+      }
 
-/**
- * Refresh posts
- * @return {refreshPost} Refresh not vkleaner posts
- */
-var refreshEveryPost = function() {
-  return rowsBlock.find('.feed_row:not([vkleaner-types])').each(function() {
-    return refreshPost( $(this) );
-  });
-};
+    } else {
+      row.removeAttr("vkleaner-types").find(".vkleaner-open").remove();
+    }
+
+    return refreshPostStatus( row, types );
+  },
+
+  /**
+   * Refresh vkleaner-status value
+   * @param  {Object} row     Hata object of .feed_row
+   * @param  {Array}  [types] Array of vkleaner-types
+   * @return {Object} row
+   */
+  refreshPostStatus = function( row, types ) {
+    if ( !types ) {
+      types = hata.trim( row.attr("vkleaner-types") ).split(" ");
+    }
+
+    var length = types.length;
+    if ( length > 0 ) {
+      var status = 0;
+
+      for ( var i = 0; i < length; i++ ) {
+        if ( hata.inArray( types[ i ], unwantedTypes ) !== -1 ) {
+          status = 1;
+          break;
+        }
+      }
+
+      return row.attr("vkleaner-status", status );
+    } else {
+      return row.removeAttr("vkleaner-status");
+    }
+  },
+
+  /**
+   * Refresh posts
+   * @return {Object} rowsBlock
+   */
+  refreshEveryPost = function() {
+    return rowsBlock.find(".feed_row:not([vkleaner-types])").each(function() {
+      refreshPost( hata(this) );
+    });
+  };

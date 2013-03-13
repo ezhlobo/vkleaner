@@ -1,66 +1,70 @@
-/**
- * Storage manager
- * @class
- */
-var StorageManager = new (function() {
-  function StorageManager() {};
+var
 
   /**
-   * Items of storage
-   * @memberOf StorageManager
-   * @type {Object}
+   * Storage manager
    */
-  StorageManager.prototype.items = {};
+  StorageManager = new (function() {
+    function StorageManager() {};
+
+    /**
+     * Items of storage
+     * @type {Object}
+     */
+    StorageManager.prototype.items = {};
+
+    /**
+     * Set storage item
+     * @param {String}   name
+     * @param {Number}   value
+     * @param {Function} callback
+     */
+    StorageManager.prototype.set = function( name, value, callback ) {
+      var object = {};
+      object[ name ] = value;
+
+      return chrome.storage.sync.set( object, callback || function() {});
+    };
+
+    /**
+     * Select storage item
+     * @param {Array|String} names
+     * @param {Function}     fnAfterSelect
+     */
+    StorageManager.prototype.select = function( names, fnAfterSelect ) {
+      var _this = this;
+
+      return chrome.storage.sync.get( names, function( object ) {
+        _this.items = hata.extend({}, idsOfOptions, fixedFirstLoadObject, _this.items, object );
+        if ( fnAfterSelect ) {
+          fnAfterSelect.call( this );
+        }
+      });
+    };
+
+    /**
+     * Select every storage item
+     * @param {Function} fnAfterSelect
+     */
+    StorageManager.prototype.selectAll = function( fnAfterSelect ) {
+      return this.select( idsOfOptionsKeys, fnAfterSelect );
+    };
+
+    /**
+     * Add onChanged listener
+     * @param {Function} callback
+     */
+    StorageManager.prototype.onChanged = function( callback ) {
+      return chrome.storage.onChanged.addListener( callback );
+    };
+
+    return StorageManager;
+  })(),
 
   /**
-   * Set storage item
-   * @param {String}   name     Name of item
-   * @param {Number}   value    Value of item
-   * @param {Function} callback
+   * Default value for items[clearvk_withLinks_content]
    */
-  StorageManager.prototype.set = function(name, value, callback) {
-    var object = {};
-    object[name] = value;
+  fixedFirstLoadObject = {
+    "clearvk_withLinks_content": "clearvk_withLinks_content"
+  },
 
-    if (!callback) callback = function() {};
-
-    return chrome.storage.sync.set(object, callback);
-  };
-
-  /**
-   * Select storage item
-   * @param  {Array|String} names
-   * @param  {Function}     fnAfterSelect
-   */
-  StorageManager.prototype.select = function(names, fnAfterSelect) {
-    var _this = this;
-
-    return chrome.storage.sync.get(names, function(object) {
-      _this.items = $.extend({}, idsOfOptions, fixedFirstLoadObject, _this.items, object);
-      if (fnAfterSelect) fnAfterSelect.call(this);
-    });
-  };
-
-  /**
-   * Select every storage item
-   * @param  {Function} fnAfterSelect
-   */
-  StorageManager.prototype.selectAll = function(fnAfterSelect) {
-    return this.select(idsOfOptionsKeys, fnAfterSelect);
-  };
-
-  /**
-   * Add onChanged listener
-   * @param  {Function} callback
-   */
-  StorageManager.prototype.onChanged = function(callback) {
-    return chrome.storage.onChanged.addListener(callback);
-  };
-
-  return StorageManager;
-})();
-
-// Default value for items[clearvk_withLinks_content]
-var fixedFirstLoadObject = {'clearvk_withLinks_content': 'clearvk_withLinks_content'};
-
-var Storage = new StorageManager();
+  Storage = new StorageManager();
