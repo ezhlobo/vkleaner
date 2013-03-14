@@ -17,9 +17,6 @@ var
    * @return {Object} row hata object of .feed_row
    */
   openClicked = function( e ) {
-    e.preventDefault();
-    e.stopPropagation();
-
     if ( hata(e.target).closest(".vkleaner-open").size() === 1 ) {
       var row = hata(e.target).closest(".feed_row");
 
@@ -30,6 +27,9 @@ var
       } else {
         status = (parseInt(row.attr("vkleaner-status")) === 2) ? 1 : 2;
       }
+
+      e.preventDefault();
+      e.stopPropagation();
 
       return row.attr("vkleaner-status", status );
     }
