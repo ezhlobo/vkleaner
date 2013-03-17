@@ -146,7 +146,7 @@ var localization = function() {
   wrapBlock.find(".description p").html(localize("options_description"));
 
   // Localize checkbox of option
-  wrapBlock.find(".option label").each(function() {
+  wrapBlock.find(".option .params").each(function() {
     this.innerHTML = localize_yes + this.innerHTML;
   });
 

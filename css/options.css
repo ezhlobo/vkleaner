@@ -1,140 +1,166 @@
-html, body, div, span, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, cite, code,
-em, img, q, s, strike, strong, sub, sup, b, u, i, ol, ul, li,
-fieldset, form, label, legend {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  vertical-align: baseline;
+html, body, div, p, h1, a, label, input {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
 }
 
-body {position: relative;font-family: Verdana, Arial;font-size: 12px;line-height: 1;}
+body {
+    position: relative;
+    font-family: Verdana, Arial;
+    font-size: 12px;
+    line-height: 1;
+    }
 
-ol, ul {list-style: none}
-blockquote, q {quotes: none}
-blockquote:before, blockquote:after, q:before, q:after {content: '';content: none}
-table {border-collapse: collapse;border-spacing: 0}
+h1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-family: "Trebuchet MS";
+    }
 
-h1 {font-size: 20px;margin-bottom: 10px;font-family: "Trebuchet MS";}
-
-.description {line-height: 16px;color: #444;}
-  .description p {margin-bottom: 10px;}
+.description {
+    line-height: 16px;
+    color: #444;
+    }
+    .description p {
+        margin-bottom: 10px;
+        }
 
 .option {
-  padding: 10px 12px;
-  margin-bottom: 3px;
-  background: rgba(230,230,230,.7);
-  border-radius: 3px;
-  text-shadow: 1px 1px 1px rgba(255,255,255,.5);
-  border-bottom: 1px solid rgba(255,255,255,1);
-  color: #444;
-  opacity: .7;
-  }
-.option.yes, .option.important {
-  background: rgba(164,198,57,.7);
-  border-bottom: 1px solid rgba(164,198,57,1);
-  color: #000;
-  opacity: 1;
-  }
-.option:after {
-  display: block;
-  clear: both;
-  content: '.';
-  height: 0;
-  overflow: hidden;
-  }
+    margin-bottom: 3px;
+    background: rgba(230, 230, 230, .7);
+    border-radius: 3px;
+    text-shadow: 1px 1px 1px rgba(255, 255, 255, .5);
+    border-bottom: 1px solid rgba(255, 255, 255, 1);
+    color: #444;
+    opacity: .7;
+    }
+.option.yes,
 .option.important {
-  background: rgba(255,191,0,.7);
-  border-bottom-color: rgba(255,191,0,1);
-  opacity: .5;
-  }
-.option.important.yes {opacity:1;}
-  .name {
-    width: 420px;
-    float: left;
-    line-height: 14px;
+    background: rgba(164, 198, 57, .7);
+    border-bottom: 1px solid rgba(164, 198, 57, 1);
+    color: #000;
+    opacity: 1;
     }
-    .name i {
-      display: block;
-      font-size: 8px;
-      line-height: 10px;
-      margin-top: 2px;
-      }
-    #clearvk_withLinks .name a {
-      color: #afafaf;
-      text-decoration: none;
-      border-bottom: 1px dashed #afafaf;
-      }
-    #clearvk_withLinks.yes .name a {
-      color: #111;
-      border-bottom-color: #111;
-      }
-  .params {
-    float: right;
-    margin-left: 20px;
-    line-height: 14px;
+.option:after {
+    display: block;
+    clear: both;
+    content: ".";
+    height: 0;
+    overflow: hidden;
     }
-    .params label {
-      margin-left: 25px;
-      cursor: pointer;
-      }
-      .params input {
-        margin: 0 0 0 3px;
-        padding: 0;
-        vertical-align: top;
+.option.important {
+    background: rgba(255, 191, 0, .7);
+    border-bottom-color: rgba(255, 191, 0, 1);
+    opacity: .5;
+    }
+.option.important.yes {
+    opacity:1;
+    }
+
+    .option label {
+        padding: 10px 12px;
+        display: block;
+        cursor: pointer;
+        }
+    .option label:after {
+        content: ".";
+        display: block;
+        clear: both;
+        visibility: hidden;
+        height: 0;
+        font-size: 0;
+        line-height: 0;
+        }
+        .name {
+            width: 420px;
+            float: left;
+            line-height: 14px;
+            }
+            .name i {
+                display: block;
+                font-size: 8px;
+                line-height: 10px;
+                margin-top: 2px;
+                }
+            #clearvk_withLinks .name a {
+                color: #afafaf;
+                text-decoration: none;
+                border-bottom: 1px dashed #afafaf;
+                }
+            #clearvk_withLinks.yes .name a {
+                color: #111;
+                border-bottom-color: #111;
+                }
+            #clearvk_withLinks .name a:hover {
+                border-style: dotted;
+                }
+        .params {
+            float: right;
+            margin-left: 20px;
+            line-height: 14px;
+            }
+            .params input {
+                margin: 0 0 0 3px;
+                padding: 0;
+                vertical-align: top;
+                cursor: pointer;
+                }
+
+#notifier {
+    width: 370px;
+    height: 228px;
+    margin: 20px 0 0 -200px;
+    padding: 15px;
+    top: 0;left: 50%;position: absolute;
+    z-index: 10000;
+    display: none;
+    background: rgba(0, 0, 0, .1);
+    border-radius: 10px;
+    }
+    .notifier {
+        width: 350px;
+        height: 168px;
+        padding: 10px 10px 50px;
+        overflow: hidden;
+        background: #fff;
+        border-radius: 3px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, .1);
+        }
+        #notifier p.title {
+            height: 18px;
+            line-height: 18px;
+            font-size: 9px;
+            color: #ccc;
+            }
+        #notifier textarea {
+            width: 350px;
+            height: 150px;
+            padding: 5px;
+            resize: none;
+            border: 5px solid #f1f1f1;
+            outline: none;
+            font-family: Arial;
+            font-size: 11px;
+            line-height: 16px;
+            }
+    #notifier button {
+        height: 40px;
+        display: block;
+        position: absolute;
+        bottom: 15px;
+        left: 15px;
+        right: 15px;
+        color: #444;
+        text-shadow: 1px 1px 0 #fff;
+        font-size: 10px;
         cursor: pointer;
         }
 
-#notifier {
-  width: 370px;
-  height: 228px;
-  margin: 20px 0 0 -200px;
-  padding: 15px;
-  top: 0;left: 50%;position: absolute;
-  z-index: 10000;
-  display: none;
-  background: rgba(0,0,0,.1);
-  border-radius: 10px;
-  }
-  .notifier {
-    width: 350px;
-    height: 168px;
-    padding: 10px 10px 50px;
-    overflow: hidden;
-    background: #fff;
-    border-radius: 3px;
-    box-shadow: 0 0 5px rgba(0,0,0,.1);
-    }
-    #notifier p.title {
-      height: 18px;
-      line-height: 18px;
-      font-size: 9px;
-      color: #ccc;
-      }
-    #notifier textarea {
-      width: 350px;
-      height: 150px;
-      padding: 5px;
-      resize: none;
-      border: 5px solid #f1f1f1;
-      outline: none;
-      font-family: Arial;
-      font-size: 11px;
-      line-height: 16px;
-      }
-  #notifier button {
-    height: 40px;
-    display: block;
-    position: absolute;bottom: 15px;left: 15px;right: 15px;
-    color: #444;
-    text-shadow: 1px 1px 0 #fff;
-    font-size: 10px;
+.background {
+    position: fixed;
+    top: 0;left: 0;
+    background: rgba(255, 255, 255, .5);
     cursor: pointer;
     }
-
-.background {
-  position: fixed;
-  top: 0;left: 0;
-  background: rgba(255,255,255,.5);
-  cursor: pointer;
-  }
