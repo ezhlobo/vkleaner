@@ -24,7 +24,13 @@ var
     "askbook.me",
     "askme.by",
     "qroom.ru",
-    "nekto.me"
+    "nekto.me",
+    "sprashivai.by",
+    "vopros.me",
+    "voprosmne.ru",
+    "sprashivalka.com",
+    "askbook.me",
+    "my-truth.ru"
   ],
 
   /**

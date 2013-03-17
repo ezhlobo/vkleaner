@@ -52,13 +52,13 @@ var
 
     rowsBlock = hata("#feed_rows");
 
+    refreshEveryPost();
+    refreshShowHeaderType();
+
     rowsBlock.unbind("DOMNodeInserted", nodeInserted );
     rowsBlock.bind("DOMNodeInserted", nodeInserted );
     rowsBlock.unbind("click", openClicked );
     rowsBlock.bind("click", openClicked );
-
-    refreshEveryPost();
-    refreshShowHeaderType();
 
     oldLocation = window.location.pathname + window.location.search;
   },
@@ -66,7 +66,7 @@ var
   locationTimer,
   locationInterval = 300,
   checkLocation = function() {
-    if ( oldLocation !== window.location.pathname + window.location.search ) {
+    if ( isLocationChanged() ) {
       if ( isNewsPage() ) {
         return refresh();
       }
