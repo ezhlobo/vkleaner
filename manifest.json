@@ -14,9 +14,13 @@
     "storage"
   ],
 
+  "background": {
+    "scripts": ["js/background.js"]
+  },
+
   "options_page": "options.html",
 
-  "browser_action": {
+  "page_action": {
     "default_icon": "img/icon-19.png",
     "default_popup": "popup.html"
   },
@@ -35,7 +39,9 @@
       "js/feed.functions.js",
       "js/feed.detectors.js",
       "js/feed.js"
-    ]
+    ],
+
+    "run_at": "document_start"
 
   }],
 

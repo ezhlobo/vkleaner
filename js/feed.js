@@ -47,6 +47,9 @@ var
   refresh = function() {
     selectUnwantedTypes();
 
+    // Show vkleaner button
+    chrome.extension.sendRequest({}, function( response ) {});
+
     rowsBlock = hata("#feed_rows");
 
     rowsBlock.unbind("DOMNodeInserted", nodeInserted );
@@ -76,7 +79,10 @@ var
     return locationTimer = setInterval(checkLocation, locationInterval);
   };
 
-Storage.selectAll( firstInitialize );
+hata.ready(function() {
+  Storage.selectAll( firstInitialize );
+});
+
 Storage.onChanged(function( change ) {
   var name, value;
 
