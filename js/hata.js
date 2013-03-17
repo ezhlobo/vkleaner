@@ -94,7 +94,7 @@ var extensions = {
       });
 
     } else {
-      return this.get(0).getAttribute( name );
+      return this.get(0) ? this.get(0).getAttribute( name ) : "";
     }
   },
 
