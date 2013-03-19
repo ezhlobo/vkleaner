@@ -34,7 +34,7 @@ var detect = {
    * Is post include links of blacklist
    */
   withLinks: function( post ) {
-    var mediaLink = post.find(".lnk .a").text();
+    var mediaLink = post.find(".lnk").find(".a").text();
     var linkInText = hata.trim( unescape( post.find(".wall_post_text").text() ) );
     var urlTpl = new RegExp("(\s|^)(https?:\/\/)?(w{3}\.)?([^\s]+\.)?(" + links().join("|").replace(".", "\\.") + ")(\/[^\s]*)?(\s|$)", "i");
 

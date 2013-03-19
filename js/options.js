@@ -7,12 +7,12 @@ hata.ready(function() {
   localization();
   Storage.selectAll( setDefaultSettings );
 
-  wrapBlock.find(".option input").bind("change", changeOptionStatus );
+  wrapBlock.find(".option").find("input").bind("change", changeOptionStatus );
 
-  modalBlacklist("#clearvk_withLinks a");
+  modalBlacklist();
 });
 
-var modalBlacklist = function( element ) {
+var modalBlacklist = function() {
   var notifier = hata("#notifier");
   var background = hata("body").append("<div class=\"background\"></div>").find(".background");
 
@@ -48,7 +48,7 @@ var modalBlacklist = function( element ) {
     });
 
     Storage.select("clearvk_withLinks_content", function() {
-      notifier.find(".notifier textarea").val(links().join("\n"));
+      notifier.find(".notifier").find("textarea").val(links().join("\n"));
     });
   };
 
@@ -90,7 +90,7 @@ var modalBlacklist = function( element ) {
     hide();
   };
 
-  wrapBlock.find(element).bind("click", open );
+  wrapBlock.find("#clearvk_withLinks").find("a").bind("click", open );
   wrapBlock.find("#notifier button").bind("click", saveContentAndHide );
 
   background.bind("click", hide );
@@ -143,10 +143,10 @@ var localization = function() {
   wrapBlock.find("h1").html(hata("h1").html() + localize_options);
 
   // Localize description
-  wrapBlock.find(".description p").html(localize("options_description"));
+  wrapBlock.find(".description").find("p").html(localize("options_description"));
 
   // Localize checkbox of option
-  wrapBlock.find(".option .params").each(function() {
+  wrapBlock.find(".params").each(function() {
     this.innerHTML = localize_yes + this.innerHTML;
   });
 
