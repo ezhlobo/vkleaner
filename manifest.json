@@ -26,7 +26,7 @@
   },
 
   "content_scripts": [{
-    "matches": ["*://vk.com/*"],
+    "matches": ["*://vk.com/feed*"],
 
     "css": [
       "css/feed.css"
