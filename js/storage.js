@@ -1,70 +1,71 @@
 var
 
-  /**
-   * Storage manager
-   */
-  StorageManager = new (function() {
-    function StorageManager() {};
+	/**
+	 * Storage manager
+	 */
+	StorageManager = new (function() {
+		function StorageManager() {};
 
-    /**
-     * Items of storage
-     * @type {Object}
-     */
-    StorageManager.prototype.items = {};
+		/**
+		 * Items of storage
+		 * @type {Object}
+		 */
+		StorageManager.prototype.items = {};
 
-    /**
-     * Set storage item
-     * @param {String}   name
-     * @param {Number}   value
-     * @param {Function} callback
-     */
-    StorageManager.prototype.set = function( name, value, callback ) {
-      var object = {};
-      object[ name ] = value;
+		/**
+		 * Set storage item
+		 * @param {String}   name
+		 * @param {Number}   value
+		 * @param {Function} callback
+		 */
+		StorageManager.prototype.set = function( name, value, callback ) {
+			var object = {};
 
-      return chrome.storage.sync.set( object, callback || function() {});
-    };
+			object[ name ] = value;
 
-    /**
-     * Select storage item
-     * @param {Array|String} names
-     * @param {Function}     fnAfterSelect
-     */
-    StorageManager.prototype.select = function( names, fnAfterSelect ) {
-      var _this = this;
+			return chrome.storage.sync.set( object, callback || function() {});
+		};
 
-      return chrome.storage.sync.get( names, function( object ) {
-        _this.items = hata.extend({}, idsOfOptions, fixedFirstLoadObject, _this.items, object );
-        if ( fnAfterSelect ) {
-          fnAfterSelect.call( this );
-        }
-      });
-    };
+		/**
+		 * Select storage item
+		 * @param {Array|String} names
+		 * @param {Function}     fnAfterSelect
+		 */
+		StorageManager.prototype.select = function( names, fnAfterSelect ) {
+			var _this = this;
 
-    /**
-     * Select every storage item
-     * @param {Function} fnAfterSelect
-     */
-    StorageManager.prototype.selectAll = function( fnAfterSelect ) {
-      return this.select( idsOfOptionsKeys, fnAfterSelect );
-    };
+			return chrome.storage.sync.get( names, function( object ) {
+				_this.items = hata.extend({}, idsOfOptions, fixedFirstLoadObject, _this.items, object );
+				if ( fnAfterSelect ) {
+					fnAfterSelect.call( this );
+				}
+			});
+		};
 
-    /**
-     * Add onChanged listener
-     * @param {Function} callback
-     */
-    StorageManager.prototype.onChanged = function( callback ) {
-      return chrome.storage.onChanged.addListener( callback );
-    };
+		/**
+		 * Select every storage item
+		 * @param {Function} fnAfterSelect
+		 */
+		StorageManager.prototype.selectAll = function( fnAfterSelect ) {
+			return this.select( idsOfOptionsKeys, fnAfterSelect );
+		};
 
-    return StorageManager;
-  })(),
+		/**
+		 * Add onChanged listener
+		 * @param {Function} callback
+		 */
+		StorageManager.prototype.onChanged = function( callback ) {
+			return chrome.storage.onChanged.addListener( callback );
+		};
 
-  /**
-   * Default value for items[clearvk_withLinks_content]
-   */
-  fixedFirstLoadObject = {
-    "clearvk_withLinks_content": "clearvk_withLinks_content"
-  },
+		return StorageManager;
+	})(),
 
-  Storage = new StorageManager();
+	/**
+	 * Default value for items[clearvk_withLinks_content]
+	 */
+	fixedFirstLoadObject = {
+		"clearvk_withLinks_content": "clearvk_withLinks_content"
+	},
+
+	Storage = new StorageManager();

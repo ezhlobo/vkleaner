@@ -1,117 +1,118 @@
 var
 
-  /**
-   * @return {Function} refreshPost
-   */
-  nodeInserted = function( e ) {
-    if ( isNewsPage() ) {
-      var row = hata(e.target).closest(".feed_row");
-      if ( !row.attr("vkleaner-types") ) {
-        return refreshPost( row );
-      }
-    }
-  },
+	/**
+	 * @return {Function} refreshPost
+	 */
+	nodeInserted = function( e ) {
+		if ( isNewsPage() ) {
+			var row = hata( e.target ).closest( ".feed_row" );
 
-  /**
-   * Show or hide hidden part of post
-   * @return {Object} row hata object of .feed_row
-   */
-  openClicked = function( e ) {
-    if ( hata(e.target).closest(".vkleaner-open").size() === 1 ) {
-      var row = hata(e.target).closest(".feed_row");
+			if ( !row.attr( "vkleaner-types" ) ) {
+				return refreshPost( row );
+			}
+		}
+	},
 
-      var status = 0;
-      if ( /display:\s?none/.test( row.find(".post").attr("style") ) ) {
-        status = 2;
-        row.find(".vkleaner-open").html(localize_post_was_deleted);
-      } else {
-        status = (parseInt(row.attr("vkleaner-status")) === 2) ? 1 : 2;
-      }
+	/**
+	 * Show or hide hidden part of post
+	 * @return {Object} row hata object of .feed_row
+	 */
+	openClicked = function( e ) {
+		if ( hata( e.target ).closest( ".vkleaner-open" ).size() === 1 ) {
+			var row = hata( e.target ).closest( ".feed_row" ),
+				status = 0;
 
-      e.preventDefault();
-      e.stopPropagation();
+			if ( /display:\s?none/.test( row.find( ".post" ).attr( "style" ) ) ) {
+				status = 2;
+				row.find( ".vkleaner-open" ).html( localize_post_was_deleted );
+			} else {
+				status = parseInt( row.attr( "vkleaner-status" ) ) === 2 ? 1 : 2;
+			}
 
-      return row.attr("vkleaner-status", status );
-    }
-  },
+			e.preventDefault();
+			e.stopPropagation();
 
-  /**
-   * Refresh the VKleaner
-   *
-   * Set rowsBlock
-   * Set oldLocation
-   * Add DOM handlers
-   * Refresh every post
-   * Refresh style
-   */
-  refresh = function() {
-    selectUnwantedTypes();
+			return row.attr( "vkleaner-status", status );
+		}
+	},
 
-    // Show vkleaner button
-    chrome.extension.sendRequest({}, function( response ) {});
+	/**
+	 * Refresh the VKleaner
+	 *
+	 * Set rowsBlock
+	 * Set oldLocation
+	 * Add DOM handlers
+	 * Refresh every post
+	 * Refresh style
+	 */
+	refresh = function() {
+		selectUnwantedTypes();
 
-    rowsBlock = hata("#feed_rows");
+		// Show vkleaner button
+		chrome.extension.sendRequest({}, function( response ) {});
 
-    refreshEveryPost();
-    refreshShowHeaderType();
+		rowsBlock = hata( "#feed_rows" );
 
-    rowsBlock.unbind("DOMNodeInserted", nodeInserted );
-    rowsBlock.bind("DOMNodeInserted", nodeInserted );
-    rowsBlock.unbind("click", openClicked );
-    rowsBlock.bind("click", openClicked );
+		refreshEveryPost();
+		refreshShowHeaderType();
 
-    oldLocation = window.location.pathname + window.location.search;
-  },
+		rowsBlock.unbind( "DOMNodeInserted", nodeInserted );
+		rowsBlock.bind( "DOMNodeInserted", nodeInserted );
+		rowsBlock.unbind( "click", openClicked );
+		rowsBlock.bind( "click", openClicked );
 
-  locationTimer,
-  locationInterval = 300,
-  checkLocation = function() {
-    if ( isLocationChanged() ) {
-      if ( isNewsPage() ) {
-        return refresh();
-      }
-      return oldLocation = window.location.pathname + window.location.search;
-    }
-  },
+		oldLocation = window.location.pathname + window.location.search;
+	},
 
-  firstInitialize = function() {
-    checkLocation();
-    return locationTimer = setInterval(checkLocation, locationInterval);
-  };
+	locationTimer,
+	locationInterval = 300,
+	checkLocation = function() {
+		if ( isLocationChanged() ) {
+			if ( isNewsPage() ) {
+				return refresh();
+			}
+			return oldLocation = window.location.pathname + window.location.search;
+		}
+	},
+
+	firstInitialize = function() {
+		checkLocation();
+		return locationTimer = setInterval( checkLocation, locationInterval );
+	};
 
 hata.ready(function() {
-  Storage.selectAll( firstInitialize );
+	Storage.selectAll( firstInitialize );
 });
 
 Storage.onChanged(function( change ) {
-  var name, value;
+	var name, value, optionName;
 
-  for ( var key in change ) {
-    name = key;
-    value = change[ key ];
-  }
+	for ( optionName in change ) {
+		name = optionName;
+		value = change[ optionName ];
+	}
 
-  switch ( name ) {
-    case "clearvk_withLinks_content":
-      Storage.items["clearvk_withLinks_content"] = value.newValue;
-      return blacklistChanged();
-      break;
+	if ( name === "clearvk_withLinks_content" ) {
+		Storage.items[ "clearvk_withLinks_content" ] = value.newValue;
+		return blacklistChanged();
+	}
 
-    case "clearvk_class":
-      Storage.items["clearvk_class"] = value.newValue;
-      return refreshShowHeaderType();
-      break;
+	if ( name === "clearvk_class" ) {
+		Storage.items[ "clearvk_class" ] = value.newValue;
+		return refreshShowHeaderType();
+	}
 
-    default:
-      var type = name.replace(/clearvk_/, "");
+	// else:
 
-      if ( value.newValue === 0 ) {
-        var position = hata.inArray( type, unwantedTypes );
-        unwantedTypes.splice( position, 1);
-      } else {
-        unwantedTypes[ unwantedTypes.length ] = type;
-      }
+	var type = name.replace( /clearvk_/, "" );
 
-      return optionsChanged( type );
-  }
+	if ( value.newValue === 0 ) {
+		var position = hata.inArray( type, unwantedTypes );
+
+		unwantedTypes.splice( position, 1 );
+	} else {
+		unwantedTypes.push( type );
+	}
+
+	return optionsChanged( type );
 });

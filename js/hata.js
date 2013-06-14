@@ -6,186 +6,197 @@
  * @return {Node}
  */
 var createNode = function( str ) {
-  var node;
+	var node;
 
-  if ( /^<([^>]+)>(.*)<\/(.+)>/.test( hata.trim( str ) ) ) {
-    html = hata.trim( str );
-    var htmlArr = html.match(/^<([^>]+)>(.*)<\/(.+)>$/);
-    var params = htmlArr[1].split(" ");
+	if ( /^<([^>]+)>(.*)<\/(.+)>/.test( hata.trim( str ) ) ) {
+		var html = hata.trim( str ),
+			htmlArr = html.match( /^<([^>]+)>(.*)<\/(.+)>$/ ),
+			params = htmlArr[ 1 ].split( " " );
 
-    node = document.createElement(params[0]);
-    hata.each( Array.prototype.slice.call( params, 1), function( value, key ) {
-      var attribute = hata.trim( value ).match(/^(.+)="(.*)"$/);
-      node.setAttribute(attribute[1], attribute[2]);
-    });
+		node = document.createElement( params[ 0 ] );
+		hata.each( Array.prototype.slice.call( params, 1 ), function( value, key ) {
+			var attribute = hata.trim( value ).match( /^(.+)='(.*)'$/ );
 
-    node.innerHTML = htmlArr[2];
+			node.setAttribute( attribute[ 1 ], attribute[ 2 ] );
+		});
 
-  } else {
-    node = document.createTextNode( str );
-  }
+		node.innerHTML = htmlArr[ 2 ];
 
-  return node;
+	} else {
+		node = document.createTextNode( str );
+	}
+
+	return node;
 };
 
 var methods = {
-  trim: function( str ) {
-    return str.replace(/^\s+|\s+$/g, "");
-  },
+	trim: function( str ) {
+		return str.replace( /^\s+|\s+$/g, "" );
+	},
 
-  inArray: function( target, obj ) {
-    return obj.indexOf( target );
-  },
+	inArray: function( target, obj ) {
+		return obj.indexOf( target );
+	},
 
-  animParams: {
-    duration: 200,
-    delay: 10,
-    done: function() {}
-  },
+	animParams: {
+		duration: 200,
+		delay: 10,
+		delta: function( progress ) {
+			return Math.sin( progress * Math.PI / 2 );
+		},
+		done: function() {}
+	},
 
-  animate: function( opts ) {
-    var start = new Date;
+	animate: function( step, opts ) {
+		var timer,
+			start = new Date,
+			opts = hata.extend({}, hata.animParams, opts ),
 
-    var timer = setInterval(function() {
-      var progress = ( new Date - start ) / (opts.duration || hata.animParams.duration);
-      if ( progress > 1 ) {
-        progress = 1;
-      }
+		timer = setInterval(function() {
+			var progress = ( new Date - start ) / opts.duration;
 
-      opts.step( progress );
+			if ( progress > 1 ) {
+				progress = 1;
+			}
 
-      if ( progress === 1 ) {
-        clearInterval( timer );
-        (opts.done || hata.animParams.done).call(this);
-      }
+			step( opts.delta( progress ) );
 
-    }, opts.delay || hata.animParams.delay );
-  }
+			if ( progress === 1 ) {
+				clearInterval( timer );
+				opts.done.call( this );
+			}
+
+		}, opts.delay );
+	}
 };
 
 var extensions = {
-  addClass: function( value ) {
-    return this.each(function( elem ) {
-      elem.classList.add( value );
-    });
-  },
+	addClass: function( value ) {
+		return this.each(function( elem ) {
+			elem.classList.add( value );
+		});
+	},
 
-  removeClass: function( value ) {
-    return this.each(function( elem ) {
-      elem.classList.remove( value );
-    });
-  },
+	removeClass: function( value ) {
+		return this.each(function( elem ) {
+			elem.classList.remove( value );
+		});
+	},
 
-  val: function( value ) {
-    if ( value ) {
-      return this.each(function( elem ) {
-        elem.value = value;
-      });
+	val: function( value ) {
+		if ( value ) {
+			return this.each(function( elem ) {
+				elem.value = value;
+			});
 
-    } else {
-      return this.get(0).value;
-    }
-  },
+		} else {
+			return this.get( 0 ).value;
+		}
+	},
 
-  attr: function( name, value ) {
-    if ( value != null ) {
-      return this.each(function( elem ) {
-        elem.setAttribute( name, value );
-      });
+	attr: function( name, value ) {
+		if ( value != null ) {
+			return this.each(function( elem ) {
+				elem.setAttribute( name, value );
+			});
 
-    } else {
-      return this.get(0) ? this.get(0).getAttribute( name ) : "";
-    }
-  },
+		} else {
+			return this.get( 0 ) ? this.get( 0 ).getAttribute( name ) : "";
+		}
+	},
 
-  removeAttr: function( name ) {
-    return this.each(function( elem ) {
-      elem.removeAttribute( name );
-    });
-  },
+	removeAttr: function( name ) {
+		return this.each(function( elem ) {
+			elem.removeAttribute( name );
+		});
+	},
 
-  prepend: function( html ) {
-    var node = createNode( html );
-    return this.each(function( elem ) {
-      elem.insertBefore( node, elem.firstChild );
-    });
-  },
+	prepend: function( html ) {
+		var node = createNode( html );
 
-  append: function( html ) {
-    var node = createNode( html );
-    return this.each(function( elem ) {
-      elem.appendChild( node );
-    });
-  },
+		return this.each(function( elem ) {
+			elem.insertBefore( node, elem.firstChild );
+		});
+	},
 
-  remove: function() {
-    return this.each(function( elem ) {
-      elem.removeNode( true );
-    });
-  },
+	append: function( html ) {
+		var node = createNode( html );
 
-  html: function( value ) {
-    if ( value ) {
-      return this.each(function( elem ) {
-        elem.innerHTML = value;
-      });
+		return this.each(function( elem ) {
+			elem.appendChild( node );
+		});
+	},
 
-    } else {
-      return this.get(0).innerHTML;
-    }
-  },
+	remove: function() {
+		return this.each(function( elem ) {
+			elem.removeNode( true );
+		});
+	},
 
-  text: function( value ) {
-    if ( value ) {
-      return this.each(function( elem ) {
-        elem.textContent = value;
-      });
+	html: function( value ) {
+		if ( value ) {
+			return this.each(function( elem ) {
+				elem.innerHTML = value;
+			});
 
-    } else {
-      // Check for correct work with empty Hata object
-      return this.get(0) ? this.get(0).textContent : "";
-    }
-  },
+		} else {
+			return this.get( 0 ).innerHTML;
+		}
+	},
 
-  size: function() {
-    return this.get().length;
-  },
+	text: function( value ) {
+		if ( value ) {
+			return this.each(function( elem ) {
+				elem.textContent = value;
+			});
 
-  parent: function() {
-    return hata( this.get(0).parentNode );
-  },
+		} else {
+			// Check for correct work with empty Hata object
+			return this.get( 0 ) ? this.get( 0 ).textContent : "";
+		}
+	},
 
-  css: function( obj ) {
-    if ( typeof obj === "string" ) {
-      return window.getComputedStyle( this.get(0) )[ obj ];
+	size: function() {
+		return this.get().length;
+	},
 
-    } else {
-      return this.each(function( elem ) {
-        for ( var key in obj ) {
-          elem.style[ key ] = obj[ key ];
-        }
-      });
-    }
-  },
+	parent: function() {
+		return hata( this.get( 0 ).parentNode );
+	},
 
-  bind: function( eventType, callback ) {
-    return this.each(function() {
-      this.addEventListener( eventType, callback, false);
-    });
-  },
+	css: function( obj ) {
+		if ( typeof obj === "string" ) {
+			return window.getComputedStyle( this.get( 0 ) )[ obj ];
 
-  unbind: function( eventType, callback ) {
-    if ( callback ) {
-      return this.each(function() {
-        this.removeEventListener( eventType, callback );
-      });
+		} else {
+			return this.each(function( elem ) {
+				var key;
 
-    } else {
-      return this.each(function() {
-        this.parentNode.replaceChild( this.cloneNode(true), this );
-      });
-    }
-  }
+				for ( key in obj ) {
+					elem.style[ key ] = obj[ key ];
+				}
+			});
+		}
+	},
+
+	bind: function( eventType, callback ) {
+		return this.each(function() {
+			this.addEventListener( eventType, callback, false );
+		});
+	},
+
+	unbind: function( eventType, callback ) {
+		if ( callback ) {
+			return this.each(function() {
+				this.removeEventListener( eventType, callback );
+			});
+
+		} else {
+			return this.each(function() {
+				this.parentNode.replaceChild( this.cloneNode( true ), this );
+			});
+		}
+	}
 };
 
 hata.extend( hata.fn, extensions );
