@@ -73,6 +73,7 @@ var
 		"clearvk_withVideo": 0,
 		"clearvk_withAudio": 0,
 		"clearvk_groupShare": 0,
+		"clearvk_eventShare": 0,
 		"clearvk_fromApps": 0
 	},
 

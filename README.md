@@ -5,12 +5,13 @@ Do you have problem with reading your personal news feed on vk.com like me? I do
 
 **VKleaner can:**
 
-- hide reposts by friends from group you're not subsribed.
-- hide reposts by friends from other friends.
-- hide posts with links on different sites.
-- hide posts containig videos and musics.
-- hide sharing of groups.
-- hide posts by apps
+- Hide reposts by friends from group you're not subsribed.
+- Hide reposts by friends from other friends.
+- Hide posts with links on different sites.
+- Hide posts containig videos and musics.
+- Hide sharing of groups.
+- Hide sharing of events.
+- Hide posts by apps.
 
 If you're afraid to miss something important you can setup application that it will collapse all unwanted posts rather than deleting it from feed. Collapsed messages will contain author's name and you can expand it just by click.
 

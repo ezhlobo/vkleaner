@@ -63,6 +63,13 @@ var detect = {
 	},
 
 	/**
+	 * Is post about event
+	 */
+	eventShare: function( post ) {
+		return post.find( ".event_share" ).size() > 0;
+	},
+
+	/**
 	 * Is post by app
 	 */
 	fromApps: function( post ) {
