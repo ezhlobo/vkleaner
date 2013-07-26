@@ -48,11 +48,19 @@
     "description": "В notifier"
   },
 
-  "options_save": { "message": "Сохранить" },
+  "options_save": {
+    "message": "Сохранить"
+  },
 
-  "options_yes": { "message": "Да" },
+  "options_yes": {
+    "message": "Да"
+  },
 
-  "feed_openlink": { "message": "Сообщение от" },
+  "feed_openlink": {
+    "message": "Сообщение от"
+  },
 
-  "post_was_deleted": { "message": "Сообщение было удалено" }
+  "post_was_deleted": {
+    "message": "Сообщение было удалено"
+  }
 }
