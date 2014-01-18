@@ -45,14 +45,14 @@ var detect = {
 	 * Is post include video
 	 */
 	withVideo: function( post ) {
-		return post.find( ".wall_text a[href^=\"/video\"], a.page_post_thumb_video" ).size() > 0;
+		return post.find( ".wall_text" ).find( "a[href^=\"/video\"], a.page_post_thumb_video" ).size() > 0;
 	},
 
 	/**
 	 * Is post include audio
 	 */
 	withAudio: function( post ) {
-		return post.find( ".audio" ).size() > 0;
+		return post.find( ".wall_text" ).find( ".audio" ).size() > 0;
 	},
 
 	/**
