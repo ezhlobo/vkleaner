@@ -22,7 +22,10 @@ var
 		"voprosmne.ru",
 		"sprashivalka.com",
 		"askbook.me",
-		"my-truth.ru"
+		"my-truth.ru",
+		"sparshivai.ru",
+		"sprashivaii.ru",
+		"sprosi.name"
 	],
 
 	// Remove empty elements from an array
