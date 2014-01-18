@@ -146,12 +146,13 @@ h1 {
             line-height: 16px;
             }
     #notifier button {
+        width: calc(100% - 30px);
         height: 40px;
         display: block;
         position: absolute;
         bottom: 15px;
         left: 15px;
-        right: 15px;
+        /*right: 15px;*/
         color: #444;
         text-shadow: 1px 1px 0 #fff;
         font-size: 10px;
@@ -161,6 +162,8 @@ h1 {
 .background {
     position: fixed;
     top: 0;left: 0;
+    bottom: 0;right: 0;
     background: rgba(255, 255, 255, .5);
+    display: none;
     cursor: pointer;
     }

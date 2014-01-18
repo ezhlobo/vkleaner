@@ -1,9 +1,4 @@
 var
-
-	/**
-	 * @param  {String} query
-	 * @return {String}
-	 */
 	localize = function( query ) {
 		return chrome.i18n.getMessage( query );
 	},
@@ -13,9 +8,6 @@ var
 	localize_feed_openlink = localize( "feed_openlink" ),
 	localize_post_was_deleted = localize( "post_was_deleted" ),
 
-	/**
-	 * Default content of blacklist
-	 */
 	defaultBlacklist = [
 		"ask.fm",
 		"sprashivai.ru",
@@ -33,11 +25,7 @@ var
 		"my-truth.ru"
 	],
 
-	/**
-	 * Remove empty elements from an array
-	 * @param  {Array} array
-	 * @return {Array}
-	 */
+	// Remove empty elements from an array
 	cleanArray = function( array ) {
 		var newArray = new Array(),
 			i = 0,
@@ -52,19 +40,14 @@ var
 		return newArray;
 	},
 
-	/**
-	 * Get current blacklist content
-	 * @return {Array}
-	 */
+	// Get current blacklist content
 	links = function() {
 		var links = Storage.items[ "clearvk_withLinks_content" ];
 
 		return links === undefined ? [] : links === "clearvk_withLinks_content" ? defaultBlacklist : cleanArray( links.split( ";" ) );
 	},
 
-	/**
-	 * Option's names and default values
-	 */
+	// Option's names and default values
 	idsOfOptions = {
 		"clearvk_class": 1,
 		"clearvk_repostFromGroups": 1,

@@ -1,9 +1,26 @@
 var
+	refresh = function() {
+		// Load options to 'unwantedTypes' variable
+		selectUnwantedTypes();
 
-	/**
-	 * @return {Function} refreshPost
-	 */
-	nodeInserted = function( e ) {
+		// Show vkleaner button
+		chrome.extension.sendRequest({}, function() {});
+
+		rowsBlock = hata( "#feed_rows" );
+
+		refreshEveryPost();
+		refreshShowHeaderType();
+
+		// Catch new post
+		rowsBlock.unbind( "DOMNodeInserted", refreshNewPost );
+		rowsBlock.bind( "DOMNodeInserted", refreshNewPost );
+
+		// Click on post header
+		rowsBlock.unbind( "click", clickOnHidedPost );
+		rowsBlock.bind( "click", clickOnHidedPost );
+	},
+
+	refreshNewPost = function( e ) {
 		if ( isNewsPage() ) {
 			var row = hata( e.target ).closest( ".feed_row" );
 
@@ -13,11 +30,7 @@ var
 		}
 	},
 
-	/**
-	 * Show or hide hidden part of post
-	 * @return {Object} row hata object of .feed_row
-	 */
-	openClicked = function( e ) {
+	clickOnHidedPost = function( e ) {
 		if ( hata( e.target ).closest( ".vkleaner-open" ).size() === 1 ) {
 			var row = hata( e.target ).closest( ".feed_row" ),
 				status = 0;
@@ -36,83 +49,60 @@ var
 		}
 	},
 
-	/**
-	 * Refresh the VKleaner
-	 *
-	 * Set rowsBlock
-	 * Set oldLocation
-	 * Add DOM handlers
-	 * Refresh every post
-	 * Refresh style
-	 */
-	refresh = function() {
-		selectUnwantedTypes();
-
-		// Show vkleaner button
-		chrome.extension.sendRequest({}, function( response ) {});
-
-		rowsBlock = hata( "#feed_rows" );
-
-		refreshEveryPost();
-		refreshShowHeaderType();
-
-		rowsBlock.unbind( "DOMNodeInserted", nodeInserted );
-		rowsBlock.bind( "DOMNodeInserted", nodeInserted );
-		rowsBlock.unbind( "click", openClicked );
-		rowsBlock.bind( "click", openClicked );
-
-		oldLocation = window.location.pathname + window.location.search;
-	},
-
 	locationTimer,
-	locationInterval = 300,
+	locationInterval = 100,
 	checkLocation = function() {
 		if ( isLocationChanged() ) {
 			if ( isNewsPage() ) {
-				return refresh();
+				refresh();
 			}
-			return oldLocation = window.location.pathname + window.location.search;
+
+			return oldLocation = getUrl();
 		}
 	},
 
 	firstInitialize = function() {
 		checkLocation();
+
 		return locationTimer = setInterval( checkLocation, locationInterval );
+	},
+
+	firstDomLoaded = function() {
+		return Storage.selectAll( firstInitialize );
+	},
+
+	storageChanged = function( change ) {
+		var name, value, optionName;
+
+		for ( optionName in change ) {
+			name = optionName;
+			value = change[ optionName ];
+		}
+
+		if ( name === "clearvk_withLinks_content" ) {
+			Storage.items[ "clearvk_withLinks_content" ] = value.newValue;
+			return blacklistChanged();
+		}
+
+		if ( name === "clearvk_class" ) {
+			Storage.items[ "clearvk_class" ] = value.newValue;
+			return refreshShowHeaderType();
+		}
+
+		// else:
+
+		var type = name.replace( /clearvk_/, "" );
+
+		if ( value.newValue === 0 ) {
+			var position = hata.inArray( type, unwantedTypes );
+
+			unwantedTypes.splice( position, 1 );
+		} else {
+			unwantedTypes.push( type );
+		}
+
+		return optionsChanged( type );
 	};
 
-hata.ready(function() {
-	Storage.selectAll( firstInitialize );
-});
-
-Storage.onChanged(function( change ) {
-	var name, value, optionName;
-
-	for ( optionName in change ) {
-		name = optionName;
-		value = change[ optionName ];
-	}
-
-	if ( name === "clearvk_withLinks_content" ) {
-		Storage.items[ "clearvk_withLinks_content" ] = value.newValue;
-		return blacklistChanged();
-	}
-
-	if ( name === "clearvk_class" ) {
-		Storage.items[ "clearvk_class" ] = value.newValue;
-		return refreshShowHeaderType();
-	}
-
-	// else:
-
-	var type = name.replace( /clearvk_/, "" );
-
-	if ( value.newValue === 0 ) {
-		var position = hata.inArray( type, unwantedTypes );
-
-		unwantedTypes.splice( position, 1 );
-	} else {
-		unwantedTypes.push( type );
-	}
-
-	return optionsChanged( type );
-});
+hata.ready( firstDomLoaded );
+Storage.onChanged( storageChanged );

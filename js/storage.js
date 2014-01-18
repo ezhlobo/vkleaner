@@ -1,5 +1,4 @@
 var
-
 	/**
 	 * Storage manager
 	 */

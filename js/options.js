@@ -26,8 +26,8 @@ modalBlacklist = function() {
 		};
 
 		background.css( hata.extend({}, cssObj, {
-			width: document.width,
-			height: document.height
+			// width: document.bod.clientWidth,
+			// height: document.height
 		}) );
 
 		notifier.css( cssObj );
