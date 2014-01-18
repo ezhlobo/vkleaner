@@ -25,7 +25,8 @@ var
 		"my-truth.ru",
 		"sparshivai.ru",
 		"sprashivaii.ru",
-		"sprosi.name"
+		"sprosi.name",
+		"askfm.su"
 	],
 
 	// Remove empty elements from an array
