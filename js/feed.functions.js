@@ -64,18 +64,18 @@ var
 	},
 
 	optionsChanged = function( type ) {
-        return rowsBlock.find( ".feed_row[vkleaner-types*=" + type + "]" ).each(function() {
-            refreshPostStatus( hata( this ) );
-        });
-    },
+		return rowsBlock.find( ".feed_row[vkleaner-types*=" + type + "]" ).each(function() {
+			refreshPostStatus( hata( this ) );
+		});
+	},
 
-    blacklistChanged = function() {
-        var rows = rowsBlock.find( ".feed_row:not([vkleaner-types]), .feed_row[vkleaner-types*=withLinks]" );
+	blacklistChanged = function() {
+		var rows = rowsBlock.find( ".feed_row:not([vkleaner-types]), .feed_row[vkleaner-types*=withLinks]" );
 
-        return rows.each(function() {
-            refreshPost( hata( this ) );
-        });
-    },
+		return rows.each(function() {
+			refreshPost( hata( this ) );
+		});
+	},
 
 	selectUnwantedTypes = function() {
 		unwantedTypes = [];
