@@ -35,6 +35,10 @@
     "message": "Скрывать рассказы о группах?",
     "description": "Имя опции"
   },
+  "options_eventShare": {
+    "message": "Скрывать рассказы о событиях?",
+    "description": "Имя опции"
+  },
   "options_fromApps": {
     "message": "Скрывать сообщения от приложений?",
     "description": "Имя опции"

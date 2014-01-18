@@ -35,6 +35,10 @@
     "message": "Hide sharing of groups?",
     "description": "Option name"
   },
+  "options_eventShare": {
+    "message": "Hide sharing of events?",
+    "description": "Option name"
+  },
   "options_fromApps": {
     "message": "Hide posts by apps?",
     "description": "Option name"

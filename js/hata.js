@@ -1,191 +1,195 @@
-/* Hata.js framework (c) 2013 */
-(function(e,t,n){var r=h,i={},s=false,o=[],u=function(e,t){if(Array.isArray(e)){for(var n=0,r=e.length;n<r;n++){if(t.call(e[n],e[n],n)===false)break}}else{for(var i in e){if(t.call(e[i],e[i],i)===false)break}}},a=function(){if(!s){s=true;u(o,function(e,t){o[t]()});o=[]}},f={Tag:/^[-_a-z0-9]+$/i,Class:/^\.[-_a-z0-9]+$/i,Id:/^#[-_a-z0-9]+$/i},l=function(e,t){if(!(e.indexOf(t)>=0)){e.push(t)}return e},c=function(e){return Array.prototype.slice.call(e)},h=function(r,i){if(!(this instanceof h)){return new h(r,i)}if(i!==n){return(new h(i||t)).find(r)}if(!r){this.elems=[];return this}if(r instanceof h){return r}var s=r==="body"?[t.body]:typeof r==="string"?h._query(t,r):r===e||r.nodeType?[r]:c(r);if(s.length===1&&s[0]==null){s.length=0}this.elems=s;return this};h.extend=function(e){u(Array.prototype.slice.call(arguments,1),function(t){u(t,function(t,n){e[n]=t})});return e};t.addEventListener("DOMContentLoaded",a,false);e.addEventListener("load",a,false);h.extend(h,{ready:function(e){if(s){e()}else{o.push(e)}return this},noConflict:function(){if(e.hata===h){e.hata=r}return h},fn:h.prototype,each:u,_query:function(e,n){if(f.Id.test(n)){return[(e.getElementById?e:t).getElementById(n.substr(1))]}if(f.Class.test(n)){return c(e.getElementsByClassName(n.substr(1)))}if(f.Tag.test(n)){return c(e.getElementsByTagName(n))}return c(e.querySelectorAll(n))},_find:function(e,t){if(!t){return e==null?[]:[e]}var n=t.nodeName?[t]:typeof t==="string"?h._query(e,t):[e];return n.length===1&&n[0]==null?[]:n}});h.extend(h.fn,{get:function(e){var t=this.elems;if(e!==n){var r=e<0?t.length+e:e;return t[r]}return t},eq:function(e){return new h(this.get(e))},is:function(e){return this.filter(e).get().length>0},each:function(e){u(this.get(),e);return this},find:function(e){var t=[];this.each(function(n){var r=0,i=h._find(n,e),s=i.length;while(r<s){l(t,i[r++])}});return new h(t)},closest:function(e){var n,r=[],i=(new h(e)).get();this.each(function(s){n=s;while(n!==t&&i.indexOf(n)<0){n=n.parentNode}if(n!==t||e===t){l(r,n)}});return new h(r)},parents:function(e){var n,r=[],i=(new h(e)).get();this.each(function(e){n=e.parentNode;while(n!==t){if(i.indexOf(n)>-1){l(r,n)}n=n.parentNode}});return new h(r)},filter:function(e){var t=new h(e),n=[];this.each(function(e){if(t.get().indexOf(e)>=0){l(n,e)}});return new h(n)}});e.hata=h})(window,window.document);
+// Hata
+// API: http://ezhlobo.github.io/hata/
+(function(e,t){var n=e.document,r=Array.isArray||function(e){return e&&Object.prototype.toString.call(e)==="[object Array]"},i=function(e,t){if(e.indexOf(t)===-1){e.push(t)}return e},s=function(e){if(!e)return[];if(/number|string/.test(typeof e))return[e];return[].slice.call(e)},o=false,u=[],a=function(){if(o)return;o=true;var e=0,t=u.length;for(;e<t;e++){u[e]()}u=[]},f={Tag:/^[-_a-z0-9]+$/i,Class:/^\.[-_a-z0-9]+$/i,Id:/^#[-_a-z0-9]+$/i},l=function(e,t){if(f.Id.test(t)&&e.getElementById){return[e.getElementById(t.substr(1))]}if(f.Class.test(t)){return s(e.getElementsByClassName(t.substr(1)))}if(f.Tag.test(t)){return s(e.getElementsByTagName(t))}return s(e.querySelectorAll(t))},c=function(e,t){if(!t){return e==null?[]:[e]}var n=t.nodeName?[t]:typeof t==="string"?l(e,t):[e];return n.length===1&&n[0]==null?[]:n};var h=function(r,i){if(!(this instanceof h)){return new h(r,i)}if(r instanceof h){return r}if(!r){this.elems=[];this.length=0;return this}if(i!==t){return(new h(i||n)).find(r)}var o=r==="body"?[n.body]:typeof r==="string"?l(n,r):r===e||r.nodeType?[r]:s(r);if(o.length===1&&o[0]==null){o.length=0}this.elems=o;this.length=this.elems.length;return this};h.each=function(e,t){if(e==null)return;var n=0,i=e.length;if(r(e)||e.toString()=="[object NodeList]"){for(;n<i;n++){if(t.call(e[n],e[n],n)===false)break}}else{for(n in e){if(t.call(e[n],e[n],n)===false)break}}};h.extend=function(e){h.each([].slice.call(arguments,1),function(t){h.each(t,function(t,n){e[n]=t})});return e};h.extend(h.prototype,{get:function(e){var t=this.elems;return e==null?t:e<0?t[this.length+e]:t[e]},eq:function(e){return new h(this.get(e))},each:function(e){h.each(this.get(),e);return this},filter:function(e){var t=new h(e),n=[];this.each(function(e){if(t.get().indexOf(e)!==-1){i(n,e)}});return new h(n)},is:function(e){return this.filter(e).length>0},find:function(e){var t=[];this.each(function(n){var r=0,s=c(n,e),o=s.length;while(r<o){i(t,s[r++])}});return new h(t)},closest:function(e){var t,r=[],s=(new h(e)).get();this.each(function(e){t=e;while(t!==n&&s.indexOf(t)===-1){t=t.parentNode}if(t!==n){i(r,t)}});return new h(r)},parent:function(){var e=[];this.each(function(t){i(e,t.parentNode)});return new h(e)},parents:function(e){var t,r=[],s=(new h(e)).get();this.each(function(e){t=e.parentNode;while(t!==n){if(s.indexOf(t)!==-1){i(r,t)}t=t.parentNode}});return new h(r)}});h.extend(h,{ready:function(e){if(o){e()}else{u.push(e)}return this},pushUniq:i,toArray:s,fn:h.prototype});n.addEventListener("DOMContentLoaded",a,false);e.addEventListener("load",a,false);e.hata=h})(window);
 
-/**
- * @param  {String} str
- * @return {Node}
- */
 var createNode = function( str ) {
-  var node;
+	var node;
 
-  if ( /^<([^>]+)>(.*)<\/(.+)>/.test( hata.trim( str ) ) ) {
-    html = hata.trim( str );
-    var htmlArr = html.match(/^<([^>]+)>(.*)<\/(.+)>$/);
-    var params = htmlArr[1].split(" ");
+	if ( /^<([^>]+)>(.*)<\/(.+)>/.test( hata.trim( str ) ) ) {
+		var html = hata.trim( str ),
+			htmlArr = html.match( /^<([^>]+)>(.*)<\/(.+)>$/ ),
+			params = htmlArr[ 1 ].split( " " );
 
-    node = document.createElement(params[0]);
-    hata.each( Array.prototype.slice.call( params, 1), function( value, key ) {
-      var attribute = hata.trim( value ).match(/^(.+)="(.*)"$/);
-      node.setAttribute(attribute[1], attribute[2]);
-    });
+		node = document.createElement( params[ 0 ] );
+		hata.each( Array.prototype.slice.call( params, 1 ), function( value, key ) {
+			var attribute = hata.trim( value ).match( /^(.+)='(.*)'$/ );
 
-    node.innerHTML = htmlArr[2];
+			node.setAttribute( attribute[ 1 ], attribute[ 2 ] );
+		});
 
-  } else {
-    node = document.createTextNode( str );
-  }
+		node.innerHTML = htmlArr[ 2 ];
 
-  return node;
+	} else {
+		node = document.createTextNode( str );
+	}
+
+	return node;
 };
 
 var methods = {
-  trim: function( str ) {
-    return str.replace(/^\s+|\s+$/g, "");
-  },
+	trim: function( str ) {
+		return str.replace( /^\s+|\s+$/g, "" );
+	},
 
-  inArray: function( target, obj ) {
-    return obj.indexOf( target );
-  },
+	inArray: function( target, obj ) {
+		return obj.indexOf( target );
+	},
 
-  animParams: {
-    duration: 200,
-    delay: 10,
-    done: function() {}
-  },
+	animParams: {
+		duration: 200,
+		delay: 10,
+		delta: function( progress ) {
+			return Math.sin( progress * Math.PI / 2 );
+		},
+		done: function() {}
+	},
 
-  animate: function( opts ) {
-    var start = new Date;
+	animate: function( step, opts ) {
+		var timer,
+			start = new Date,
+			opts = hata.extend({}, hata.animParams, opts ),
 
-    var timer = setInterval(function() {
-      var progress = ( new Date - start ) / (opts.duration || hata.animParams.duration);
-      if ( progress > 1 ) {
-        progress = 1;
-      }
+		timer = setInterval(function() {
+			var progress = ( new Date - start ) / opts.duration;
 
-      opts.step( progress );
+			if ( progress > 1 ) {
+				progress = 1;
+			}
 
-      if ( progress === 1 ) {
-        clearInterval( timer );
-        (opts.done || hata.animParams.done).call(this);
-      }
+			step( opts.delta( progress ) );
 
-    }, opts.delay || hata.animParams.delay );
-  }
+			if ( progress === 1 ) {
+				clearInterval( timer );
+				opts.done.call( this );
+			}
+
+		}, opts.delay );
+	}
 };
 
 var extensions = {
-  addClass: function( value ) {
-    return this.each(function( elem ) {
-      elem.classList.add( value );
-    });
-  },
+	addClass: function( value ) {
+		return this.each(function( elem ) {
+			elem.classList.add( value );
+		});
+	},
 
-  removeClass: function( value ) {
-    return this.each(function( elem ) {
-      elem.classList.remove( value );
-    });
-  },
+	removeClass: function( value ) {
+		return this.each(function( elem ) {
+			elem.classList.remove( value );
+		});
+	},
 
-  val: function( value ) {
-    if ( value ) {
-      return this.each(function( elem ) {
-        elem.value = value;
-      });
+	val: function( value ) {
+		if ( value ) {
+			return this.each(function( elem ) {
+				elem.value = value;
+			});
 
-    } else {
-      return this.get(0).value;
-    }
-  },
+		} else {
+			return this.get( 0 ).value;
+		}
+	},
 
-  attr: function( name, value ) {
-    if ( value != null ) {
-      return this.each(function( elem ) {
-        elem.setAttribute( name, value );
-      });
+	attr: function( name, value ) {
+		if ( value != null ) {
+			return this.each(function( elem ) {
+				elem.setAttribute( name, value );
+			});
 
-    } else {
-      return this.get(0) ? this.get(0).getAttribute( name ) : "";
-    }
-  },
+		} else {
+			return this.get( 0 ) ? this.get( 0 ).getAttribute( name ) : "";
+		}
+	},
 
-  removeAttr: function( name ) {
-    return this.each(function( elem ) {
-      elem.removeAttribute( name );
-    });
-  },
+	removeAttr: function( name ) {
+		return this.each(function( elem ) {
+			elem.removeAttribute( name );
+		});
+	},
 
-  prepend: function( html ) {
-    var node = createNode( html );
-    return this.each(function( elem ) {
-      elem.insertBefore( node, elem.firstChild );
-    });
-  },
+	prepend: function( html ) {
+		var node = createNode( html );
 
-  append: function( html ) {
-    var node = createNode( html );
-    return this.each(function( elem ) {
-      elem.appendChild( node );
-    });
-  },
+		return this.each(function( elem ) {
+			elem.insertBefore( node, elem.firstChild );
+		});
+	},
 
-  remove: function() {
-    return this.each(function( elem ) {
-      elem.removeNode( true );
-    });
-  },
+	append: function( html ) {
+		var node = createNode( html );
 
-  html: function( value ) {
-    if ( value ) {
-      return this.each(function( elem ) {
-        elem.innerHTML = value;
-      });
+		return this.each(function( elem ) {
+			elem.appendChild( node );
+		});
+	},
 
-    } else {
-      return this.get(0).innerHTML;
-    }
-  },
+	remove: function() {
+		return this.each(function( elem ) {
+			elem.removeNode( true );
+		});
+	},
 
-  text: function( value ) {
-    if ( value ) {
-      return this.each(function( elem ) {
-        elem.textContent = value;
-      });
+	html: function( value ) {
+		if ( value ) {
+			return this.each(function( elem ) {
+				elem.innerHTML = value;
+			});
 
-    } else {
-      // Check for correct work with empty Hata object
-      return this.get(0) ? this.get(0).textContent : "";
-    }
-  },
+		} else {
+			return this.get( 0 ).innerHTML;
+		}
+	},
 
-  size: function() {
-    return this.get().length;
-  },
+	text: function( value ) {
+		if ( value ) {
+			return this.each(function( elem ) {
+				elem.textContent = value;
+			});
 
-  parent: function() {
-    return hata( this.get(0).parentNode );
-  },
+		} else {
+			// Check for correct work with empty Hata object
+			return this.get( 0 ) ? this.get( 0 ).textContent : "";
+		}
+	},
 
-  css: function( obj ) {
-    if ( typeof obj === "string" ) {
-      return window.getComputedStyle( this.get(0) )[ obj ];
+	size: function() {
+		return this.get().length;
+	},
 
-    } else {
-      return this.each(function( elem ) {
-        for ( var key in obj ) {
-          elem.style[ key ] = obj[ key ];
-        }
-      });
-    }
-  },
+	css: function( obj ) {
+		if ( typeof obj === "string" ) {
+			return window.getComputedStyle( this.get( 0 ) )[ obj ];
 
-  bind: function( eventType, callback ) {
-    return this.each(function() {
-      this.addEventListener( eventType, callback, false);
-    });
-  },
+		} else {
+			return this.each(function( elem ) {
+				var key;
 
-  unbind: function( eventType, callback ) {
-    if ( callback ) {
-      return this.each(function() {
-        this.removeEventListener( eventType, callback );
-      });
+				for ( key in obj ) {
+					elem.style[ key ] = obj[ key ];
+				}
+			});
+		}
+	},
 
-    } else {
-      return this.each(function() {
-        this.parentNode.replaceChild( this.cloneNode(true), this );
-      });
-    }
-  }
+	bind: function( eventType, callback ) {
+		return this.each(function() {
+			this.addEventListener( eventType, callback, false );
+		});
+	},
+
+	unbind: function( eventType, callback ) {
+		if ( callback ) {
+			return this.each(function() {
+				this.removeEventListener( eventType, callback );
+			});
+
+		} else {
+			return this.each(function() {
+				this.parentNode.replaceChild( this.cloneNode( true ), this );
+			});
+		}
+	}
 };
 
 hata.extend( hata.fn, extensions );
