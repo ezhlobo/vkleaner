@@ -73,7 +73,10 @@ var detect = {
 	 * Is post by app
 	 */
 	fromApps: function( post ) {
-		return post.find( ".wall_post_source_default" ).size() > 0;
+		var link = post.find( ".wall_post_source_default" );
+
+		// app3698024 - Instagram
+		return link.size() > 0 && !/app3698024/.test( link.attr( "href" ) );
 	}
 
 };
