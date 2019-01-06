@@ -43,6 +43,10 @@
     "message": "Скрывать сообщения от приложений?",
     "description": "Имя опции"
   },
+  "options_promotedPosts": {
+    "message": "Скрывать рекламные посты?",
+    "description": "Имя опции"
+  },
   "options_class": {
     "message": "Показывать заголовок скрытого поста?",
     "description": "Имя опции"

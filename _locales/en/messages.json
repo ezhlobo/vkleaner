@@ -43,6 +43,10 @@
     "message": "Hide posts by apps?",
     "description": "Option name"
   },
+  "options_promotedPosts": {
+    "message": "Hide promoted posts?",
+    "description": "Option name"
+  },
   "options_class": {
     "message": "Show the title of the hidden post?",
     "description": "Option name"
