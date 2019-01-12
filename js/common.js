@@ -61,7 +61,8 @@ var
 		"clearvk_withAudio": 0,
 		"clearvk_groupShare": 0,
 		"clearvk_eventShare": 0,
-		"clearvk_fromApps": 0
+		"clearvk_fromApps": 0,
+		"clearvk_promotedPosts": 1
 	},
 
 	idsOfOptionsKeys = [ "clearvk_withLinks_content" ];

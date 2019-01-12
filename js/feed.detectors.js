@@ -77,6 +77,10 @@ var detect = {
 
 		// app3698024 - Instagram
 		return link.size() > 0 && !/app3698024/.test( link.attr( "href" ) );
-	}
+	},
+
+	promotedPosts: function( post ) {
+		return post.find( ".wall_text_name_explain_promoted_post" ).size() > 0;
+	},
 
 };
